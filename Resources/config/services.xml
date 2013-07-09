@@ -1,0 +1,54 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="fsi_doctrine_extensions.filehandler.chain.class">FSi\DoctrineExtensions\Uploadable\FileHandler\ChainHandler</parameter>
+        <parameter key="fsi_doctrine_extensions.filehandler.gaufrette.class">FSi\DoctrineExtensions\Uploadable\FileHandler\GaufretteHandler</parameter>
+        <parameter key="fsi_doctrine_extensions.filehandler.splfileinfo.class">FSi\DoctrineExtensions\Uploadable\FileHandler\SplFileInfoHandler</parameter>
+        <parameter key="fsi_doctrine_extensions.filehandler.symfony_uploaded_file.class">FSi\Bundle\DoctrineExtensionsBundle\Listener\Uploadable\FileHandler\SymfonyUploadedFileHandler</parameter>
+        <parameter key="fsi_doctrine_extensions.gaufrette.filesystem_map.class">FSi\Bundle\DoctrineExtensionsBundle\FilesystemMap</parameter>
+        <parameter key="fsi_doctrine_extensions.listener.uploadable.class">FSi\DoctrineExtensions\Uploadable\UploadableListener</parameter>
+        <parameter key="fsi_doctrine_extensions.default.key_maker.class">FSi\DoctrineExtensions\Uploadable\Keymaker\Entity</parameter>
+        <parameter key="fsi_doctrine_extensions.default.filesystem.class">Gaufrette\Filesystem</parameter>
+        <parameter key="fsi_doctrine_extensions.default.filesystem.adapter.class">Gaufrette\Adapter\Local</parameter>
+    </parameters>
+
+    <services>
+        <service id="fsi_doctrine_extensions.filehandler.gaufrette" class="%fsi_doctrine_extensions.filehandler.gaufrette.class%"/>
+        <service id="fsi_doctrine_extensions.filehandler.splfileinfo" class="%fsi_doctrine_extensions.filehandler.splfileinfo.class%"/>
+        <service id="fsi_doctrine_extensions.filehandler.symfony_uploaded_file" class="%fsi_doctrine_extensions.filehandler.symfony_uploaded_file.class%"/>
+
+        <service id="fsi_doctrine_extensions.filehandler.chain" class="%fsi_doctrine_extensions.filehandler.chain.class%">
+            <argument type="collection">
+                <argument type="service" id="fsi_doctrine_extensions.filehandler.gaufrette" />
+                <argument type="service" id="fsi_doctrine_extensions.filehandler.symfony_uploaded_file" />
+                <argument type="service" id="fsi_doctrine_extensions.filehandler.splfileinfo" />
+            </argument>
+        </service>
+
+        <service id="fsi_doctrine_extensions.gaufrette.filesystem_map" class="%fsi_doctrine_extensions.gaufrette.filesystem_map.class%">
+            <argument type="service" id="knp_gaufrette.filesystem_map"/>
+        </service>
+
+        <service id="fsi_doctrine_extensions.default.key_maker" class="%fsi_doctrine_extensions.default.key_maker.class%"/>
+
+        <service id="fsi_doctrine_extensions.default.filesystem.adapter" class="%fsi_doctrine_extensions.default.filesystem.adapter.class%">
+            <argument>%fsi_doctrine_extensions.default.filesystem.adapter.path%</argument>
+            <argument>true</argument>
+        </service>
+
+        <service id="fsi_doctrine_extensions.default.filesystem" class="%fsi_doctrine_extensions.default.filesystem.class%">
+            <argument type="service" id="fsi_doctrine_extensions.default.filesystem.adapter" />
+        </service>
+
+        <!-- Listeners -->
+        <service id="fsi_doctrine_extensions.listener.uploadable" class="%fsi_doctrine_extensions.listener.uploadable.class%">
+            <argument type="service" id="fsi_doctrine_extensions.gaufrette.filesystem_map" />
+            <argument type="service" id="fsi_doctrine_extensions.filehandler.chain" />
+        </service>
+    </services>
+
+</container>
