@@ -37,7 +37,7 @@ Modify Files:
 
 Configure listeners
 
-**Listeners are not registred by default and you need to congiure them in ``app/config/config.yml`` file before using.**
+**Listeners are not registered by default and you need to configure them in ``app/config/config.yml`` file before using.**
 
 ```
 # app/config/config.yml
