@@ -50,3 +50,8 @@ fsi_doctrine_extensions:
     default_filesystem_path: "%kernel.root_dir%/../web/uploaded" # optional root path for default filesystem
     default_filesystem_service: fsi_doctrine_extensions.default.filesystem # optional default filesystem
 ```
+
+# Documentation
+
+## Twig Extensions
+* [fsi_file_asset](Resources/doc/twig.md)
