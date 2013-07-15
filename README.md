@@ -37,7 +37,7 @@ Modify Files:
 
 Configure listeners
 
-**Listeners are not registred by default and you need to congiure them in ``app/config/config.yml`` file before using.**
+**Listeners are not registered by default and you need to configure them in ``app/config/config.yml`` file before using.**
 
 ```
 # app/config/config.yml
@@ -46,7 +46,14 @@ fsi_doctrine_extensions:
     orm:
         default:
             uploadable: true
-    default_key_maker_service: fsi_doctrine_extensions.default.key_maker # optional id of default key maker sercice
+    default_key_maker_service: fsi_doctrine_extensions.default.key_maker # optional id of default key maker service
     default_filesystem_path: "%kernel.root_dir%/../web/uploaded" # optional root path for default filesystem
     default_filesystem_service: fsi_doctrine_extensions.default.filesystem # optional default filesystem
 ```
+
+# Documentation
+
+## Twig Extensions
+* [fsi_file_asset](Resources/doc/twig.md)
+## Symfony Form
+* [fsi_file](Resources/doc/form.md)
