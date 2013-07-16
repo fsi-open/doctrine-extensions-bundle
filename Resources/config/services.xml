@@ -14,6 +14,8 @@
         <parameter key="fsi_doctrine_extensions.default.key_maker.class">FSi\DoctrineExtensions\Uploadable\Keymaker\Entity</parameter>
         <parameter key="fsi_doctrine_extensions.default.filesystem.class">Gaufrette\Filesystem</parameter>
         <parameter key="fsi_doctrine_extensions.default.filesystem.adapter.class">Gaufrette\Adapter\Local</parameter>
+        <parameter key="fsi_doctrine_extensions.twig.extension.assets.class">FSi\Bundle\DoctrineExtensionsBundle\Twig\Extension\Assets</parameter>
+        <parameter key="fsi_doctrine_extensions.form.type.fsi.file.class">FSi\Bundle\DoctrineExtensionsBundle\Form\Type\Admin\FSi\FileType</parameter>
     </parameters>
 
     <services>
@@ -48,6 +50,17 @@
         <service id="fsi_doctrine_extensions.listener.uploadable" class="%fsi_doctrine_extensions.listener.uploadable.class%">
             <argument type="service" id="fsi_doctrine_extensions.gaufrette.filesystem_map" />
             <argument type="service" id="fsi_doctrine_extensions.filehandler.chain" />
+        </service>
+
+        <!-- Twig Extension -->
+        <service id="fsi_doctrine_extensions.twig.extension.assets" class="fsi_doctrine_extensions.twig.extension.assets.class">
+            <tag name="twig.extension" />
+            <argument>%fsi_doctrine_extensions.default.filesystem.adapter.path%</argument>
+        </service>
+
+        <!-- Symfony Form Types -->
+        <service id="fsi_doctrine_extensions.form.type.fsi.file" class="fsi_doctrine_extensions.form.type.fsi.file.class">
+            <tag name="form.type" alias="fsi_file" />
         </service>
     </services>
 
