@@ -53,13 +53,13 @@
         </service>
 
         <!-- Twig Extension -->
-        <service id="fsi_doctrine_extensions.twig.extension.assets" class="fsi_doctrine_extensions.twig.extension.assets.class">
+        <service id="fsi_doctrine_extensions.twig.extension.assets" class="%fsi_doctrine_extensions.twig.extension.assets.class%">
             <tag name="twig.extension" />
             <argument>%fsi_doctrine_extensions.default.filesystem.adapter.path%</argument>
         </service>
 
         <!-- Symfony Form Types -->
-        <service id="fsi_doctrine_extensions.form.type.fsi.file" class="fsi_doctrine_extensions.form.type.fsi.file.class">
+        <service id="fsi_doctrine_extensions.form.type.fsi.file" class="%fsi_doctrine_extensions.form.type.fsi.file.class%">
             <tag name="form.type" alias="fsi_file" />
         </service>
     </services>
