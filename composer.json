@@ -20,14 +20,15 @@
         "symfony/twig-bundle": "~2.2",
         "symfony/http-foundation": "~2.2",
         "symfony/form" : "~2.2",
-        "fsi/doctrine-extensions": "1.0.*@dev",
-        "knplabs/knp-gaufrette-bundle": "0.2.*@dev",
-        "knplabs/gaufrette": "0.2.*@dev"
+        "fsi/doctrine-extensions": "dev-master",
+        "knplabs/knp-gaufrette-bundle": "dev-master",
+        "knplabs/gaufrette": "dev-master"
     },
     "require-dev": {
         "phpspec/phpspec": "2.0.*@dev",
         "symfony/twig-bridge": "~2.2"
     },
+    "minimum-stability": "dev",
     "config": {
         "bin-dir": "bin"
     },
