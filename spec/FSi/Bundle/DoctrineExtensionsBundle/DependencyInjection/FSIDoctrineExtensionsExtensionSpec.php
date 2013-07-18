@@ -4,6 +4,9 @@ namespace spec\FSi\Bundle\DoctrineExtensionsBundle\DependencyInjection;
 
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 /**
  * @author Norbert Orzechowicz <norbert@fsi.pl>
@@ -20,12 +23,7 @@ class FSIDoctrineExtensionsExtensionSpec extends ObjectBehavior
         $this->getAlias()->shouldReturn('fsi_doctrine_extensions');
     }
 
-    /**
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $builder
-     * @param \Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface $parameterBag
-     * @param \Symfony\Component\DependencyInjection\Definition $uploadable
-     */
-    function it_should_configure_service_container_builder($builder, $parameterBag, $uploadable)
+    function it_should_add_tag_to_uploadable_listener_service(ContainerBuilder $builder,ParameterBagInterface $parameterBag, Definition $uploadable)
     {
         $builder->hasExtension(Argument::type('string'))->willReturn(false);
         $builder->addResource(Argument::type('\Symfony\Component\Config\Resource\FileResource'))->shouldBeCalled();
@@ -38,6 +36,7 @@ class FSIDoctrineExtensionsExtensionSpec extends ObjectBehavior
         $uploadable->addMethodCall('setDefaultKeymaker', Argument::type('array'))->shouldBeCalled();
         $builder->setParameter('fsi_doctrine_extensions.default.filesystem.adapter.path', '%kernel.root_dir%/../web/uploaded')
             ->shouldBeCalled();
+        $builder->setParameter('fsi_doctrine_extensions.listener.uploadable.configuration', array())->shouldBeCalled();
         $uploadable->addMethodCall('setDefaultFilesystem', Argument::type('array'))->shouldBeCalled();
         $uploadable->addTag('doctrine.event_subscriber', array('connection' => 'default'))->shouldBeCalled();
 
@@ -45,9 +44,42 @@ class FSIDoctrineExtensionsExtensionSpec extends ObjectBehavior
             0 => array(
                 'orm' => array(
                     'default' => array(
-                        'uploadable' => true
+                        'uploadable' => true,
                     )
                 )
+            )
+        ), $builder);
+    }
+
+    function it_should_add_uploadable_configuration_parameter_to_container(ContainerBuilder $builder,ParameterBagInterface $parameterBag, Definition $uploadable)
+    {
+        $builder->hasExtension(Argument::type('string'))->willReturn(false);
+        $builder->addResource(Argument::type('\Symfony\Component\Config\Resource\FileResource'))->shouldBeCalled();
+        $builder->setDefinition(Argument::type('string'), Argument::type('Symfony\Component\DependencyInjection\Definition'))->shouldBeCalled();
+        $builder->getParameterBag()->shouldBeCalled()->willReturn($parameterBag);
+        /* Above code is added only because builder is used in services loader */
+
+        $builder->setParameter('fsi_doctrine_extensions.listener.uploadable.configuration', array(
+            'FSi\Bundle\DemoBundle\Entity\Article' => array(
+                'image' => array(
+                    'filesystem' => 'some_filesystem',
+                    'keymaker' => 'FSi\Bundle\DemoBundle\KeyMaker\SpecificKeyMaker'
+                )
+            )
+        ))->shouldBeCalled();
+
+        $this->load(array(
+            0 => array(
+                'uploadable_configuration' => array(
+                    'FSi\Bundle\DemoBundle\Entity\Article' => array(
+                        'configuration' => array(
+                            'image' => array(
+                                'filesystem' => 'some_filesystem',
+                                'keymaker' => 'FSi\Bundle\DemoBundle\KeyMaker\SpecificKeyMaker'
+                            )
+                        )
+                    )
+                ),
             )
         ), $builder);
     }
