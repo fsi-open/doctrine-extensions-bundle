@@ -23,6 +23,37 @@ class FSIDoctrineExtensionsExtension extends Extension
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
 
+        $this->setListenersConfiguration($container, $config);
+        $this->setUploadabbleConfigurationParameter($container, $config['uploadable_configuration']);
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     * @param array $config
+     */
+    protected function setListenersConfiguration(ContainerBuilder $container, $config = array())
+    {
+        foreach ($config['orm'] as $connection => $subscribers) {
+            foreach ($subscribers as $name => $enabled) {
+                $subscriber = sprintf('fsi_doctrine_extensions.listener.%s', $name);
+
+                if ($enabled && $container->hasDefinition($subscriber)) {
+                    $attributes = array('connection' => $connection);
+                    $definition = $container->getDefinition($subscriber);
+                    $definition->addTag('doctrine.event_subscriber', $attributes);
+
+                    switch ($name) {
+                        case 'uploadable':
+                            $this->setUploadableConfiguration($container, $config);
+                            break;
+                    }
+                }
+            }
+        }
+    }
+
+    protected function setUploadableConfiguration(ContainerBuilder $container, $config = array())
+    {
         $container->getDefinition('fsi_doctrine_extensions.listener.uploadable')->addMethodCall(
             'setDefaultKeymaker',
             array(new Reference($config['default_key_maker_service']))
@@ -32,26 +63,16 @@ class FSIDoctrineExtensionsExtension extends Extension
             'setDefaultFilesystem',
             array(new Reference($config['default_filesystem_service']))
         );
-
-        $this->setORMConfiguration($container, $config['orm']);
     }
 
-    /**
-     * @param ContainerBuilder $container
-     * @param array $config
-     */
-    protected function setORMConfiguration(ContainerBuilder $container, $config = array())
+    protected function setUploadabbleConfigurationParameter(ContainerBuilder $container, $config = array())
     {
-        foreach ($config as $connection => $subscribers) {
-            foreach ($subscribers as $name => $enabled) {
-                $subscriber = sprintf('fsi_doctrine_extensions.listener.%s', $name);
-                $attributes = array('connection' => $connection);
+        $configuration = array();
 
-                if ($enabled && $container->hasDefinition($subscriber)) {
-                    $definition = $container->getDefinition($subscriber);
-                    $definition->addTag('doctrine.event_subscriber', $attributes);
-                }
-            }
+        foreach ($config as $entity => $entityConfig) {
+            $configuration[$entity] = $entityConfig['configuration'];
         }
+
+        $container->setParameter('fsi_doctrine_extensions.listener.uploadable.configuration', $configuration);
     }
 }

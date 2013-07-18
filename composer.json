@@ -25,6 +25,7 @@
     },
     "require-dev": {
         "phpspec/phpspec": "2.0.*@dev",
+        "doctrine/orm": "~2.3@dev",
         "symfony/twig-bridge": "~2.2"
     },
     "config": {

@@ -27,13 +27,13 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testUploadableDefaultOptions()
+    public function testUploadableEnabledOption()
     {
         $input = array(
             0 => array(
                 'orm' => array(
                     'default' => array(
-                        'uploadable' => true
+                        'uploadable' => true,
                     )
                 )
             )
@@ -47,9 +47,70 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
                 array(
                     'orm' => array(
                         'default' => array(
-                            'uploadable' => true
+                            'uploadable' => true,
                         )
+                    ),
+                )
+            )
+        );
+    }
+
+    public function testUploadableConfigurationOptions()
+    {
+        $input = array(
+            0 => array(
+                'orm' => array(
+                    'default' => array(
+                        'uploadable' => true,
                     )
+                ),
+                'uploadable_configuration' => array(
+                    array(
+                        'class' => 'FSi\Bundle\DemoBundle\Article',
+                        'configuration' => array(
+                            array(
+                                'property' => 'file',
+                                'filesystem' => 'default_filesystem',
+                                'keymaker' => 'default_keymaker',
+                            ),
+                            array(
+                                'property' => 'image_file',
+                                'filesystem' => 'default_filesystem',
+                                'keymaker' => 'default_keymaker',
+                            )
+                        )
+                    ),
+                )
+            )
+        );
+        $config = $this->getProcessor()->processConfiguration(new Configuration(), $input);
+
+        $this->assertSame(
+            $config,
+            array_merge(
+                array(
+                    'orm' => array(
+                        'default' => array(
+                            'uploadable' => true,
+                        )
+                    ),
+                    'uploadable_configuration' => array(
+                        'FSi\Bundle\DemoBundle\Article' => array(
+                            'configuration' => array(
+                                'file' => array(
+                                    'filesystem' => 'default_filesystem',
+                                    'keymaker' => 'default_keymaker',
+                                ),
+                                'image_file' => array(
+                                    'filesystem' => 'default_filesystem',
+                                    'keymaker' => 'default_keymaker',
+                                )
+                            )
+                        )
+                    ),
+                    'default_key_maker_service' =>  'fsi_doctrine_extensions.default.key_maker',
+                    'default_filesystem_path' => '%kernel.root_dir%/../web/uploaded',
+                    'default_filesystem_service' => 'fsi_doctrine_extensions.default.filesystem',
                 )
             )
         );
@@ -61,7 +122,8 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
             'orm' => array(),
             'default_key_maker_service' =>  'fsi_doctrine_extensions.default.key_maker',
             'default_filesystem_path' => '%kernel.root_dir%/../web/uploaded',
-            'default_filesystem_service' => 'fsi_doctrine_extensions.default.filesystem'
+            'default_filesystem_service' => 'fsi_doctrine_extensions.default.filesystem',
+            'uploadable_configuration' => array()
         );
     }
 
