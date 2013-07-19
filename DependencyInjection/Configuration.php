@@ -24,6 +24,22 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('default_key_maker_service')->defaultValue('fsi_doctrine_extensions.default.key_maker')->end()
                 ->scalarNode('default_filesystem_path')->defaultValue('%kernel.root_dir%/../web/uploaded')->end()
                 ->scalarNode('default_filesystem_service')->defaultValue('fsi_doctrine_extensions.default.filesystem')->end()
+                ->arrayNode('uploadable_configuration')
+                    ->useAttributeAsKey('class')
+                    ->prototype('array')
+                    ->children()
+                        ->scalarNode('class')->end()
+                        ->arrayNode('configuration')
+                        ->useAttributeAsKey('property')
+                        ->prototype('array')
+                            ->children()
+                                ->scalarNode('property')->end()
+                                ->scalarNode('filesystem')->end()
+                                ->scalarNode('keymaker')->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
             ->end();
 
         return $treeBuilder;

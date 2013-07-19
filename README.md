@@ -51,6 +51,31 @@ fsi_doctrine_extensions:
     default_filesystem_service: fsi_doctrine_extensions.default.filesystem # optional default filesystem
 ```
 
+Sometimes you also may need to configure filesystem or keymaker for entity not in metadata configuration.
+For example if you create a bundle that provide entity that use uploadable extension you can't force bundle users to
+use filesystem defined in bundle. Filesystem is something that should depend from application, not bundle.
+For such cases you can use ``uploadable_configuration`` option in application config.
+
+```
+knp_gaufrette:
+    adapters:
+        local_adapter:
+            local:
+                directory: "%kernel.root_dir%/../uploaded"
+    filesystems:
+        article_content_image:
+            adapter: local_adapter
+
+fsi_doctrine_extensions:
+    uploadable_configuration:
+        FSi\Bundle\CompanySiteBundle\Entity\ArticleContent: # class that use uploadable extension
+            configuration:
+                imageFileKey: # property that is file key
+                    filesystem: article_content_image # gaufrette filesystem
+```
+From now ``FSi\Bundle\CompanySiteBundle\Entity\ArticleContent::imageFileKey`` will use ``article_content_image`` filesystem.
+Even if there is other filesystem defined in field metadata. 
+
 # Documentation
 
 ## Twig Extensions
