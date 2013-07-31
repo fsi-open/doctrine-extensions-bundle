@@ -15,6 +15,7 @@
         <parameter key="fsi_doctrine_extensions.default.filesystem.class">Gaufrette\Filesystem</parameter>
         <parameter key="fsi_doctrine_extensions.default.filesystem.adapter.class">Gaufrette\Adapter\Local</parameter>
         <parameter key="fsi_doctrine_extensions.twig.extension.assets.class">FSi\Bundle\DoctrineExtensionsBundle\Twig\Extension\Assets</parameter>
+        <parameter key="fsi_doctrine_extensions.twig.extension.fsi_file.class">FSi\Bundle\DoctrineExtensionsBundle\Twig\Extension\FSi\File</parameter>
         <parameter key="fsi_doctrine_extensions.form.type.fsi.file.class">FSi\Bundle\DoctrineExtensionsBundle\Form\Type\FSi\FileType</parameter>
     </parameters>
 
@@ -57,6 +58,10 @@
         <service id="fsi_doctrine_extensions.twig.extension.assets" class="%fsi_doctrine_extensions.twig.extension.assets.class%">
             <tag name="twig.extension" />
             <argument>%fsi_doctrine_extensions.default.filesystem.adapter.path%</argument>
+        </service>
+
+        <service id="fsi_doctrine_extensions.twig.extension.fsi_file" class="%fsi_doctrine_extensions.twig.extension.fsi_file.class%">
+            <tag name="twig.extension" />
         </service>
 
         <!-- Symfony Form Types -->
