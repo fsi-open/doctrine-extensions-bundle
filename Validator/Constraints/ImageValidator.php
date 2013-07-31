@@ -2,6 +2,7 @@
 
 namespace FSi\Bundle\DoctrineExtensionsBundle\Validator\Constraints;
 
+use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints\ImageValidator as BaseValidator;
 use FSi\DoctrineExtensions\Uploadable\File as FSiFile;
 
