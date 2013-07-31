@@ -20,6 +20,7 @@
         "symfony/twig-bundle": "~2.2",
         "symfony/http-foundation": "~2.2",
         "symfony/form" : "~2.2",
+        "symfony/validator": "~2.2",
         "fsi/doctrine-extensions": "0.9.*",
         "knplabs/knp-gaufrette-bundle": "0.1.*"
     },
