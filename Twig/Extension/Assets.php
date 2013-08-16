@@ -70,7 +70,8 @@ class Assets extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-           new \Twig_SimpleFunction('fsi_file_asset', array($this, 'fileAsset'))
+           new \Twig_SimpleFunction('fsi_file_asset', array($this, 'fileAsset')),
+           new \Twig_SimpleFunction('fsi_file_path', array($this, 'filePath'))
         );
     }
 
@@ -96,6 +97,23 @@ class Assets extends \Twig_Extension
         $this->writeFileToLocalAdapter($file);
 
         return $this->assets->getAssetUrl($this->generatePath($file, $prefix));
+    }
+
+    /**
+     * @param File $file
+     * @param null|string $prefix
+     * @return string
+     */
+    public function filePath(File $file, $prefix = null)
+    {
+        if ($file->getFilesystem()->getAdapter() instanceof Local
+            || $file->getFilesystem()->getAdapter() instanceof Cache) {
+            return  '/' . $this->generatePath($file, $prefix);
+        }
+
+        $this->writeFileToLocalAdapter($file);
+
+        return '/' . $this->generatePath($file, $prefix);
     }
 
     public function fileBasename(File $file)
