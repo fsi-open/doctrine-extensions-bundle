@@ -71,7 +71,7 @@ class Assets extends \Twig_Extension
     {
         return array(
            new \Twig_SimpleFunction('fsi_file_asset', array($this, 'fileAsset')),
-            new \Twig_SimpleFunction('fsi_file_path', array($this, 'filePath'))
+           new \Twig_SimpleFunction('fsi_file_path', array($this, 'filePath'))
         );
     }
 
