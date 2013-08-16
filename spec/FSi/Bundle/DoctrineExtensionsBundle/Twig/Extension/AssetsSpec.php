@@ -47,6 +47,11 @@ class AssetsSpec extends ObjectBehavior
         $this->getFunctions()->shouldHaveFunction('fsi_file_asset');
     }
 
+    function it_have_fsi_file_path_function()
+    {
+        $this->getFunctions()->shouldHaveFunction('fsi_file_path');
+    }
+
     function it_have_fsi_file_basename_filter()
     {
         $this->getFilters()->shouldHaveFilter('fsi_file_basename');
@@ -67,6 +72,7 @@ class AssetsSpec extends ObjectBehavior
         $filesystem->getAdapter()->willReturn($adapter);
 
         $this->fileAsset($file)->shouldReturn('/TestFolder/File/file.jpg');
+        $this->filePath($file)->shouldReturn('/TestFolder/File/file.jpg');
     }
 
     /**
@@ -84,6 +90,7 @@ class AssetsSpec extends ObjectBehavior
         $filesystem->getAdapter()->willReturn($adapter);
 
         $this->fileAsset($file)->shouldReturn('/TestFolder/File/file.jpg');
+        $this->filePath($file)->shouldReturn('/TestFolder/File/file.jpg');
     }
 
     /**
@@ -101,6 +108,7 @@ class AssetsSpec extends ObjectBehavior
         $filesystem->getAdapter()->willReturn($adapter);
 
         $this->fileAsset($file, 'uploaded')->shouldReturn('/uploaded/TestFolder/File/file.jpg');
+        $this->filePath($file, 'uploaded')->shouldReturn('/uploaded/TestFolder/File/file.jpg');
     }
 
     /**
@@ -118,6 +126,7 @@ class AssetsSpec extends ObjectBehavior
         $filesystem->getAdapter()->willReturn($adapter);
 
         $this->fileAsset($file, '/uploaded/')->shouldReturn('/uploaded/TestFolder/File/file.jpg');
+        $this->filePath($file, '/uploaded/')->shouldReturn('/uploaded/TestFolder/File/file.jpg');
     }
 
     /**
@@ -137,6 +146,7 @@ class AssetsSpec extends ObjectBehavior
         $file->getContent()->shouldBeCalled()->willReturn('file content');
 
         $this->fileAsset($file)->shouldReturn('/TestFolder/File/file.jpg');
+        $this->filePath($file)->shouldReturn('/TestFolder/File/file.jpg');
     }
 
     /**
@@ -160,6 +170,7 @@ class AssetsSpec extends ObjectBehavior
         $filesystem->getAdapter()->willReturn($adapter);
 
         $this->fileAsset($file)->shouldReturn('/uploaded/TestFolder/File/file.jpg');
+        $this->filePath($file)->shouldReturn('/uploaded/TestFolder/File/file.jpg');
     }
 
     /**
@@ -183,6 +194,7 @@ class AssetsSpec extends ObjectBehavior
         $filesystem->getAdapter()->willReturn($adapter);
 
         $this->fileAsset($file, 'my_prefix')->shouldReturn('/my_prefix/TestFolder/File/file.jpg');
+        $this->filePath($file, 'my_prefix')->shouldReturn('/my_prefix/TestFolder/File/file.jpg');
     }
 
     /**
