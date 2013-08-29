@@ -1,24 +1,16 @@
 <?php
 
-namespace spec\FSi\Bundle\DoctrineExtensionsBundle\Form\Type\Admin\FSi;
+namespace spec\FSi\Bundle\DoctrineExtensionsBundle\Form\Type\FSi;
 
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
+use Symfony\Component\Form\FormBuilderInterface;
 
 class FileTypeSpec extends ObjectBehavior
 {
-    /**
-     * @param \FSi\Bundle\AdminBundle\Structure\GroupManager $manager
-     * @param \Symfony\Bundle\FrameworkBundle\Routing\Router $router
-     */
-    function let($manager, $router)
-    {
-        $this->beConstructedWith($manager, $router);
-    }
-
     function it_is_initializable()
     {
-        $this->shouldHaveType('FSi\Bundle\DoctrineExtensionsBundle\Form\Type\Admin\FSi\FileType');
+        $this->shouldHaveType('FSi\Bundle\DoctrineExtensionsBundle\Form\Type\FSi\FileType');
     }
 
     function it_should_have_valid_name()
@@ -42,5 +34,16 @@ class FileTypeSpec extends ObjectBehavior
         ))->shouldBeCalled();
 
         $this->setDefaultOptions($resolver);
+    }
+
+    /**
+     * @param \Symfony\Component\Form\FormBuilderInterface $builder
+     */
+    function it_should_register_listener(FormBuilderInterface $builder)
+    {
+        $builder->addEventSubscriber(Argument::type('FSi\Bundle\DoctrineExtensionsBundle\Form\EventListener\FileSubscriber'))
+            ->shouldBeCalled();
+
+        $this->buildForm($builder, array());
     }
 }
