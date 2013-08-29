@@ -28,7 +28,8 @@ class FileSubscriber implements EventSubscriberInterface
     public function preSubmit(FormEvent $event)
     {
         $data = $event->getData();
-        if (empty($data))
+        if (empty($data)) {
             $event->setData($event->getForm()->getData());
+        }
     }
 }
