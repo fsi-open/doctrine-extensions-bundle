@@ -9,7 +9,9 @@
 
 namespace FSi\Bundle\DoctrineExtensionsBundle\Form\Type\FSi;
 
+use FSi\Bundle\DoctrineExtensionsBundle\Form\EventListener\FileSubscriber;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class FileType extends AbstractType
@@ -28,6 +30,14 @@ class FileType extends AbstractType
     public function getName()
     {
         return 'fsi_file';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $builder->addEventSubscriber(new FileSubscriber());
     }
 
     /**
