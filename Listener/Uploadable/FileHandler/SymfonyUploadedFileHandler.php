@@ -12,6 +12,7 @@ namespace FSi\Bundle\DoctrineExtensionsBundle\Listener\Uploadable\FileHandler;
 use FSi\DoctrineExtensions\Uploadable\Exception\RuntimeException;
 use FSi\DoctrineExtensions\Uploadable\FileHandler\AbstractHandler;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use FSi\Bundle\DoctrineExtensionsBundle\Exception\Uploadable\InvalidFile;
 
 /**
  * @author Norbert Orzechowicz <norbert@fsi.pl>
@@ -41,6 +42,10 @@ class SymfonyUploadedFileHandler extends AbstractHandler
     {
         if (!$this->supports($file)) {
             throw $this->generateNotSupportedException($file);
+        }
+
+        if (!$file->isValid()) {
+            throw new InvalidFile(sprintf('File isn\'t uploaded properly! Code of error was "%s".', $file->getError()));
         }
 
         $level = error_reporting(0);
