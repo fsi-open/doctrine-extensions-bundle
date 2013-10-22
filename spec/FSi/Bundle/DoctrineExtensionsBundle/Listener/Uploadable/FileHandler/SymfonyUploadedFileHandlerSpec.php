@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * (c) FSi sp. z o.o. <info@fsi.pl>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace spec\FSi\Bundle\DoctrineExtensionsBundle\Listener\Uploadable\FileHandler;
 
 use PhpSpec\ObjectBehavior;
@@ -40,6 +47,6 @@ class UploadedFile extends SymfonyUploadedFile
 {
     public function __construct()
     {
-        /* There are some issues in prophecy and its not possible to create double that implements UploadedFile */
+        /* There are some issues in prophecy and its not possible to create double that implements UploadedFile. */
     }
 }

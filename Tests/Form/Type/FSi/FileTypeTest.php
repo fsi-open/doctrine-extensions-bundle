@@ -1,7 +1,7 @@
 <?php
 
 /**
- * (c) Fabryka Stron Internetowych sp. z o.o <info@fsi.pl>
+ * (c) FSi sp. z o.o. <info@fsi.pl>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -22,9 +22,6 @@ use Symfony\Bundle\TwigBundle\Extension\AssetsExtension;
 use Symfony\Component\Form\Test\FormIntegrationTestCase;
 use Symfony\Component\Templating\Asset\UrlPackage;
 
-/**
- * @author Norbert Orzechowicz <norbert@fsi.pl>
- */
 class FileTypeTest extends FormIntegrationTestCase
 {
     /**
@@ -70,6 +67,9 @@ class FileTypeTest extends FormIntegrationTestCase
         $this->twig = $twig;
     }
 
+    /**
+     * @return \FSi\Bundle\DoctrineExtensionsBundle\Tests\Fixtures\Form\Extension\FSiFileExtension
+     */
     public function getExtensions()
     {
         return array(
@@ -126,6 +126,10 @@ class FileTypeTest extends FormIntegrationTestCase
         $this->assertSame($html, $this->getExpectedHtml('form_with_fsi_file.html'));
     }
 
+    /**
+     * @param string $filename
+     * @return string
+     */
     private function getExpectedHtml($filename)
     {
         $path = __DIR__ . '/../../../Resources/views/' . $filename;

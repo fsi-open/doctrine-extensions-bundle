@@ -1,7 +1,7 @@
 <?php
 
 /**
- * (c) Fabryka Stron Internetowych sp. z o.o <info@fsi.pl>
+ * (c) FSi sp. z o.o. <info@fsi.pl>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -83,7 +83,7 @@ class Assets extends \Twig_Extension
     }
 
     /**
-     * @param File $file
+     * @param \FSi\DoctrineExtensions\Uploadable\File $file
      * @param null|string $prefix
      * @return string
      */
@@ -100,7 +100,7 @@ class Assets extends \Twig_Extension
     }
 
     /**
-     * @param File $file
+     * @param \FSi\DoctrineExtensions\Uploadable\File $file
      * @param null|string $prefix
      * @return string
      */
@@ -116,13 +116,17 @@ class Assets extends \Twig_Extension
         return '/' . $this->generatePath($file, $prefix);
     }
 
+    /**
+     * @param \FSi\DoctrineExtensions\Uploadable\File $file
+     * @return string
+     */
     public function fileBasename(File $file)
     {
         return basename($file->getName());
     }
 
     /**
-     * @param File $file
+     * @param \FSi\DoctrineExtensions\Uploadable\File $file
      */
     protected function writeFileToLocalAdapter(File $file)
     {
@@ -132,7 +136,7 @@ class Assets extends \Twig_Extension
     }
 
     /**
-     * @return Local
+     * @return \Gaufrette\Adapter\Local
      */
     protected function getLocalAdapter()
     {
@@ -144,7 +148,7 @@ class Assets extends \Twig_Extension
     }
 
     /**
-     * @param File $file
+     * @param \FSi\DoctrineExtensions\Uploadable\File $file
      * @param null $prefix
      * @return string
      */

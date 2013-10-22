@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * (c) FSi sp. z o.o. <info@fsi.pl>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace spec\FSi\Bundle\DoctrineExtensionsBundle\DependencyInjection;
 
 use PhpSpec\ObjectBehavior;
@@ -8,9 +15,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
-/**
- * @author Norbert Orzechowicz <norbert@fsi.pl>
- */
 class FSIDoctrineExtensionsExtensionSpec extends ObjectBehavior
 {
     function it_is_initializable()
@@ -29,7 +33,7 @@ class FSIDoctrineExtensionsExtensionSpec extends ObjectBehavior
         $builder->addResource(Argument::type('\Symfony\Component\Config\Resource\FileResource'))->shouldBeCalled();
         $builder->setDefinition(Argument::type('string'), Argument::type('Symfony\Component\DependencyInjection\Definition'))->shouldBeCalled();
         $builder->getParameterBag()->shouldBeCalled()->willReturn($parameterBag);
-        /* Above code is added only because builder is used in services loader */
+        /* Above code is added only because builder is used in services loader. */
 
         $builder->hasDefinition('fsi_doctrine_extensions.listener.uploadable')->shouldBeCalled()->willReturn(true);
         $builder->getDefinition('fsi_doctrine_extensions.listener.uploadable')->shouldBeCalled()->willReturn($uploadable);
@@ -57,7 +61,7 @@ class FSIDoctrineExtensionsExtensionSpec extends ObjectBehavior
         $builder->addResource(Argument::type('\Symfony\Component\Config\Resource\FileResource'))->shouldBeCalled();
         $builder->setDefinition(Argument::type('string'), Argument::type('Symfony\Component\DependencyInjection\Definition'))->shouldBeCalled();
         $builder->getParameterBag()->shouldBeCalled()->willReturn($parameterBag);
-        /* Above code is added only because builder is used in services loader */
+        /* Above code is added only because builder is used in services loader. */
 
         $builder->setParameter('fsi_doctrine_extensions.listener.uploadable.configuration', array(
             'FSi\Bundle\DemoBundle\Entity\Article' => array(

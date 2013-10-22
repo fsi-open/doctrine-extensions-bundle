@@ -1,7 +1,7 @@
 <?php
 
 /**
- * (c) Fabryka Stron Internetowych sp. z o.o <info@fsi.pl>
+ * (c) FSi sp. z o.o. <info@fsi.pl>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,9 +13,6 @@ use Doctrine\Common\Persistence\ObjectManager;
 use FSi\DoctrineExtensions\Uploadable\FileHandler\FileHandlerInterface;
 use FSi\DoctrineExtensions\Uploadable\UploadableListener as BaseListener;
 
-/**
- * @author Norbert Orzechowicz <norbert@fsi.pl>
- */
 class UploadableListener extends BaseListener
 {
     /**
@@ -34,7 +31,7 @@ class UploadableListener extends BaseListener
 
     /**
      * @param array|\Gaufrette\FilesystemMap $filesystems
-     * @param FileHandlerInterface $fileHandler
+     * @param \FSi\DoctrineExtensions\Uploadable\FileHandler\FileHandlerInterface $fileHandler
      * @param array $configuration
      */
     public function __construct($filesystems, FileHandlerInterface $fileHandler, $configuration = array())
@@ -44,7 +41,7 @@ class UploadableListener extends BaseListener
     }
 
     /**
-     * @param ObjectManager $objectManager
+     * @param \Doctrine\Common\Persistence\ObjectManager $objectManager
      * @param string $class
      * @return \FSi\DoctrineExtensions\Uploadable\Mapping\ClassMetadata
      */
@@ -91,7 +88,7 @@ class UploadableListener extends BaseListener
     }
 
     /**
-     * @param $configuration
+     * @param array $configuration
      */
     protected function setConfiguration($configuration)
     {
