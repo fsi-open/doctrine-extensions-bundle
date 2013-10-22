@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * (c) FSi sp. z o.o. <info@fsi.pl>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace FSi\Bundle\DoctrineExtensionsBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -8,13 +15,10 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
 
-/**
- * @author Norbert Orzechowicz <norbert@fsi.pl>
- */
 class FSIDoctrineExtensionsExtension extends Extension
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function load(array $configs, ContainerBuilder $container)
     {
@@ -28,7 +32,7 @@ class FSIDoctrineExtensionsExtension extends Extension
     }
 
     /**
-     * @param ContainerBuilder $container
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      * @param array $config
      */
     protected function setListenersConfiguration(ContainerBuilder $container, $config = array())
@@ -52,6 +56,10 @@ class FSIDoctrineExtensionsExtension extends Extension
         }
     }
 
+    /**
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param array $config
+     */
     protected function setUploadableConfiguration(ContainerBuilder $container, $config = array())
     {
         $container->getDefinition('fsi_doctrine_extensions.listener.uploadable')->addMethodCall(
@@ -65,6 +73,10 @@ class FSIDoctrineExtensionsExtension extends Extension
         );
     }
 
+    /**
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param array $config
+     */
     protected function setUploadabbleConfigurationParameter(ContainerBuilder $container, $config = array())
     {
         $configuration = array();

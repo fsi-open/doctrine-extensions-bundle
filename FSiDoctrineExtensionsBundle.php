@@ -1,17 +1,21 @@
 <?php
 
+/**
+ * (c) FSi sp. z o.o. <info@fsi.pl>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace FSi\Bundle\DoctrineExtensionsBundle;
 
 use FSi\Bundle\DoctrineExtensionsBundle\DependencyInjection\FSIDoctrineExtensionsExtension;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-/**
- * @author Norbert Orzechowicz <norbert@fsi.pl>
- */
 class FSiDoctrineExtensionsBundle extends Bundle
 {
     /**
-     * @return FSIDoctrineExtensionsExtension|null|\Symfony\Component\DependencyInjection\Extension\ExtensionInterface
+     * @return null|\FSi\Bundle\DoctrineExtensionsBundle\DependencyInjection\FSIDoctrineExtensionsExtension|\Symfony\Component\DependencyInjection\Extension\ExtensionInterface
      */
     public function getContainerExtension()
     {

@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * (c) FSi sp. z o.o. <info@fsi.pl>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace spec\FSi\Bundle\DoctrineExtensionsBundle\Listener\Uploadable;
 
 use FSi\Bundle\DoctrineExtensionsBundle\FilesystemMap;
@@ -9,6 +16,10 @@ use Prophecy\Argument;
 
 class UploadableListenerSpec extends ObjectBehavior
 {
+    /**
+     * @param \FSi\Bundle\DoctrineExtensionsBundle\FilesystemMap $map
+     * @param \FSi\DoctrineExtensions\Uploadable\FileHandler\GaufretteHandler $handler
+     */
     function let(FilesystemMap $map, GaufretteHandler $handler)
     {
         $map->all()->willReturn(array());

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * (c) Fabryka Stron Internetowych sp. z o.o <info@fsi.pl>
+ * (c) FSi sp. z o.o. <info@fsi.pl>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,7 +17,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 class FileType extends AbstractType
 {
     /**
-     * @return null|string|\Symfony\Component\Form\FormTypeInterface
+     * {@inheritdoc}
      */
     public function getParent()
     {
@@ -25,7 +25,7 @@ class FileType extends AbstractType
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getName()
     {
@@ -41,7 +41,7 @@ class FileType extends AbstractType
     }
 
     /**
-     * @param OptionsResolverInterface $resolver
+     * {@inheritdoc}
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {

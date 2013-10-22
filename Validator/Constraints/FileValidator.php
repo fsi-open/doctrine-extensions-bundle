@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * (c) FSi sp. z o.o. <info@fsi.pl>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace FSi\Bundle\DoctrineExtensionsBundle\Validator\Constraints;
 
 use Symfony\Component\Validator\Constraint;
@@ -8,6 +15,9 @@ use FSi\DoctrineExtensions\Uploadable\File as FSiFile;
 
 class FileValidator extends BaseValidator
 {
+    /**
+     * {@inheritdoc}
+     */
     public function validate($value, Constraint $constraint)
     {
         if ($value instanceof FSiFile) {

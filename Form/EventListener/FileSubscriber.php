@@ -1,7 +1,7 @@
 <?php
 
 /**
- * (c) Fabryka Stron Internetowych sp. z o.o <info@fsi.pl>
+ * (c) FSi sp. z o.o. <info@fsi.pl>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,6 +15,9 @@ use Symfony\Component\Form\FormEvents;
 
 class FileSubscriber implements EventSubscriberInterface
 {
+    /**
+     * {@inheritdoc}
+     */
     public static function getSubscribedEvents()
     {
         return array(
@@ -23,7 +26,7 @@ class FileSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @param FormEvent $event
+     * @param \Symfony\Component\Form\FormEvent $event
      */
     public function preSubmit(FormEvent $event)
     {

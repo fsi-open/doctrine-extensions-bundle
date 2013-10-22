@@ -1,7 +1,7 @@
 <?php
 
 /**
- * (c) Fabryka Stron Internetowych sp. z o.o <info@fsi.pl>
+ * (c) FSi sp. z o.o. <info@fsi.pl>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,9 +12,6 @@ namespace FSi\Bundle\DoctrineExtensionsBundle\Tests\DependencyInjection;
 use FSi\Bundle\DoctrineExtensionsBundle\DependencyInjection\Configuration;
 use Symfony\Component\Config\Definition\Processor;
 
-/**
- * @author Norbert Orzechowicz <norbert@fsi.pl>
- */
 class ConfigurationTest extends \PHPUnit_Framework_TestCase
 {
     public function testDefaultOptions()
@@ -128,7 +125,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return Processor
+     * @return \Symfony\Component\Config\Definition\Processor
      */
     protected function getProcessor()
     {

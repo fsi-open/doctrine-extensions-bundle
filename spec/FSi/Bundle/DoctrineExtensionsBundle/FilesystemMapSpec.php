@@ -1,13 +1,17 @@
 <?php
 
+/**
+ * (c) FSi sp. z o.o. <info@fsi.pl>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace spec\FSi\Bundle\DoctrineExtensionsBundle;
 
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 
-/**
- * @author Norbert Orzechowicz <norbert@fsi.pl>
- */
 class FilesystemMapSpec extends ObjectBehavior
 {
     /**
@@ -32,7 +36,6 @@ class FilesystemMapSpec extends ObjectBehavior
     {
         $this->shouldHaveType('Gaufrette\FilesystemMap');
     }
-
 
     function it_have_all_filesystems_from_bundle_filesystem_map()
     {

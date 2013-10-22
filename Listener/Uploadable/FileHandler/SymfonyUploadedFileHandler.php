@@ -1,7 +1,7 @@
 <?php
 
 /**
- * (c) Fabryka Stron Internetowych sp. z o.o <info@fsi.pl>
+ * (c) FSi sp. z o.o. <info@fsi.pl>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,9 +14,6 @@ use FSi\DoctrineExtensions\Uploadable\FileHandler\AbstractHandler;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use FSi\Bundle\DoctrineExtensionsBundle\Exception\Uploadable\InvalidFile;
 
-/**
- * @author Norbert Orzechowicz <norbert@fsi.pl>
- */
 class SymfonyUploadedFileHandler extends AbstractHandler
 {
     /**
@@ -58,5 +55,4 @@ class SymfonyUploadedFileHandler extends AbstractHandler
 
         return $content;
     }
-
 }
