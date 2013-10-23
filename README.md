@@ -8,9 +8,8 @@ modify composer.json file
 
 ```
 {
-    "repositories": [{ "type": "composer", "url": "http://git.fsi.pl"}],
     "require": {
-        "fsi/doctrine-extensions-bundle": "1.0.x-dev",
+        "fsi/doctrine-extensions-bundle": "1.0.*",
     },
 
 }
