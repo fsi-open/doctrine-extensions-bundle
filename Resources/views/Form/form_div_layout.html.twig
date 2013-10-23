@@ -1,9 +1,13 @@
 {% block fsi_file_widget %}
 {% spaceless %}
     {% if form.vars.data is not null %}
+        {% if is_fsi_file(form.vars.data) %}
         <div>
-            <a href="{{ fsi_file_asset(form.vars.data, 'uploaded') }}" data-for="{{ form.vars.id }}" target="_blank">{{ form.vars.data|fsi_file_basename }}</a>
+            <a href="{{ fsi_file_path(form.vars.data, 'uploaded') }}" data-for="{{ form.vars.id }}" target="_blank">{{ form.vars.data|fsi_file_basename }}</a>
         </div>
+        {% elseif form.vars.valid %}
+            <div>{{ 'fsi_file.refresh'|trans({}, 'FSiDoctrineExtensionsBundle') }}</div>
+        {% endif %}
     {% endif %}
     {% set type = type|default('file') %}
     {{ block('form_widget_simple') }}

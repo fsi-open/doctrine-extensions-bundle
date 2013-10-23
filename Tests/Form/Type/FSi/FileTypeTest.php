@@ -12,6 +12,7 @@ namespace FSi\Bundle\DoctrineExtensionsBundle\Tests\Form\Type\FSi;
 use FSi\Bundle\DoctrineExtensionsBundle\Tests\Fixtures\Entity\Article;
 use FSi\Bundle\DoctrineExtensionsBundle\Tests\Fixtures\Form\Extension\FSiFileExtension;
 use FSi\Bundle\DoctrineExtensionsBundle\Twig\Extension\Assets;
+use FSi\Bundle\DoctrineExtensionsBundle\Twig\Extension\FSi\File as FileTwigExtension;
 use Symfony\Bridge\Twig\Extension\FormExtension;
 use Symfony\Bridge\Twig\Extension\TranslationExtension;
 use Symfony\Bridge\Twig\Form\TwigRenderer;
@@ -55,6 +56,7 @@ class FileTypeTest extends FormIntegrationTestCase
         $twig->addExtension(new TranslationExtension(new StubTranslator()));
         $twig->addExtension(new FormExtension($renderer));
         $twig->addExtension(new Assets('local_path'));
+        $twig->addExtension(new FileTwigExtension());
 
 
         $container = $this->getMock('Symfony\Component\DependencyInjection\ContainerInterface');
@@ -88,14 +90,14 @@ class FileTypeTest extends FormIntegrationTestCase
         $file->expects($this->any())
             ->method('getFilesystem')
             ->will($this->returnCallback(function() use ($self) {
-                $fileSystem = $this->getMockBuilder('Gaufrette\Filesystem')
+                $fileSystem = $self->getMockBuilder('Gaufrette\Filesystem')
                     ->disableOriginalConstructor()
                     ->getMock();
 
-                $fileSystem->expects($this->any())
+                $fileSystem->expects($self->any())
                     ->method('getAdapter')
-                    ->will($this->returnCallback(function() use ($self) {
-                        $adapter = $this->getMockBuilder('Gaufrette\Adapter\Local')
+                    ->will($self->returnCallback(function() use ($self) {
+                        $adapter = $self->getMockBuilder('Gaufrette\Adapter\Local')
                             ->disableOriginalConstructor()
                             ->getMock();
 

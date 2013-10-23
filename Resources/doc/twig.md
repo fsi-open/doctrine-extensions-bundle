@@ -2,14 +2,14 @@
 
 ## Functions
 
-### fsi_file_asset
+### fsi_file_path
 
 This function generate **relative** url to ``FSi\DoctrineExtensions\Uploadable\File`` resource.
 If file is saved in not local filesystem, like FTP extension will create local adapter and save file into it.
 Usage:
 
 ```
-<a href="{{ fsi_file_asset(entity.file, 'uploaded') }}">File</a>
+<a href="{{ fsi_file_path(entity.file, 'uploaded') }}">File</a>
 ```
 
 First argument must be an instance of ``FSi\DoctrineExtensions\Uploadable\File``. The second one is prefix added to 
@@ -35,7 +35,7 @@ twig:
 From now following code
 
 ```
-<a href="{{ fsi_file_asset(entity.file) }}">File</a>
+<a href="{{ fsi_file_path(entity.file) }}">File</a>
 ```
 
 will give us
@@ -43,6 +43,10 @@ will give us
 ```
 <a href="/uploaded/Entity/File/1/file.jpg">File</a>
 ```
+
+### is_fsi_file 
+
+This function check if passed argument is an instance of ``FSi\DoctrineExtensions\Uploadable\File``
 
 ## Filters
 
