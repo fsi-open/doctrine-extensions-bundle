@@ -55,8 +55,7 @@
             <argument type="collection">{%fsi_doctrine_extensions.listener.uploadable.configuration%}</argument>
         </service>
 
-        <service id="fsi_doctrine_extensions.listener.translatable" class="%fsi_doctrine_extensions.listener.translatable.class%">
-        </service>
+        <service id="fsi_doctrine_extensions.listener.translatable" class="%fsi_doctrine_extensions.listener.translatable.class%" />
 
         <!-- Twig Extension -->
         <service id="fsi_doctrine_extensions.twig.extension.assets" class="%fsi_doctrine_extensions.twig.extension.assets.class%">
