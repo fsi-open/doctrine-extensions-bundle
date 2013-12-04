@@ -46,9 +46,9 @@ class FSIDoctrineExtensionsExtension extends Extension
                     $definition = $container->getDefinition($subscriber);
                     $definition->addTag('doctrine.event_subscriber', $attributes);
                 }
-                $this->setUploadableConfiguration($container, $config);
             }
         }
+        $this->setUploadableConfiguration($container, $config);
     }
 
     /**

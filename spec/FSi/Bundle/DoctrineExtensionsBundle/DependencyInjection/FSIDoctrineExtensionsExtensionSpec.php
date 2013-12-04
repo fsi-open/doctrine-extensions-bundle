@@ -63,6 +63,13 @@ class FSIDoctrineExtensionsExtensionSpec extends ObjectBehavior
         $builder->getParameterBag()->shouldBeCalled()->willReturn($parameterBag);
         /* Above code is added only because builder is used in services loader. */
 
+        $builder->getDefinition('fsi_doctrine_extensions.listener.uploadable')
+            ->shouldBeCalled()
+            ->willReturn($uploadable);
+
+        $builder->setParameter('fsi_doctrine_extensions.default.filesystem.adapter.path',
+            '%kernel.root_dir%/../web/uploaded')->shouldBeCalled();
+
         $builder->setParameter('fsi_doctrine_extensions.listener.uploadable.configuration', array(
             'FSi\Bundle\DemoBundle\Entity\Article' => array(
                 'image' => array(
