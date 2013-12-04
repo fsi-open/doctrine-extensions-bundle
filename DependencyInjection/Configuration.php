@@ -25,6 +25,7 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->append($this->getVendorNode('orm'))
+                ->scalarNode('default_locale')->defaultValue('%locale%')->end()
                 ->scalarNode('default_key_maker_service')->defaultValue('fsi_doctrine_extensions.default.key_maker')->end()
                 ->scalarNode('default_filesystem_path')->defaultValue('%kernel.root_dir%/../web/uploaded')->end()
                 ->scalarNode('default_filesystem_service')->defaultValue('fsi_doctrine_extensions.default.filesystem')->end()

@@ -107,6 +107,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
                             )
                         )
                     ),
+                    'default_locale' => '%locale%',
                     'default_key_maker_service' =>  'fsi_doctrine_extensions.default.key_maker',
                     'default_filesystem_path' => '%kernel.root_dir%/../web/uploaded',
                     'default_filesystem_service' => 'fsi_doctrine_extensions.default.filesystem',
@@ -148,6 +149,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             'orm' => array(),
+            'default_locale' => '%locale%',
             'default_key_maker_service' =>  'fsi_doctrine_extensions.default.key_maker',
             'default_filesystem_path' => '%kernel.root_dir%/../web/uploaded',
             'default_filesystem_service' => 'fsi_doctrine_extensions.default.filesystem',
