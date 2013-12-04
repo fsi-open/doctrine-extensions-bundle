@@ -63,6 +63,7 @@ class Configuration implements ConfigurationInterface
             ->performNoDeepMerging()
                 ->children()
                     ->scalarNode('uploadable')->defaultFalse()->end()
+                    ->scalarNode('translatable')->defaultFalse()->end()
                 ->end()
             ->end();
 

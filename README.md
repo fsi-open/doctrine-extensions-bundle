@@ -42,6 +42,7 @@ Configure listeners
 fsi_doctrine_extensions:
     orm:
         default:
+            translatable: true
             uploadable: true
 ```
 
