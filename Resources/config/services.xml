@@ -10,7 +10,7 @@
         <parameter key="fsi_doctrine_extensions.filehandler.splfileinfo.class">FSi\DoctrineExtensions\Uploadable\FileHandler\SplFileInfoHandler</parameter>
         <parameter key="fsi_doctrine_extensions.filehandler.symfony_uploaded_file.class">FSi\Bundle\DoctrineExtensionsBundle\Listener\Uploadable\FileHandler\SymfonyUploadedFileHandler</parameter>
         <parameter key="fsi_doctrine_extensions.gaufrette.filesystem_map.class">FSi\Bundle\DoctrineExtensionsBundle\FilesystemMap</parameter>
-        <parameter key="fsi_doctrine_extensions.listener.translatable.class">FSi\Bundle\DoctrineExtensionsBundle\Listener\Translatable\TranslatableListener</parameter>
+        <parameter key="fsi_doctrine_extensions.listener.translatable.class">FSi\Bundle\DoctrineExtensions\Translatable\TranslatableListener</parameter>
         <parameter key="fsi_doctrine_extensions.listener.uploadable.class">FSi\Bundle\DoctrineExtensionsBundle\Listener\Uploadable\UploadableListener</parameter>
         <parameter key="fsi_doctrine_extensions.default.key_maker.class">FSi\DoctrineExtensions\Uploadable\Keymaker\Entity</parameter>
         <parameter key="fsi_doctrine_extensions.default.filesystem.class">Gaufrette\Filesystem</parameter>
