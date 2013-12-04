@@ -49,6 +49,7 @@ class FSIDoctrineExtensionsExtension extends Extension
             }
         }
         $this->setUploadableConfiguration($container, $config);
+        $this->setTranslatableConfiguration($container, $config);
     }
 
     /**
@@ -81,5 +82,15 @@ class FSIDoctrineExtensionsExtension extends Extension
         }
 
         $container->setParameter('fsi_doctrine_extensions.listener.uploadable.configuration', $configuration);
+    }
+
+    /**
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param array $config
+     */
+    protected function setTranslatableConfiguration(ContainerBuilder $container, $config = array())
+    {
+        $container->getDefinition('fsi_doctrine_extensions.listener.translatable')
+            ->addMethodCall('setDefaultLocale', array('defaultLocale' => $config['default_locale']));
     }
 }
