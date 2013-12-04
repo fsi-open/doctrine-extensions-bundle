@@ -27,5 +27,7 @@ class ImageValidatorTest extends BaseTest
         $this->validator = new ImageValidator();
         $this->validator->initialize($this->context);
         $this->image = new File('test.gif', $filesystem);
+        $this->imageLandscape = new File('test_landscape.gif', $filesystem);
+        $this->imagePortrait = new File('test_portrait.gif', $filesystem);
     }
 }
