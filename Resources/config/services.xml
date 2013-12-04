@@ -10,6 +10,7 @@
         <parameter key="fsi_doctrine_extensions.filehandler.splfileinfo.class">FSi\DoctrineExtensions\Uploadable\FileHandler\SplFileInfoHandler</parameter>
         <parameter key="fsi_doctrine_extensions.filehandler.symfony_uploaded_file.class">FSi\Bundle\DoctrineExtensionsBundle\Listener\Uploadable\FileHandler\SymfonyUploadedFileHandler</parameter>
         <parameter key="fsi_doctrine_extensions.gaufrette.filesystem_map.class">FSi\Bundle\DoctrineExtensionsBundle\FilesystemMap</parameter>
+        <parameter key="fsi_doctrine_extensions.listener.translatable.class">FSi\Bundle\DoctrineExtensionsBundle\Listener\Translatable\TranslatableListener</parameter>
         <parameter key="fsi_doctrine_extensions.listener.uploadable.class">FSi\Bundle\DoctrineExtensionsBundle\Listener\Uploadable\UploadableListener</parameter>
         <parameter key="fsi_doctrine_extensions.default.key_maker.class">FSi\DoctrineExtensions\Uploadable\Keymaker\Entity</parameter>
         <parameter key="fsi_doctrine_extensions.default.filesystem.class">Gaufrette\Filesystem</parameter>
@@ -53,6 +54,8 @@
             <argument type="service" id="fsi_doctrine_extensions.filehandler.chain" />
             <argument type="collection">{%fsi_doctrine_extensions.listener.uploadable.configuration%}</argument>
         </service>
+
+        <service id="fsi_doctrine_extensions.listener.translatable" class="%fsi_doctrine_extensions.listener.translatable.class%" />
 
         <!-- Twig Extension -->
         <service id="fsi_doctrine_extensions.twig.extension.assets" class="%fsi_doctrine_extensions.twig.extension.assets.class%">
