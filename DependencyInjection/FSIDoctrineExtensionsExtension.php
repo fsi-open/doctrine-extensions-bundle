@@ -45,13 +45,8 @@ class FSIDoctrineExtensionsExtension extends Extension
                     $attributes = array('connection' => $connection);
                     $definition = $container->getDefinition($subscriber);
                     $definition->addTag('doctrine.event_subscriber', $attributes);
-
-                    switch ($name) {
-                        case 'uploadable':
-                            $this->setUploadableConfiguration($container, $config);
-                            break;
-                    }
                 }
+                $this->setUploadableConfiguration($container, $config);
             }
         }
     }
