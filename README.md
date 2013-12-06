@@ -53,7 +53,7 @@ framework:
     translator:      { fallback: %locale% }
 ```
 
-Create entity
+## Example entity with uploadable fields
 
 ```php
 <?php
@@ -140,12 +140,223 @@ class Article
 
 ```
 
-# Documentation
+## Example entity with translatable fields and translation entity
+
+```php
+namespace Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use FSi\DoctrineExtensions\Translatable\Mapping\Annotation as Translatable;
+
+/**
+ * @ORM\Entity(repositoryClass="\FSi\DoctrineExtensions\Translatable\Entity\Repository\TranslatableRepository")
+ */
+class Article
+{
+    /**
+     * @ORM\Column(name="id", type="bigint")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     * @var integer $id
+     */
+    private $id;
+
+    /**
+     * @ORM\Column(type="datetime")
+     * @var string
+     */
+    private $date;
+
+    /**
+     * @Translatable\Locale
+     * @var string
+     */
+    private $locale;
+
+    /**
+     * @Translatable\Translatable(mappedBy="translations")
+     * @var string
+     */
+    private $title;
+
+    /**
+     * @Translatable\Translatable(mappedBy="translations")
+     * @var string
+     */
+    private $contents;
+
+    /**
+     * @ORM\OneToMany(targetEntity="ArticleTranslation", mappedBy="article", indexBy="locale")
+     * @var Doctrine\Common\Collections\ArrayCollection
+     */
+    private $translations;
+
+    public function __construct()
+    {
+        $this->translations = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Get id
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function setDate(\DateTime $date)
+    {
+        $this->date = $date;
+        return $this;
+    }
+
+    public function getDate()
+    {
+        return $this->date;
+    }
+
+    public function setTitle($title)
+    {
+        $this->title = (string)$title;
+        return $this;
+    }
+
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    public function setContents($contents)
+    {
+        $this->contents = (string)$contents;
+        return $this;
+    }
+
+    public function getContents()
+    {
+        return $this->contents;
+    }
+
+    public function setLocale($locale)
+    {
+        $this->locale = (string)$locale;
+        return $this;
+    }
+
+    public function getLocale()
+    {
+        return $this->locale;
+    }
+
+    public function getTranslations()
+    {
+        return $this->translations;
+    }
+
+    public function hasTranslation($locale)
+    {
+        return isset($this->translations[$locale]);
+    }
+
+    public function getTranslation($locale)
+    {
+        if ($this->hasTranslation($locale)) {
+            return $this->translations[$locale];
+        } else {
+            return null;
+        }
+    }
+}
+```
+
+```
+namespace Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use FSi\DoctrineExtensions\Translatable\Mapping\Annotation as Translatable;
+
+/**
+ * @ORM\Entity
+ */
+class ArticleTranslation
+{
+    /**
+     * @ORM\Column(name="id", type="bigint")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     * @var integer $id
+     */
+    private $id;
+
+    /**
+     * @Translatable\Locale
+     * @ORM\Column(type="string", length=2)
+     * @var string
+     */
+    private $locale;
+
+    /**
+     * @ORM\Column
+     * @var string
+     */
+    private $title;
+
+    /**
+     * @ORM\Column
+     * @var string
+     */
+    private $contents;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Article", inversedBy="translations")
+     * @ORM\JoinColumn(name="article", referencedColumnName="id")
+     * @var Doctrine\Common\Collections\ArrayCollection
+     */
+    private $article;
+
+    public function setTitle($title)
+    {
+        $this->title = (string)$title;
+        return $this;
+    }
+
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    public function setContents($contents)
+    {
+        $this->contents = (string)$contents;
+        return $this;
+    }
+
+    public function getContents()
+    {
+        return $this->contents;
+    }
+
+    public function setLocale($locale)
+    {
+        $this->locale = (string)$locale;
+        return $this;
+    }
+
+    public function getLocale()
+    {
+        return $this->locale;
+    }
+
+}
+```
+
+## Additional documentation
 
 * [Twig Extensions](Resources/doc/twig.md)
 * [Symfony Form](Resources/doc/form.md)
 
-# Validation
+## Extended validators
 
 There are two validators that can be used with FSi uploadable file. 
 
@@ -153,3 +364,8 @@ There are two validators that can be used with FSi uploadable file.
 ``@FSiAssert\File`` - extends symfony2 File validator  
 
 Both of them have exactly same options as parents. 
+
+## Detailed documentation of FSi doctrine extensions
+
+* [Translatable](https://github.com/fsi-open/doctrine-extensions/blob/master/doc/translatable.md)
+* [Uploadable](https://github.com/fsi-open/doctrine-extensions/blob/master/doc/uploadable.md)
