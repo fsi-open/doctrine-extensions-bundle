@@ -11,3 +11,6 @@ before_script:
 script:
   - ./bin/phpspec run -f pretty
   - phpunit
+
+notifications:
+  irc: "irc.freenode.org#fsi-open"   
