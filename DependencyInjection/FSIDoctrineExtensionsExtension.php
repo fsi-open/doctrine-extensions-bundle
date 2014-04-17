@@ -67,6 +67,11 @@ class FSIDoctrineExtensionsExtension extends Extension
             'setDefaultFilesystem',
             array(new Reference($config['default_filesystem_service']))
         );
+
+        $container->setParameter(
+            'fsi_doctrine_extensions.default.filesystem.adapter.prefix',
+            $config['default_filesystem_prefix']
+        );
     }
 
     /**

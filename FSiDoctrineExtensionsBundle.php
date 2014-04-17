@@ -9,6 +9,7 @@
 
 namespace FSi\Bundle\DoctrineExtensionsBundle;
 
+use FSi\Bundle\DoctrineExtensionsBundle\DependencyInjection\Compiler\TwigGlobalsPass;
 use FSi\Bundle\DoctrineExtensionsBundle\DependencyInjection\FSIDoctrineExtensionsExtension;
 use FSi\Bundle\DoctrineExtensionsBundle\DependencyInjection\Compiler\TwigFormPass;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
@@ -24,6 +25,7 @@ class FSiDoctrineExtensionsBundle extends Bundle
         parent::build($container);
 
         $container->addCompilerPass(new TwigFormPass());
+        $container->addCompilerPass(new TwigGlobalsPass());
     }
 
     /**
