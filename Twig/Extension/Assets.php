@@ -84,7 +84,7 @@ class Assets extends \Twig_Extension
     public function fileAsset(File $file, $prefix = null)
     {
         return $this->assets->getAssetUrl(
-            $this->filePathResolver->fileAsset($file, $prefix)
+            $this->filePathResolver->filePath($file, $prefix)
         );
     }
 }

@@ -44,8 +44,8 @@ class AssetsSpec extends ObjectBehavior
     function it_compute_file_asset_path(File $file, AssetsExtension $assets, FSiFilePathResolver $filePathResolver)
     {
         $file->getKey()->willReturn('file-name.txt');
-        $filePathResolver->fileAsset($file, 'uploaded')->willReturn('uploaded/file-name.txt');
-        $assets->getAssetUrl('uploaded/file-name.txt')->willReturn('/uploaded/file-name.txt');
+        $filePathResolver->filePath($file, 'uploaded')->willReturn('/uploaded/file-name.txt');
+        $assets->getAssetUrl('/uploaded/file-name.txt')->willReturn('/uploaded/file-name.txt');
 
         $this->fileAsset($file, 'uploaded')->shouldReturn('/uploaded/file-name.txt');
     }
