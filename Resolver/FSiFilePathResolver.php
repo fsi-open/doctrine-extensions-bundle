@@ -27,24 +27,6 @@ class FSiFilePathResolver
         $this->adapterPath = $adapterPath;
         $this->filePrefix = $filePrefix;
     }
-    
-    /**
-     * @param \FSi\DoctrineExtensions\Uploadable\File $file
-     * @param null|string $prefix
-     * @throws \RuntimeException
-     * @return string
-     */
-    public function fileAsset(File $file, $prefix = null)
-    {
-        if ($file->getFilesystem()->getAdapter() instanceof Local
-            || $file->getFilesystem()->getAdapter() instanceof Cache) {
-            return $this->generatePath($file, $prefix);
-        }
-
-        $this->writeFileToLocalAdapter($file);
-
-        return $this->generatePath($file, $prefix);
-    }
 
     /**
      * @param \FSi\DoctrineExtensions\Uploadable\File $file
