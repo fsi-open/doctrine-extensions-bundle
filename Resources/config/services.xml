@@ -18,6 +18,7 @@
         <parameter key="fsi_doctrine_extensions.twig.extension.assets.class">FSi\Bundle\DoctrineExtensionsBundle\Twig\Extension\Assets</parameter>
         <parameter key="fsi_doctrine_extensions.twig.extension.fsi_file.class">FSi\Bundle\DoctrineExtensionsBundle\Twig\Extension\FSi\File</parameter>
         <parameter key="fsi_doctrine_extensions.form.type.fsi.file.class">FSi\Bundle\DoctrineExtensionsBundle\Form\Type\FSi\FileType</parameter>
+        <parameter key="fsi_doctrine_extensions.resolver.fsi.file_path.class">FSi\Bundle\DoctrineExtensionsBundle\Resolver\FSiFilePathResolver</parameter>
     </parameters>
 
     <services>
@@ -57,10 +58,15 @@
 
         <service id="fsi_doctrine_extensions.listener.translatable" class="%fsi_doctrine_extensions.listener.translatable.class%" />
 
+        <service id="fsi_doctrine_extensions.resolver.fsi.file_path" class="%fsi_doctrine_extensions.resolver.fsi.file_path.class%">
+            <argument>%fsi_doctrine_extensions.default.filesystem.adapter.path%</argument>
+            <argument>%fsi_doctrine_extensions.default.filesystem.adapter.prefix%</argument>
+        </service>
+
         <!-- Twig Extension -->
         <service id="fsi_doctrine_extensions.twig.extension.assets" class="%fsi_doctrine_extensions.twig.extension.assets.class%">
             <tag name="twig.extension" />
-            <argument>%fsi_doctrine_extensions.default.filesystem.adapter.path%</argument>
+            <argument type="service" id="fsi_doctrine_extensions.resolver.fsi.file_path" />
         </service>
 
         <service id="fsi_doctrine_extensions.twig.extension.fsi_file" class="%fsi_doctrine_extensions.twig.extension.fsi_file.class%">
