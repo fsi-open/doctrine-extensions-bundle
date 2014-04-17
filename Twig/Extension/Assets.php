@@ -9,7 +9,7 @@
 
 namespace FSi\Bundle\DoctrineExtensionsBundle\Twig\Extension;
 
-use FSi\Bundle\DoctrineExtensionsBundle\Resolver\FilePathResolver;
+use FSi\Bundle\DoctrineExtensionsBundle\Resolver\FSiFilePathResolver;
 use FSi\DoctrineExtensions\Uploadable\File;
 use Twig_Environment;
 
@@ -26,14 +26,14 @@ class Assets extends \Twig_Extension
     protected $filePrefix;
 
     /**
-     * @var \FSi\Bundle\DoctrineExtensionsBundle\Resolver\FilePathResolver
+     * @var \FSi\Bundle\DoctrineExtensionsBundle\Resolver\FSiFilePathResolver
      */
     protected $filePathResolver;
 
     /**
-     * @param FilePathResolver $filePathResolver
+     * @param FSiFilePathResolver $filePathResolver
      */
-    public function __construct(FilePathResolver $filePathResolver)
+    public function __construct(FSiFilePathResolver $filePathResolver)
     {
         $this->filePathResolver = $filePathResolver;
     }
