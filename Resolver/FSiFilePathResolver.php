@@ -13,7 +13,7 @@ use FSi\DoctrineExtensions\Uploadable\File;
 use Gaufrette\Adapter\Cache;
 use Gaufrette\Adapter\Local;
 
-class FilePathResolver
+class FSiFilePathResolver
 {
     private $adapterPath;
     private $filePrefix;

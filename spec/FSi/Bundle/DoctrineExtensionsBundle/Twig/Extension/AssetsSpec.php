@@ -9,7 +9,7 @@
 
 namespace spec\FSi\Bundle\DoctrineExtensionsBundle\Twig\Extension;
 
-use FSi\Bundle\DoctrineExtensionsBundle\Resolver\FilePathResolver;
+use FSi\Bundle\DoctrineExtensionsBundle\Resolver\FSiFilePathResolver;
 use FSi\DoctrineExtensions\Uploadable\File;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
@@ -17,7 +17,7 @@ use Symfony\Bundle\TwigBundle\Extension\AssetsExtension;
 
 class AssetsSpec extends ObjectBehavior
 {
-    function let(\Twig_Environment $environment, AssetsExtension $assets, FilePathResolver $filePathResolver)
+    function let(\Twig_Environment $environment, AssetsExtension $assets, FSiFilePathResolver $filePathResolver)
     {
         $this->beConstructedWith($filePathResolver);
         $environment->hasExtension('assets')->shouldBeCalled()->willReturn(true);
@@ -41,7 +41,7 @@ class AssetsSpec extends ObjectBehavior
         $this->getFunctions()->shouldHaveFunction('fsi_file_asset');
     }
 
-    function it_compute_file_asset_path(File $file, AssetsExtension $assets, FilePathResolver $filePathResolver)
+    function it_compute_file_asset_path(File $file, AssetsExtension $assets, FSiFilePathResolver $filePathResolver)
     {
         $file->getKey()->willReturn('file-name.txt');
         $filePathResolver->fileAsset($file, 'uploaded')->willReturn('uploaded/file-name.txt');

@@ -15,7 +15,7 @@ use Gaufrette\Filesystem;
 use PhpSpec\ObjectBehavior;
 use Twig_Environment;
 
-class FilePathResolverSpec extends ObjectBehavior
+class FSiFilePathResolverSpec extends ObjectBehavior
 {
     function let()
     {
