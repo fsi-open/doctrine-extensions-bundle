@@ -16,8 +16,10 @@ matrix:
   allow_failures:
     - env: SYMFONY_VERSION=dev-master
 
-before_script:
+before_install:
   - sudo apt-get update > /dev/null
+
+before_script:
   - composer --prefer-source --dev install
 
 install:
