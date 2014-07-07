@@ -21,7 +21,7 @@ before_script:
   - composer --prefer-source --dev install
 
 install:
-  - sudo apt-get install -y --force-yes apache2 libapache2-mod-php5 php5-sqlite
+  - sudo apt-get install -y --force-yes apache2 libapache2-mod-php5
   - sudo sed -i -e "s/export APACHE_RUN_USER=.*/export APACHE_RUN_USER=travis/ ; s/export APACHE_RUN_GROUP=.*/export APACHE_RUN_GROUP=travis/" /etc/apache2/envvars
   - sudo chown -R travis:travis /var/lock/apache2
   - echo '' > ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini
