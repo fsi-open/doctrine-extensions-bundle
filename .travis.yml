@@ -5,12 +5,30 @@ php:
   - 5.4
   - 5.5
 
+env:
+  - SYMFONY_VERSION=2.2.*
+  - SYMFONY_VERSION=2.3.*
+  - SYMFONY_VERSION=2.4.*
+  - SYMFONY_VERSION=2.5.*
+  - SYMFONY_VERSION=dev-master
+
+matrix:
+  allow_failures:
+    - env: SYMFONY_VERSION=dev-master
+
 before_script:
+  - sudo apt-get update > /dev/null
   - composer --prefer-source --dev install
+
+install:
+  - sudo apt-get install -y --force-yes apache2 libapache2-mod-php5 php5-sqlite
+  - sudo sed -i -e "s/export APACHE_RUN_USER=.*/export APACHE_RUN_USER=travis/ ; s/export APACHE_RUN_GROUP=.*/export APACHE_RUN_GROUP=travis/" /etc/apache2/envvars
+  - sudo chown -R travis:travis /var/lock/apache2
+  - echo '' > ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini
 
 script:
   - ./bin/phpspec run -f pretty
-  - phpunit
+  - ./bin/phpunit
 
 notifications:
-  irc: "irc.freenode.org#fsi-open"   
+  irc:   "irc.freenode.org#fsi-open"
