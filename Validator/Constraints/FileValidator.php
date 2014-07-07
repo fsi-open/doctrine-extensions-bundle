@@ -27,7 +27,6 @@ class FileValidator extends BaseValidator
     public function validate($value, Constraint $constraint)
     {
         if ($value instanceof FSiFile) {
-//            \Doctrine\Common\Util\Debug::
             $tmpFile = sys_get_temp_dir() . '/' . uniqid();
             file_put_contents($tmpFile, $value->getContent());
 
