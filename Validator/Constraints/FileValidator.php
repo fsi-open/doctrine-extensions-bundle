@@ -15,6 +15,12 @@ use FSi\DoctrineExtensions\Uploadable\File as FSiFile;
 
 class FileValidator extends BaseValidator
 {
+    protected static $suffices = array(
+        1 => 'bytes',
+        self::KB_BYTES => 'kB',
+        self::MB_BYTES => 'MB',
+    );
+
     /**
      * {@inheritdoc}
      */

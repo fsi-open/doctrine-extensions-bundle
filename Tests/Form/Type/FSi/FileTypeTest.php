@@ -9,7 +9,6 @@
 
 namespace FSi\Bundle\DoctrineExtensionsBundle\Tests\Form\Type\FSi;
 
-use FSi\Bundle\DoctrineExtensionsBundle\Resolver\FSiFilePathResolver;
 use FSi\Bundle\DoctrineExtensionsBundle\Tests\Fixtures\Entity\Article;
 use FSi\Bundle\DoctrineExtensionsBundle\Tests\Fixtures\Form\Extension\FSiFileExtension;
 use FSi\Bundle\DoctrineExtensionsBundle\Twig\Extension\Assets;
@@ -22,6 +21,7 @@ use Symfony\Bridge\Twig\Tests\Extension\Fixtures\StubFilesystemLoader;
 use Symfony\Bridge\Twig\Tests\Extension\Fixtures\StubTranslator;
 use Symfony\Bundle\TwigBundle\Extension\AssetsExtension;
 use Symfony\Component\Form\Test\FormIntegrationTestCase;
+use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Templating\Asset\UrlPackage;
 
 class FileTypeTest extends FormIntegrationTestCase
@@ -56,7 +56,7 @@ class FileTypeTest extends FormIntegrationTestCase
         $twig->addGlobal('global', '');
         $twig->addExtension(new TranslationExtension(new StubTranslator()));
         $twig->addExtension(new FormExtension($renderer));
-        $twig->addExtension(new Assets(new FSiFilePathResolver('/adapter/path', 'uploaded')));
+        $twig->addExtension(new Assets('local_path'));
         $twig->addExtension(new FileTwigExtension());
 
 
@@ -66,7 +66,9 @@ class FileTypeTest extends FormIntegrationTestCase
             ->with('templating.helper.assets')
             ->will($this->returnValue(new UrlPackage()));
 
-        $twig->addExtension(new AssetsExtension($container));
+        $request = $this->getMock('Symfony\Component\Routing\RequestContext');
+
+        $twig->addExtension(new AssetsExtension($container, $request));
         $this->twig = $twig;
     }
 
