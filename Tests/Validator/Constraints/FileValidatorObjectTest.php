@@ -86,4 +86,25 @@ class FileValidatorObjectTest extends BaseTest
 
         $this->validator->validate($this->getFile($this->path), $constraint);
     }
+
+    /**
+     * @dataProvider provideMaxSizeExceededTests
+     */
+    public function testMaxSizeExceeded($bytesWritten, $limit, $sizeAsString, $limitAsString, $suffix)
+    {
+        fseek($this->file, $bytesWritten-1, SEEK_SET);
+        fwrite($this->file, '0');
+        fclose($this->file);
+
+        $constraint = new \Symfony\Component\Validator\Constraints\File(array(
+            'maxSize'           => $limit,
+            'maxSizeMessage'    => 'myMessage',
+        ));
+
+        $this->context->expects($this->once())
+            ->method('addViolation')
+           ;
+
+        $this->validator->validate($this->getFile($this->path), $constraint);
+    }
 }

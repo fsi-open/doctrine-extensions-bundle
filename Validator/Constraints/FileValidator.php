@@ -15,12 +15,19 @@ use FSi\DoctrineExtensions\Uploadable\File as FSiFile;
 
 class FileValidator extends BaseValidator
 {
+    protected static $suffices = array(
+        1 => 'bytes',
+        self::KB_BYTES => 'kB',
+        self::MB_BYTES => 'MB',
+    );
+
     /**
      * {@inheritdoc}
      */
     public function validate($value, Constraint $constraint)
     {
         if ($value instanceof FSiFile) {
+//            \Doctrine\Common\Util\Debug::
             $tmpFile = sys_get_temp_dir() . '/' . uniqid();
             file_put_contents($tmpFile, $value->getContent());
 
