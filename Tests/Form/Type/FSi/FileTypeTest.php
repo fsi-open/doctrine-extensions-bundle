@@ -9,6 +9,7 @@
 
 namespace FSi\Bundle\DoctrineExtensionsBundle\Tests\Form\Type\FSi;
 
+use FSi\Bundle\DoctrineExtensionsBundle\Resolver\FSiFilePathResolver;
 use FSi\Bundle\DoctrineExtensionsBundle\Tests\Fixtures\Entity\Article;
 use FSi\Bundle\DoctrineExtensionsBundle\Tests\Fixtures\Form\Extension\FSiFileExtension;
 use FSi\Bundle\DoctrineExtensionsBundle\Twig\Extension\Assets;
@@ -55,7 +56,7 @@ class FileTypeTest extends FormIntegrationTestCase
         $twig->addGlobal('global', '');
         $twig->addExtension(new TranslationExtension(new StubTranslator()));
         $twig->addExtension(new FormExtension($renderer));
-        $twig->addExtension(new Assets('local_path'));
+        $twig->addExtension(new Assets(new FSiFilePathResolver('/adapter/path', 'uploaded')));
         $twig->addExtension(new FileTwigExtension());
 
 

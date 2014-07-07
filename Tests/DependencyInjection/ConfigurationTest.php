@@ -30,7 +30,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
             0 => array(
                 'orm' => array(
                     'default' => array(
-                        'uploadable' => true,
+                        'uploadable' => true
                     )
                 )
             )
@@ -45,6 +45,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
                     'orm' => array(
                         'default' => array(
                             'uploadable' => true,
+                            'translatable' => false
                         )
                     ),
                 )
@@ -89,6 +90,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
                     'orm' => array(
                         'default' => array(
                             'uploadable' => true,
+                            'translatable' => false
                         )
                     ),
                     'uploadable_configuration' => array(
@@ -105,9 +107,40 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
                             )
                         )
                     ),
+                    'default_locale' => '%locale%',
                     'default_key_maker_service' =>  'fsi_doctrine_extensions.default.key_maker',
+                    'default_filesystem_prefix' => 'uploaded',
                     'default_filesystem_path' => '%kernel.root_dir%/../web/uploaded',
                     'default_filesystem_service' => 'fsi_doctrine_extensions.default.filesystem',
+                )
+            )
+        );
+    }
+
+    public function testTranslatableEnabledOption()
+    {
+        $input = array(
+            0 => array(
+                'orm' => array(
+                    'default' => array(
+                        'translatable' => true
+                    )
+                )
+            )
+        );
+        $config = $this->getProcessor()->processConfiguration(new Configuration(), $input);
+
+        $this->assertSame(
+            $config,
+            array_merge(
+                $this->getBundleDefaultOptions(),
+                array(
+                    'orm' => array(
+                        'default' => array(
+                            'translatable' => true,
+                            'uploadable' => false
+                        )
+                    ),
                 )
             )
         );
@@ -117,7 +150,9 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             'orm' => array(),
+            'default_locale' => '%locale%',
             'default_key_maker_service' =>  'fsi_doctrine_extensions.default.key_maker',
+            'default_filesystem_prefix' => 'uploaded',
             'default_filesystem_path' => '%kernel.root_dir%/../web/uploaded',
             'default_filesystem_service' => 'fsi_doctrine_extensions.default.filesystem',
             'uploadable_configuration' => array()

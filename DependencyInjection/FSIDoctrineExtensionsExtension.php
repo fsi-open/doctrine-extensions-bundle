@@ -45,15 +45,11 @@ class FSIDoctrineExtensionsExtension extends Extension
                     $attributes = array('connection' => $connection);
                     $definition = $container->getDefinition($subscriber);
                     $definition->addTag('doctrine.event_subscriber', $attributes);
-
-                    switch ($name) {
-                        case 'uploadable':
-                            $this->setUploadableConfiguration($container, $config);
-                            break;
-                    }
                 }
             }
         }
+        $this->setUploadableConfiguration($container, $config);
+        $this->setTranslatableConfiguration($container, $config);
     }
 
     /**
@@ -71,6 +67,11 @@ class FSIDoctrineExtensionsExtension extends Extension
             'setDefaultFilesystem',
             array(new Reference($config['default_filesystem_service']))
         );
+
+        $container->setParameter(
+            'fsi_doctrine_extensions.default.filesystem.adapter.prefix',
+            $config['default_filesystem_prefix']
+        );
     }
 
     /**
@@ -86,5 +87,15 @@ class FSIDoctrineExtensionsExtension extends Extension
         }
 
         $container->setParameter('fsi_doctrine_extensions.listener.uploadable.configuration', $configuration);
+    }
+
+    /**
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param array $config
+     */
+    protected function setTranslatableConfiguration(ContainerBuilder $container, $config = array())
+    {
+        $container->getDefinition('fsi_doctrine_extensions.listener.translatable')
+            ->addMethodCall('setDefaultLocale', array('defaultLocale' => $config['default_locale']));
     }
 }

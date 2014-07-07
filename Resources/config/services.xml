@@ -10,6 +10,7 @@
         <parameter key="fsi_doctrine_extensions.filehandler.splfileinfo.class">FSi\DoctrineExtensions\Uploadable\FileHandler\SplFileInfoHandler</parameter>
         <parameter key="fsi_doctrine_extensions.filehandler.symfony_uploaded_file.class">FSi\Bundle\DoctrineExtensionsBundle\Listener\Uploadable\FileHandler\SymfonyUploadedFileHandler</parameter>
         <parameter key="fsi_doctrine_extensions.gaufrette.filesystem_map.class">FSi\Bundle\DoctrineExtensionsBundle\FilesystemMap</parameter>
+        <parameter key="fsi_doctrine_extensions.listener.translatable.class">FSi\DoctrineExtensions\Translatable\TranslatableListener</parameter>
         <parameter key="fsi_doctrine_extensions.listener.uploadable.class">FSi\Bundle\DoctrineExtensionsBundle\Listener\Uploadable\UploadableListener</parameter>
         <parameter key="fsi_doctrine_extensions.default.key_maker.class">FSi\DoctrineExtensions\Uploadable\Keymaker\Entity</parameter>
         <parameter key="fsi_doctrine_extensions.default.filesystem.class">Gaufrette\Filesystem</parameter>
@@ -17,6 +18,7 @@
         <parameter key="fsi_doctrine_extensions.twig.extension.assets.class">FSi\Bundle\DoctrineExtensionsBundle\Twig\Extension\Assets</parameter>
         <parameter key="fsi_doctrine_extensions.twig.extension.fsi_file.class">FSi\Bundle\DoctrineExtensionsBundle\Twig\Extension\FSi\File</parameter>
         <parameter key="fsi_doctrine_extensions.form.type.fsi.file.class">FSi\Bundle\DoctrineExtensionsBundle\Form\Type\FSi\FileType</parameter>
+        <parameter key="fsi_doctrine_extensions.resolver.fsi.file_path.class">FSi\Bundle\DoctrineExtensionsBundle\Resolver\FSiFilePathResolver</parameter>
     </parameters>
 
     <services>
@@ -54,10 +56,17 @@
             <argument type="collection">{%fsi_doctrine_extensions.listener.uploadable.configuration%}</argument>
         </service>
 
+        <service id="fsi_doctrine_extensions.listener.translatable" class="%fsi_doctrine_extensions.listener.translatable.class%" />
+
+        <service id="fsi_doctrine_extensions.resolver.fsi.file_path" class="%fsi_doctrine_extensions.resolver.fsi.file_path.class%">
+            <argument>%fsi_doctrine_extensions.default.filesystem.adapter.path%</argument>
+            <argument>%fsi_doctrine_extensions.default.filesystem.adapter.prefix%</argument>
+        </service>
+
         <!-- Twig Extension -->
         <service id="fsi_doctrine_extensions.twig.extension.assets" class="%fsi_doctrine_extensions.twig.extension.assets.class%">
             <tag name="twig.extension" />
-            <argument>%fsi_doctrine_extensions.default.filesystem.adapter.path%</argument>
+            <argument type="service" id="fsi_doctrine_extensions.resolver.fsi.file_path" />
         </service>
 
         <service id="fsi_doctrine_extensions.twig.extension.fsi_file" class="%fsi_doctrine_extensions.twig.extension.fsi_file.class%">

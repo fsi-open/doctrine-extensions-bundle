@@ -9,27 +9,21 @@
 
 namespace spec\FSi\Bundle\DoctrineExtensionsBundle\Twig\Extension;
 
+use FSi\Bundle\DoctrineExtensionsBundle\Resolver\FSiFilePathResolver;
+use FSi\DoctrineExtensions\Uploadable\File;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
+use Symfony\Bundle\TwigBundle\Extension\AssetsExtension;
 
 class AssetsSpec extends ObjectBehavior
 {
-    /**
-     * @param \Twig_Environment $environment
-     * @param \Symfony\Bundle\TwigBundle\Extension\AssetsExtension $assets
-     */
-    function let($environment, $assets)
+    function let(\Twig_Environment $environment, AssetsExtension $assets, FSiFilePathResolver $filePathResolver)
     {
-        $this->beConstructedWith(__DIR__ . '/tmp');
+        $this->beConstructedWith($filePathResolver);
         $environment->hasExtension('assets')->shouldBeCalled()->willReturn(true);
         $environment->getExtension('assets')->shouldBeCalled()->willReturn($assets);
         $environment->getGlobals()->shouldBeCalled()->willReturn(array());
         $this->initRuntime($environment);
-    }
-
-    function it_is_initializable()
-    {
-        $this->shouldHaveType('FSi\Bundle\DoctrineExtensionsBundle\Twig\Extension\Assets');
     }
 
     function it_is_twig_extension()
@@ -37,7 +31,7 @@ class AssetsSpec extends ObjectBehavior
         $this->shouldBeAnInstanceOf('Twig_Extension');
     }
 
-    function it_have_fsi_url_name()
+    function it_have_extension_name()
     {
         $this->getName()->shouldReturn('fsi_assets');
     }
@@ -45,6 +39,15 @@ class AssetsSpec extends ObjectBehavior
     function it_have_fsi_file_asset_function()
     {
         $this->getFunctions()->shouldHaveFunction('fsi_file_asset');
+    }
+
+    function it_compute_file_asset_path(File $file, AssetsExtension $assets, FSiFilePathResolver $filePathResolver)
+    {
+        $file->getKey()->willReturn('file-name.txt');
+        $filePathResolver->filePath($file, 'uploaded')->willReturn('/uploaded/file-name.txt');
+        $assets->getAssetUrl('/uploaded/file-name.txt')->willReturn('/uploaded/file-name.txt');
+
+        $this->fileAsset($file, 'uploaded')->shouldReturn('/uploaded/file-name.txt');
     }
 
     function it_have_fsi_file_path_function()
@@ -55,156 +58,6 @@ class AssetsSpec extends ObjectBehavior
     function it_have_fsi_file_basename_filter()
     {
         $this->getFilters()->shouldHaveFilter('fsi_file_basename');
-    }
-
-    /**
-     * @param \Symfony\Bundle\TwigBundle\Extension\AssetsExtension $assets
-     * @param \FSi\DoctrineExtensions\Uploadable\File $file
-     * @param \Gaufrette\Filesystem $filesystem
-     * @param \Gaufrette\Adapter\Local $adapter
-     */
-    function it_generate_url_for_fsi_file_with_local_adapter($assets, $file, $filesystem, $adapter)
-    {
-        $assets->getAssetUrl('TestFolder/File/file.jpg')->shouldBeCalled()->willReturn('/TestFolder/File/file.jpg');
-
-        $file->getKey()->shouldBeCalled()->willReturn('TestFolder/File/file.jpg');
-        $file->getFilesystem()->shouldBeCalled()->willReturn($filesystem);
-        $filesystem->getAdapter()->willReturn($adapter);
-
-        $this->fileAsset($file)->shouldReturn('/TestFolder/File/file.jpg');
-        $this->filePath($file)->shouldReturn('/TestFolder/File/file.jpg');
-    }
-
-    /**
-     * @param \Symfony\Bundle\TwigBundle\Extension\AssetsExtension $assets
-     * @param \FSi\DoctrineExtensions\Uploadable\File $file
-     * @param \Gaufrette\Filesystem $filesystem
-     * @param \Gaufrette\Adapter\Cache $adapter
-     */
-    function it_generate_url_for_fsi_file_with_cache_adapter($assets, $file, $filesystem, $adapter)
-    {
-        $assets->getAssetUrl('TestFolder/File/file.jpg')->shouldBeCalled()->willReturn('/TestFolder/File/file.jpg');
-
-        $file->getKey()->shouldBeCalled()->willReturn('TestFolder/File/file.jpg');
-        $file->getFilesystem()->shouldBeCalled()->willReturn($filesystem);
-        $filesystem->getAdapter()->willReturn($adapter);
-
-        $this->fileAsset($file)->shouldReturn('/TestFolder/File/file.jpg');
-        $this->filePath($file)->shouldReturn('/TestFolder/File/file.jpg');
-    }
-
-    /**
-     * @param \Symfony\Bundle\TwigBundle\Extension\AssetsExtension $assets
-     * @param \FSi\DoctrineExtensions\Uploadable\File $file
-     * @param \Gaufrette\Filesystem $filesystem
-     * @param \Gaufrette\Adapter\Local $adapter
-     */
-    function it_generate_url_with_file_path_prefix($assets, $file, $filesystem, $adapter)
-    {
-        $assets->getAssetUrl('uploaded/TestFolder/File/file.jpg')->shouldBeCalled()->willReturn('/uploaded/TestFolder/File/file.jpg');
-
-        $file->getKey()->shouldBeCalled()->willReturn('TestFolder/File/file.jpg');
-        $file->getFilesystem()->shouldBeCalled()->willReturn($filesystem);
-        $filesystem->getAdapter()->willReturn($adapter);
-
-        $this->fileAsset($file, 'uploaded')->shouldReturn('/uploaded/TestFolder/File/file.jpg');
-        $this->filePath($file, 'uploaded')->shouldReturn('/uploaded/TestFolder/File/file.jpg');
-    }
-
-    /**
-     * @param \Symfony\Bundle\TwigBundle\Extension\AssetsExtension $assets
-     * @param \FSi\DoctrineExtensions\Uploadable\File $file
-     * @param \Gaufrette\Filesystem $filesystem
-     * @param \Gaufrette\Adapter\Local $adapter
-     */
-    function it_generate_url_with_file_path_prefix_that_should_be_trimed($assets, $file, $filesystem, $adapter)
-    {
-        $assets->getAssetUrl('uploaded/TestFolder/File/file.jpg')->shouldBeCalled()->willReturn('/uploaded/TestFolder/File/file.jpg');
-
-        $file->getKey()->shouldBeCalled()->willReturn('TestFolder/File/file.jpg');
-        $file->getFilesystem()->shouldBeCalled()->willReturn($filesystem);
-        $filesystem->getAdapter()->willReturn($adapter);
-
-        $this->fileAsset($file, '/uploaded/')->shouldReturn('/uploaded/TestFolder/File/file.jpg');
-        $this->filePath($file, '/uploaded/')->shouldReturn('/uploaded/TestFolder/File/file.jpg');
-    }
-
-    /**
-     * @param \Symfony\Bundle\TwigBundle\Extension\AssetsExtension $assets
-     * @param \FSi\DoctrineExtensions\Uploadable\File $file
-     * @param \Gaufrette\Filesystem $filesystem
-     * @param \Gaufrette\Adapter $adapter
-     */
-    function it_generate_url_for_fsi_file_with_external_adapter($assets, $file, $filesystem, $adapter)
-    {
-        $assets->getAssetUrl('TestFolder/File/file.jpg')->shouldBeCalled()->willReturn('/TestFolder/File/file.jpg');
-
-        $file->getKey()->shouldBeCalled()->willReturn('TestFolder/File/file.jpg');
-        $file->getFilesystem()->shouldBeCalled()->willReturn($filesystem);
-        $filesystem->getAdapter()->willReturn($adapter);
-
-        $file->getContent()->shouldBeCalled()->willReturn('file content');
-
-        $this->fileAsset($file)->shouldReturn('/TestFolder/File/file.jpg');
-        $this->filePath($file)->shouldReturn('/TestFolder/File/file.jpg');
-    }
-
-    /**
-     * @param \Twig_Environment $environment
-     * @param \Symfony\Bundle\TwigBundle\Extension\AssetsExtension $assets
-     * @param \FSi\DoctrineExtensions\Uploadable\File $file
-     * @param \Gaufrette\Filesystem $filesystem
-     * @param \Gaufrette\Adapter\Local $adapter
-     */
-    function it_generate_url_with_prefix_from_globals($environment, $assets, $file, $filesystem, $adapter)
-    {
-        $environment->getGlobals()->willReturn(array(
-            'fsi_file_prefix' => 'uploaded'
-        ));
-        $this->initRuntime($environment);
-
-        $assets->getAssetUrl('uploaded/TestFolder/File/file.jpg')->shouldBeCalled()->willReturn('/uploaded/TestFolder/File/file.jpg');
-
-        $file->getKey()->shouldBeCalled()->willReturn('TestFolder/File/file.jpg');
-        $file->getFilesystem()->shouldBeCalled()->willReturn($filesystem);
-        $filesystem->getAdapter()->willReturn($adapter);
-
-        $this->fileAsset($file)->shouldReturn('/uploaded/TestFolder/File/file.jpg');
-        $this->filePath($file)->shouldReturn('/uploaded/TestFolder/File/file.jpg');
-    }
-
-    /**
-     * @param \Twig_Environment $environment
-     * @param \Symfony\Bundle\TwigBundle\Extension\AssetsExtension $assets
-     * @param \FSi\DoctrineExtensions\Uploadable\File $file
-     * @param \Gaufrette\Filesystem $filesystem
-     * @param \Gaufrette\Adapter\Local $adapter
-     */
-    function it_generate_url_with_passed_prefix_even_if_there_is_a_prefix_in_globals($environment, $assets, $file, $filesystem, $adapter)
-    {
-        $environment->getGlobals()->willReturn(array(
-            'fsi_file_prefix' => 'uploaded'
-        ));
-        $this->initRuntime($environment);
-
-        $assets->getAssetUrl('my_prefix/TestFolder/File/file.jpg')->shouldBeCalled()->willReturn('/my_prefix/TestFolder/File/file.jpg');
-
-        $file->getKey()->shouldBeCalled()->willReturn('TestFolder/File/file.jpg');
-        $file->getFilesystem()->shouldBeCalled()->willReturn($filesystem);
-        $filesystem->getAdapter()->willReturn($adapter);
-
-        $this->fileAsset($file, 'my_prefix')->shouldReturn('/my_prefix/TestFolder/File/file.jpg');
-        $this->filePath($file, 'my_prefix')->shouldReturn('/my_prefix/TestFolder/File/file.jpg');
-    }
-
-    /**
-     * @param \FSi\DoctrineExtensions\Uploadable\File $file
-     */
-    function it_generate_fsi_file_basename($file)
-    {
-        $file->getName()->shouldBeCalled()->willReturn('TestFolder/File/file.jpg');
-
-        $this->fileBasename($file)->shouldReturn('file.jpg');
     }
 
     /**
@@ -236,34 +89,5 @@ class AssetsSpec extends ObjectBehavior
                 return false;
             }
         );
-    }
-
-    function letgo()
-    {
-        if (file_exists(__DIR__ . '/tmp')) {
-            self::deleteRecursive(__DIR__ . '/tmp');
-            rmdir(__DIR__ . '/tmp');
-        }
-    }
-
-    /**
-     * @param string $path
-     */
-    public static function deleteRecursive($path)
-    {
-        foreach (new \DirectoryIterator($path) as $file) {
-            if ($file->isDot()) {
-                continue;
-            }
-
-            $filename = $path . DIRECTORY_SEPARATOR . $file->getFilename();
-
-            if ($file->isDir()) {
-                self::deleteRecursive($filename);
-                rmdir($filename);
-            } else {
-                unlink($filename);
-            }
-        }
     }
 }

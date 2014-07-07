@@ -9,9 +9,8 @@
 
 namespace FSi\Bundle\DoctrineExtensionsBundle\Twig\Extension;
 
+use FSi\Bundle\DoctrineExtensionsBundle\Resolver\FSiFilePathResolver;
 use FSi\DoctrineExtensions\Uploadable\File;
-use Gaufrette\Adapter\Cache;
-use Gaufrette\Adapter\Local;
 use Twig_Environment;
 
 class Assets extends \Twig_Extension
@@ -22,21 +21,21 @@ class Assets extends \Twig_Extension
     protected $assets;
 
     /**
-     * @var string
-     */
-    protected $adapterPath;
-
-    /**
      * @var null|string
      */
     protected $filePrefix;
 
     /**
-     * @param string $adapterPath path for local adapter created when File adapter is different than local or cache.
+     * @var \FSi\Bundle\DoctrineExtensionsBundle\Resolver\FSiFilePathResolver
      */
-    public function __construct($adapterPath)
+    protected $filePathResolver;
+
+    /**
+     * @param FSiFilePathResolver $filePathResolver
+     */
+    public function __construct(FSiFilePathResolver $filePathResolver)
     {
-        $this->adapterPath = $adapterPath;
+        $this->filePathResolver = $filePathResolver;
     }
 
     /**
@@ -71,99 +70,21 @@ class Assets extends \Twig_Extension
     {
         return array(
            new \Twig_SimpleFunction('fsi_file_asset', array($this, 'fileAsset')),
-           new \Twig_SimpleFunction('fsi_file_path', array($this, 'filePath'))
+           new \Twig_SimpleFunction('fsi_file_path', array($this->filePathResolver, 'filePath'))
         );
     }
 
     public function getFilters()
     {
         return array(
-            new \Twig_SimpleFilter('fsi_file_basename', array($this, 'fileBasename'))
+            new \Twig_SimpleFilter('fsi_file_basename', array($this->filePathResolver, 'fileBasename'))
         );
     }
 
-    /**
-     * @param \FSi\DoctrineExtensions\Uploadable\File $file
-     * @param null|string $prefix
-     * @return string
-     */
     public function fileAsset(File $file, $prefix = null)
     {
-        if ($file->getFilesystem()->getAdapter() instanceof Local
-            || $file->getFilesystem()->getAdapter() instanceof Cache) {
-            return $this->assets->getAssetUrl($this->generatePath($file, $prefix));
-        }
-
-        $this->writeFileToLocalAdapter($file);
-
-        return $this->assets->getAssetUrl($this->generatePath($file, $prefix));
-    }
-
-    /**
-     * @param \FSi\DoctrineExtensions\Uploadable\File $file
-     * @param null|string $prefix
-     * @return string
-     */
-    public function filePath(File $file, $prefix = null)
-    {
-        if ($file->getFilesystem()->getAdapter() instanceof Local
-            || $file->getFilesystem()->getAdapter() instanceof Cache) {
-            return  '/' . $this->generatePath($file, $prefix);
-        }
-
-        $this->writeFileToLocalAdapter($file);
-
-        return '/' . $this->generatePath($file, $prefix);
-    }
-
-    /**
-     * @param \FSi\DoctrineExtensions\Uploadable\File $file
-     * @return string
-     */
-    public function fileBasename(File $file)
-    {
-        return basename($file->getName());
-    }
-
-    /**
-     * @param \FSi\DoctrineExtensions\Uploadable\File $file
-     */
-    protected function writeFileToLocalAdapter(File $file)
-    {
-        if (!$this->getLocalAdapter()->exists($file->getKey())) {
-            $this->getLocalAdapter()->write($file->getKey(), $file->getContent());
-        }
-    }
-
-    /**
-     * @return \Gaufrette\Adapter\Local
-     */
-    protected function getLocalAdapter()
-    {
-        if (!isset($this->adapter)) {
-            $this->adapter = new Local($this->adapterPath, true);
-        }
-
-        return $this->adapter;
-    }
-
-    /**
-     * @param \FSi\DoctrineExtensions\Uploadable\File $file
-     * @param null $prefix
-     * @return string
-     */
-    protected function generatePath(File $file, $prefix = null)
-    {
-        if (!isset($prefix) && isset($this->filePrefix)) {
-            $prefix = $this->filePrefix;
-        }
-
-        if (isset($prefix)) {
-            $prefix = trim($prefix, '/');
-
-            return $prefix . '/' . ltrim($file->getKey(), '/');
-        }
-
-        return $file->getKey();
+        return $this->assets->getAssetUrl(
+            $this->filePathResolver->filePath($file, $prefix)
+        );
     }
 }
