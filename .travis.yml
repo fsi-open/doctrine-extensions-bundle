@@ -29,7 +29,7 @@ install:
 
 script:
   - ./bin/phpspec run -f pretty
-  - ./bin/phpunit
+  - ./bin/phpunit -v --debug
 
 notifications:
   irc: "irc.freenode.org#fsi-open"
