@@ -12,9 +12,21 @@ namespace FSi\Bundle\DoctrineExtensionsBundle\Validator\Constraints;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints\ImageValidator as BaseValidator;
 use FSi\DoctrineExtensions\Uploadable\File as FSiFile;
+use Symfony\Component\Validator\Constraints\FileValidator as SymfonyFileValidator;
 
-class ImageValidator extends BaseValidator
+class ImageValidator
 {
+    private $validator;
+
+    public function __construct(
+        SymfonyFileValidator $validator = null
+    ) {
+        if (!$validator) {
+            $validator = new SymfonyFileValidator();
+        }
+        $this->validator = $validator;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -25,7 +37,7 @@ class ImageValidator extends BaseValidator
             file_put_contents($tmpFile, $value->getContent());
 
             try {
-                parent::validate($tmpFile, $constraint);
+                $this->validator->validate($tmpFile, $constraint);
             } catch (\Exception $e) {
                 unlink($tmpFile);
                 throw $e;
@@ -34,6 +46,14 @@ class ImageValidator extends BaseValidator
             return;
         }
 
-        parent::validate($value, $constraint);
+        $this->validator->validate($value, $constraint);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function initialize(\Symfony\Component\Validator\ExecutionContext $context)
+    {
+        $this->validator->initialize($context);
     }
 }

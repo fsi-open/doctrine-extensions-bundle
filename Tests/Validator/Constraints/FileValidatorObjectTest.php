@@ -15,8 +15,18 @@ use Gaufrette\Adapter\Local;
 use Gaufrette\Filesystem;
 use Symfony\Component\Validator\Tests\Constraints\FileValidatorObjectTest as BaseTest;
 
-class FileValidatorObjectTest extends BaseTest
+class FileValidatorObjectTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var \Symfony\Component\Validator\ExecutionContext
+     */
+    protected $context;
+
+    /**
+     * @var \Symfony\Component\Validator\Constraints\FileValidator
+     */
+    protected $symfonyValidator;
+
     protected function setUp()
     {
         if (!class_exists('Symfony\Component\HttpFoundation\File\UploadedFile')) {
@@ -24,7 +34,9 @@ class FileValidatorObjectTest extends BaseTest
         }
 
         $this->context = $this->getMock('Symfony\Component\Validator\ExecutionContext', array(), array(), '', false);
-        $this->validator = new FileValidator();
+        $this->symfonyValidator = $this->getMock('Symfony\Component\Validator\Constraints\FileValidator');
+
+        $this->validator = new FileValidator($this->symfonyValidator);
         $this->validator->initialize($this->context);
         $this->path = sys_get_temp_dir().DIRECTORY_SEPARATOR.'FileValidatorTest';
         $this->file = fopen($this->path, 'w');
@@ -42,48 +54,58 @@ class FileValidatorObjectTest extends BaseTest
         return new File(basename($filename), $filesystem);
     }
 
-    public function testTooLargeBytes()
+    public function testValidateFSiFile()
     {
-        fwrite($this->file, str_repeat('0', 11));
+        $file = $this->path;
+        $that = $this;
 
-        $constraint = new \Symfony\Component\Validator\Constraints\File(array(
-            'maxSize'           => 10,
-            'maxSizeMessage'    => 'myMessage',
-        ));
+        $this->symfonyValidator
+            ->expects($this->any())
+            ->method('validate')
+            ->with($this->anything(), $constraintMock = $this->getMock('Symfony\Component\Validator\Constraint'))
+            ->will($this->returnCallback(function($path, $constraint) use ($file, $that) {
+                $that->assertFileEquals($path, $file);
+            }))
+        ;
 
-        $this->context->expects($this->once())
-            ->method('addViolation');
-
-        $this->validator->validate($this->getFile($this->path), $constraint);
+        $this->validator->validate($this->getFile($this->path), $constraintMock);
     }
 
-    public function testTooLargeKiloBytes()
+    public function testValidateNotFSiFile()
     {
-        fwrite($this->file, str_repeat('0', 1400));
+        $file = $this->path;
+        $that = $this;
+        $this->symfonyValidator
+            ->expects($this->any())
+            ->method('validate')
+            ->with($this->equalTo($this->path), $constraintMock = $this->getMock('Symfony\Component\Validator\Constraint'))
+            ->will($this->returnCallback(function($path, $constraint) use ($file, $that) {
+                $that->assertFileEquals($path, $file);
+            }))
+        ;
 
-        $constraint = new \Symfony\Component\Validator\Constraints\File(array(
-            'maxSize'           => '1k',
-            'maxSizeMessage'    => 'myMessage',
-        ));
+        $this->validator->validate($this->path, $constraintMock);
 
-        $this->context->expects($this->once())
-            ->method('addViolation');
-
-        $this->validator->validate($this->getFile($this->path), $constraint);
     }
 
-    public function testTooLargeMegaBytes()
+    public function testValidateWronglyFSiFile()
     {
-        fwrite($this->file, str_repeat('0', 1400000));
-
         $constraint = new \Symfony\Component\Validator\Constraints\File(array(
-            'maxSize'           => '1M',
-            'maxSizeMessage'    => 'myMessage',
+            'maxSize'           => '1',
+            'maxSizeMessage'    => 'Too much input data',
         ));
 
-        $this->context->expects($this->once())
-            ->method('addViolation');
+        fwrite($this->file, bin2hex(openssl_random_pseudo_bytes(10000)));
+        fclose($this->file);
 
+        $this->symfonyValidator
+            ->expects($this->any())
+            ->method('validate')
+            ->with($this->anything(), $constraint)
+            ->will($this->throwException(new \Exception))
+        ;
+
+        $this->setExpectedException('\Exception');
         $this->validator->validate($this->getFile($this->path), $constraint);
     }
 }

@@ -66,7 +66,9 @@ class FileTypeTest extends FormIntegrationTestCase
             ->with('templating.helper.assets')
             ->will($this->returnValue(new UrlPackage()));
 
-        $twig->addExtension(new AssetsExtension($container));
+        $request = $this->getMock('Symfony\Component\Routing\RequestContext');
+
+        $twig->addExtension(new AssetsExtension($container, $request));
         $this->twig = $twig;
     }
 
@@ -131,6 +133,7 @@ class FileTypeTest extends FormIntegrationTestCase
 
     /**
      * @param string $filename
+     * @throws \RuntimeException
      * @return string
      */
     private function getExpectedHtml($filename)
