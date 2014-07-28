@@ -10,12 +10,6 @@ env:
   - SYMFONY_VERSION=2.4.*
   - SYMFONY_VERSION=2.5.*
 
-before_install:
-  - sudo apt-get update > /dev/null
-
-install:
-  - echo '' > ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini
-
 script:
   - composer self-update
   - composer require symfony/framework-bundle:${SYMFONY_VERSION} -n --prefer-source
