@@ -12,8 +12,10 @@ namespace FSi\Bundle\DoctrineExtensionsBundle\Validator\Constraints;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints\FileValidator as SymfonyFileValidator;
 use FSi\DoctrineExtensions\Uploadable\File as FSiFile;
+use Symfony\Component\Validator\ConstraintValidator;
+use Symfony\Component\Validator\ExecutionContextInterface;
 
-class FileValidator
+class FileValidator extends ConstraintValidator
 {
     private $validator;
 
@@ -50,7 +52,7 @@ class FileValidator
     /**
      * {@inheritdoc}
      */
-    public function initialize(\Symfony\Component\Validator\ExecutionContext $context)
+    public function initialize(ExecutionContextInterface $context)
     {
         $this->validator->initialize($context);
     }

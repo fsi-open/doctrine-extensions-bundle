@@ -13,8 +13,10 @@ use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints\ImageValidator as BaseValidator;
 use FSi\DoctrineExtensions\Uploadable\File as FSiFile;
 use Symfony\Component\Validator\Constraints\FileValidator as SymfonyFileValidator;
+use Symfony\Component\Validator\ConstraintValidator;
+use Symfony\Component\Validator\ExecutionContextInterface;
 
-class ImageValidator
+class ImageValidator extends ConstraintValidator
 {
     private $validator;
 
@@ -52,7 +54,7 @@ class ImageValidator
     /**
      * {@inheritdoc}
      */
-    public function initialize(\Symfony\Component\Validator\ExecutionContext $context)
+    public function initialize(ExecutionContextInterface $context)
     {
         $this->validator->initialize($context);
     }
