@@ -13,6 +13,7 @@ use FSi\Bundle\DoctrineExtensionsBundle\Validator\Constraints\FileValidator;
 use FSi\DoctrineExtensions\Uploadable\File;
 use Gaufrette\Adapter\Local;
 use Gaufrette\Filesystem;
+use Symfony\Component\Validator\Constraints\File as FileConstraint;
 use Symfony\Component\Validator\Tests\Constraints\FileValidatorObjectTest as BaseTest;
 
 class FileValidatorObjectTest extends BaseTest
@@ -40,6 +41,31 @@ class FileValidatorObjectTest extends BaseTest
         $filesystem = new Filesystem($adapter);
 
         return new File(basename($filename), $filesystem);
+    }
+
+    /**
+     * @dataProvider provideMaxSizeExceededTests
+     */
+    public function testMaxSizeExceeded($bytesWritten, $limit, $sizeAsString, $limitAsString, $suffix)
+    {
+        fseek($this->file, $bytesWritten-1, SEEK_SET);
+        fwrite($this->file, '0');
+        fclose($this->file);
+
+        $constraint = new FileConstraint(array(
+            'maxSize'           => $limit,
+            'maxSizeMessage'    => 'myMessage',
+        ));
+
+        $this->context->expects($this->once())
+            ->method('addViolation')
+            ->with('myMessage', $this->callback(function ($data) use ($sizeAsString, $limitAsString, $suffix) {
+                return $data['{{ limit }}'] === $limitAsString &&
+                    $data['{{ size }}'] === $sizeAsString &&
+                    $data['{{ suffix }}'] === $suffix;
+            }));
+
+        $this->validator->validate($this->getFile($this->path), $constraint);
     }
 
     public function testTooLargeBytes()
