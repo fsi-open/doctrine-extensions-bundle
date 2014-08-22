@@ -9,6 +9,7 @@
 
 namespace FSi\Bundle\DoctrineExtensionsBundle;
 
+use FSi\Bundle\DoctrineExtensionsBundle\DependencyInjection\Compiler\CustomHydratorPass;
 use FSi\Bundle\DoctrineExtensionsBundle\DependencyInjection\Compiler\TwigGlobalsPass;
 use FSi\Bundle\DoctrineExtensionsBundle\DependencyInjection\FSIDoctrineExtensionsExtension;
 use FSi\Bundle\DoctrineExtensionsBundle\DependencyInjection\Compiler\TwigFormPass;
@@ -26,6 +27,7 @@ class FSiDoctrineExtensionsBundle extends Bundle
 
         $container->addCompilerPass(new TwigFormPass());
         $container->addCompilerPass(new TwigGlobalsPass());
+        $container->addCompilerPass(new CustomHydratorPass());
     }
 
     /**
