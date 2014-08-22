@@ -20,15 +20,19 @@ class FileValidatorObjectTest extends BaseTest
 {
     protected function setUp()
     {
+        parent::setUp();
+
         if (!class_exists('Symfony\Component\HttpFoundation\File\UploadedFile')) {
             $this->markTestSkipped('The "HttpFoundation" component is not available');
         }
 
-        $this->context = $this->getMock('Symfony\Component\Validator\ExecutionContext', array(), array(), '', false);
-        $this->validator = new FileValidator();
-        $this->validator->initialize($this->context);
         $this->path = sys_get_temp_dir().DIRECTORY_SEPARATOR.'FileValidatorTest';
         $this->file = fopen($this->path, 'w');
+    }
+
+    protected function createValidator()
+    {
+        return new FileValidator();
     }
 
     /**
@@ -43,31 +47,6 @@ class FileValidatorObjectTest extends BaseTest
         return new File(basename($filename), $filesystem);
     }
 
-    /**
-     * @dataProvider provideMaxSizeExceededTests
-     */
-    public function testMaxSizeExceeded($bytesWritten, $limit, $sizeAsString, $limitAsString, $suffix)
-    {
-        fseek($this->file, $bytesWritten-1, SEEK_SET);
-        fwrite($this->file, '0');
-        fclose($this->file);
-
-        $constraint = new FileConstraint(array(
-            'maxSize'           => $limit,
-            'maxSizeMessage'    => 'myMessage',
-        ));
-
-        $this->context->expects($this->once())
-            ->method('addViolation')
-            ->with('myMessage', $this->callback(function ($data) use ($sizeAsString, $limitAsString, $suffix) {
-                return $data['{{ limit }}'] === $limitAsString &&
-                    $data['{{ size }}'] === $sizeAsString &&
-                    $data['{{ suffix }}'] === $suffix;
-            }));
-
-        $this->validator->validate($this->getFile($this->path), $constraint);
-    }
-
     public function testTooLargeBytes()
     {
         fwrite($this->file, str_repeat('0', 11));
@@ -77,10 +56,13 @@ class FileValidatorObjectTest extends BaseTest
             'maxSizeMessage'    => 'myMessage',
         ));
 
-        $this->context->expects($this->once())
-            ->method('addViolation');
-
         $this->validator->validate($this->getFile($this->path), $constraint);
+
+        $this->assertViolation('myMessage', array(
+           '{{ limit }}' => '10',
+           '{{ size }}' => '11',
+           '{{ suffix }}' => 'bytes',
+        ));
     }
 
     public function testTooLargeKiloBytes()
@@ -92,10 +74,13 @@ class FileValidatorObjectTest extends BaseTest
             'maxSizeMessage'    => 'myMessage',
         ));
 
-        $this->context->expects($this->once())
-            ->method('addViolation');
-
         $this->validator->validate($this->getFile($this->path), $constraint);
+
+        $this->assertViolation('myMessage', array(
+            '{{ limit }}' => '1',
+            '{{ size }}' => '1.4',
+            '{{ suffix }}' => 'kB',
+        ));
     }
 
     public function testTooLargeMegaBytes()
@@ -107,9 +92,22 @@ class FileValidatorObjectTest extends BaseTest
             'maxSizeMessage'    => 'myMessage',
         ));
 
-        $this->context->expects($this->once())
-            ->method('addViolation');
-
         $this->validator->validate($this->getFile($this->path), $constraint);
+
+        $this->assertViolation('myMessage', array(
+            '{{ limit }}' => '1',
+            '{{ size }}' => '1.4',
+            '{{ suffix }}' => 'MB',
+        ));
+    }
+
+    protected function assertViolation($message, array $parameters = array(), $propertyPath = 'property.path', $invalidValue = 'InvalidValue', $plural = null, $code = null)
+    {
+        $violationParameters = $this->context->getViolations()->get(0)->getMessageParameters();
+        if (isset($violationParameters['{{ file }}'])) {
+            $parameters['{{ file }}'] = $violationParameters['{{ file }}'];
+        }
+
+        parent::assertViolation($message, $parameters, $propertyPath, $invalidValue, $plural);
     }
 }
