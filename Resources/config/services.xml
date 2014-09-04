@@ -16,6 +16,7 @@
         <parameter key="fsi_doctrine_extensions.default.key_maker.class">FSi\DoctrineExtensions\Uploadable\Keymaker\Entity</parameter>
         <parameter key="fsi_doctrine_extensions.default.filesystem.class">Gaufrette\Filesystem</parameter>
         <parameter key="fsi_doctrine_extensions.default.filesystem.adapter.class">Gaufrette\Adapter\Local</parameter>
+        <parameter key="fsi_doctrine_extensions.request.translatable_param_converter.class">FSi\Bundle\DoctrineExtensionsBundle\Request\TranslatableParamConverter</parameter>
         <parameter key="fsi_doctrine_extensions.twig.extension.assets.class">FSi\Bundle\DoctrineExtensionsBundle\Twig\Extension\Assets</parameter>
         <parameter key="fsi_doctrine_extensions.twig.extension.fsi_file.class">FSi\Bundle\DoctrineExtensionsBundle\Twig\Extension\FSi\File</parameter>
         <parameter key="fsi_doctrine_extensions.form.type.fsi.file.class">FSi\Bundle\DoctrineExtensionsBundle\Form\Type\FSi\FileType</parameter>
@@ -109,6 +110,13 @@
         <service id="fsi_doctrine_extensions.validator.image" class="%fsi_doctrine_extensions.validator.image.class%">
             <argument type="service" id="fsi_doctrine_extensions.validator.symfony_image" />
             <tag name="validator.constraint_validator" alias="fsi_image" />
+        </service>
+
+        <!-- Param converter -->
+        <service id="fsi_doctrine_extensions.request.translatable_param_converter" class="%fsi_doctrine_extensions.request.translatable_param_converter.class%">
+            <argument type="service" id="doctrine" />
+            <argument type="service" id="fsi_doctrine_extensions.listener.translatable"/>
+            <tag name="request.param_converter" priority="10" />
         </service>
     </services>
 
