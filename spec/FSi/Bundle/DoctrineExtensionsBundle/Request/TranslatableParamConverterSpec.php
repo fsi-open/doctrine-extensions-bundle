@@ -102,6 +102,7 @@ class TranslatableParamConverterSpec extends ObjectBehavior
         $paramConverter->getClass()->willReturn('TranslatableEntity');
         $translatableMetadata->hasTranslatableProperties()->willReturn(true);
 
+        $request->getLocale()->willReturn('some_locale');
         $request->attributes = $attributes;
         $attributes->keys()->willReturn(array('translatableProperty'));
         $attributes->get('translatableProperty')->willReturn('translationValue');
@@ -110,8 +111,11 @@ class TranslatableParamConverterSpec extends ObjectBehavior
                 'translatableProperty' => 'translationField'
             )
         ));
-        $translatableRepository->findTranslatableOneBy(array('translatableProperty' => 'translationValue'))
-            ->willThrow('\Doctrine\ORM\NoResultException');
+        $translatableRepository->findTranslatableOneBy(
+            array('translatableProperty' => 'translationValue'),
+            null,
+            'some_locale'
+        )->willThrow('\Doctrine\ORM\NoResultException');
 
         $this->shouldThrow(new NotFoundHttpException('Object of class "TranslatableEntity" has not been found.'))
             ->during('apply', array($request, $paramConverter));
@@ -129,6 +133,7 @@ class TranslatableParamConverterSpec extends ObjectBehavior
         $paramConverter->getName()->willReturn('object');
         $translatableMetadata->hasTranslatableProperties()->willReturn(true);
 
+        $request->getLocale()->willReturn('some_locale');
         $request->attributes = $attributes;
         $attributes->keys()->willReturn(array('translatableProperty'));
         $attributes->get('translatableProperty')->willReturn('translationValue');
@@ -137,8 +142,11 @@ class TranslatableParamConverterSpec extends ObjectBehavior
                 'translatableProperty' => 'translationField'
             )
         ));
-        $translatableRepository->findTranslatableOneBy(array('translatableProperty' => 'translationValue'))
-            ->willReturn($object);
+        $translatableRepository->findTranslatableOneBy(
+            array('translatableProperty' => 'translationValue'),
+            null,
+            'some_locale'
+        )->willReturn($object);
 
         $attributes->set('object', $object)->shouldBeCalled();
 

@@ -55,7 +55,12 @@ class TranslatableParamConverter implements ParamConverterInterface
         }
 
         try {
-            $object = $this->getRepository($configuration)->findTranslatableOneBy($criteria);
+            $object = $this->getRepository($configuration)
+                ->findTranslatableOneBy(
+                    $criteria,
+                    null,
+                    $request->getLocale()
+                );
         } catch (NoResultException $e) {
             throw new NotFoundHttpException(sprintf(
                 'Object of class "%s" has not been found.',
