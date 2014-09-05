@@ -16,8 +16,17 @@ class CustomHydratorPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
-        $configurator = $container->findDefinition('doctrine.orm.manager_configurator.abstract');
+        $config = current($container->getExtensionConfig('fsi_doctrine_extensions'));
+        if (empty($config['orm'])) {
+            return;
+        }
 
-        $configurator->setClass('%fsi_doctrine_extensions.orm.manager_configurator.class%');
+        foreach ($config['orm'] as $managerName => $listeners) {
+            if (!empty($listeners['translatable'])) {
+                $configurator = $container->findDefinition('doctrine.orm.manager_configurator.abstract');
+
+                $configurator->setClass('%fsi_doctrine_extensions.orm.manager_configurator.class%');
+            }
+        }
     }
 }
