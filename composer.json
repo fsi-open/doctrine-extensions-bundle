@@ -18,6 +18,7 @@
         "symfony/http-foundation": "~2.2",
         "symfony/form" : "~2.2",
         "symfony/validator": "~2.2",
+        "doctrine/doctrine-bundle": "~1.2",
         "fsi/doctrine-extensions": "1.0.*",
         "knplabs/knp-gaufrette-bundle": "0.1.*"
     },

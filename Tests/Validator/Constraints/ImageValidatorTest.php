@@ -19,15 +19,29 @@ class ImageValidatorTest extends BaseTest
 {
     protected function setUp()
     {
+        parent::setUp();
+
         $reflection = new \ReflectionClass('Symfony\Component\Validator\Tests\Constraints\ImageValidatorTest');
         $adapter = new Local(dirname($reflection->getFileName()) . '/Fixtures/');
         $filesystem = new Filesystem($adapter);
 
-        $this->context = $this->getMock('Symfony\Component\Validator\ExecutionContext', array(), array(), '', false);
-        $this->validator = new ImageValidator();
-        $this->validator->initialize($this->context);
         $this->image = new File('test.gif', $filesystem);
         $this->imageLandscape = new File('test_landscape.gif', $filesystem);
         $this->imagePortrait = new File('test_portrait.gif', $filesystem);
+    }
+
+    protected function createValidator()
+    {
+        return new ImageValidator();
+    }
+
+    protected function assertViolation($message, array $parameters = array(), $propertyPath = 'property.path', $invalidValue = 'InvalidValue', $plural = null, $code = null)
+    {
+        $violationParameters = $this->context->getViolations()->get(0)->getMessageParameters();
+        if (isset($violationParameters['{{ file }}'])) {
+            $parameters['{{ file }}'] = $violationParameters['{{ file }}'];
+        }
+
+        parent::assertViolation($message, $parameters, $propertyPath, $invalidValue, $plural);
     }
 }
