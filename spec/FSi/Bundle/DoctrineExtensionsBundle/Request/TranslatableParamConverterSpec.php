@@ -37,7 +37,6 @@ class TranslatableParamConverterSpec extends ObjectBehavior
         TranslatableRepository $translatableRepository,
         ParamConverter $paramConverter
     ) {
-        $managerRegistry->getManagers()->willReturn(array('default' => $objectManager));
         $managerRegistry->getManagerForClass(Argument::type('string'))->willReturn($objectManager);
         $metadataFactory->isTransient(Argument::type('string'))->willReturn(false);
         $objectManager->getMetadataFactory()->willReturn($metadataFactory);

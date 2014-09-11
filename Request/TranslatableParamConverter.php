@@ -36,7 +36,7 @@ class TranslatableParamConverter implements ParamConverterInterface
      * @param \Doctrine\Common\Persistence\ManagerRegistry $registry
      * @param \FSi\DoctrineExtensions\Translatable\TranslatableListener $translatableListener
      */
-    public function __construct(ManagerRegistry $registry = null, TranslatableListener $translatableListener)
+    public function __construct(ManagerRegistry $registry, TranslatableListener $translatableListener)
     {
         $this->registry = $registry;
         $this->translatableListener = $translatableListener;
@@ -77,8 +77,7 @@ class TranslatableParamConverter implements ParamConverterInterface
      */
     public function supports(ConfigurationInterface $configuration)
     {
-        return $this->validateManagerRegistry() &&
-            $this->validateClass($configuration) &&
+        return $this->validateClass($configuration) &&
             $this->validateManager($configuration) &&
             $this->validateRepository($configuration) &&
             $this->hasTranslatableProperties($configuration);
@@ -210,14 +209,6 @@ class TranslatableParamConverter implements ParamConverterInterface
     {
         return $this->getManager($configuration)
             ->getRepository($configuration->getClass());
-    }
-
-    /**
-     * @return bool
-     */
-    private function validateManagerRegistry()
-    {
-        return null !== $this->registry && count($this->registry->getManagers());
     }
 
     /**
