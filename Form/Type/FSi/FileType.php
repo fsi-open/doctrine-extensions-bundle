@@ -10,6 +10,7 @@
 namespace FSi\Bundle\DoctrineExtensionsBundle\Form\Type\FSi;
 
 use FSi\Bundle\DoctrineExtensionsBundle\Form\EventListener\FileSubscriber;
+use FSi\Bundle\DoctrineExtensionsBundle\Validator\Constraints\File;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -47,7 +48,10 @@ class FileType extends AbstractType
     {
         $resolver->setDefaults(array(
             'required' => false,
-            'data_class' => 'FSi\DoctrineExtensions\Uploadable\File'
+            'data_class' => 'FSi\DoctrineExtensions\Uploadable\File',
+            'constraints' => array(
+                new File(),
+            )
         ));
     }
 }
