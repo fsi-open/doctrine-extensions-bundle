@@ -35,9 +35,16 @@ class FileTypeSpec extends ObjectBehavior
      */
     function it_should_set_default_options($resolver)
     {
-        $resolver->setDefaults(array(
-            'required' => false,
-            'data_class' => 'FSi\DoctrineExtensions\Uploadable\File'
+        $resolver->setDefaults(Argument::allOf(
+            Argument::withEntry('required', false),
+            Argument::withEntry('data_class', 'FSi\DoctrineExtensions\Uploadable\File'),
+            Argument::that(function (array $param) {
+                    if (array_key_exists('constraints', $param) &&
+                        $param['constraints'] instanceof \FSi\Bundle\DoctrineExtensionsBundle\Validator\Constraints\File) {
+                        return true;
+                    }
+                }
+            )
         ))->shouldBeCalled();
 
         $this->setDefaultOptions($resolver);
