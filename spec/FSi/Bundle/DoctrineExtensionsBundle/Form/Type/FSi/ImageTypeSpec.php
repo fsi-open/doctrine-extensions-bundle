@@ -25,7 +25,6 @@ class ImageTypeSpec extends ObjectBehavior
         $this->getParent()->shouldReturn('fsi_file');
     }
 
-
     function it_should_set_default_options(OptionsResolver $resolver)
     {
         $resolver->setDefaults(Argument::allOf(
