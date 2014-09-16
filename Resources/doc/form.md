@@ -1,9 +1,21 @@
-# fsi_file form type
+# Form types
 
-Expanded file type that generate url to resource.  
+Expanded file types that generate url to resource.
+
+## fsi_file form type
+
 Usage:
 ```php
 $form = $formFactory->create('form', $entity);
 $form->add('file', 'fsi_file');
 ```
-There must be a field ``file`` in ``$entity`` that returns ``FSi\DoctrineExtensions\Uploadable\File`` or ``null``.
+
+## fsi_image form type
+
+Usage:
+```php
+$form = $formFactory->create('form', $entity);
+$form->add('file', 'fsi_image');
+```
+
+In both cases there must be a field ``file`` in ``$entity`` that returns ``FSi\DoctrineExtensions\Uploadable\File`` or ``null``.
