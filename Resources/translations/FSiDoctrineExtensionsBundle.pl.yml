@@ -2,5 +2,4 @@ fsi_file:
     refresh: Odśwież stronę aby zobaczyć podgląd pliku
 
 fsi_removable_file:
-    delete: Usuń plik
-
+    remove: Usuń plik

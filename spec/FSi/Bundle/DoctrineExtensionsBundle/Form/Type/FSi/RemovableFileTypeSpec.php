@@ -9,17 +9,20 @@
 
 namespace spec\FSi\Bundle\DoctrineExtensionsBundle\Form\Type\FSi;
 
+use FSi\Bundle\DoctrineExtensionsBundle\Form\EventListener\FileSubscriber;
 use FSi\Bundle\DoctrineExtensionsBundle\Form\EventListener\RemovableFileSubscriber;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 class RemovableFileTypeSpec extends ObjectBehavior
 {
-    function let(RemovableFileSubscriber $fileSubscriber)
+    function let(RemovableFileSubscriber $removableFileSubscriber)
     {
-        $this->beConstructedWith($fileSubscriber);
+        $this->beConstructedWith($removableFileSubscriber);
     }
 
     function it_is_initializable()
@@ -45,11 +48,19 @@ class RemovableFileTypeSpec extends ObjectBehavior
         $resolver->setDefaults(array(
             'compound' => true,
             'inherit_data' => true,
-            'delete_label' => 'fsi_removable_file.delete'
+            'remove_name' => 'remove',
+            'remove_type' => 'checkbox',
+            'remove_options' => array(),
+            'file_type' => 'fsi_file',
+            'file_options' => array(),
         ))->shouldBeCalled();
 
-        $resolver->setRequired(array(
-            'property_path'
+        $resolver->setAllowedTypes(array(
+            'remove_name' => 'string',
+            'remove_type' => 'string',
+            'remove_options' => 'array',
+            'file_type' => 'string',
+            'file_options' => 'array'
         ))->shouldBeCalled();
 
         $this->setDefaultOptions($resolver);
@@ -57,34 +68,46 @@ class RemovableFileTypeSpec extends ObjectBehavior
 
     /**
      * @param \Symfony\Component\Form\FormBuilderInterface $builder
+     * @param \FSi\Bundle\DoctrineExtensionsBundle\Form\EventListener\RemovableFileSubscriber $fileSubscriber
      */
-    function it_should_register_listener(
+    function it_should_build_form_remove_original_listener_and_register_own_listener(
         FormBuilderInterface $builder,
-        RemovableFileSubscriber $fileSubscriber)
+        FormBuilderInterface $fileBuilder,
+        EventDispatcherInterface $fileEventDispatcher,
+        FileSubscriber $fileSubscriber,
+        RemovableFileSubscriber $removableFileSubscriber)
     {
-        $builder->add('file', 'file', array(
-            'mapped' => true,
-            'required' => true,
-            'data_class' => 'FSi\DoctrineExtensions\Uploadable\File',
-            'property_path' => 'field',
-            'label' => false
+        $builder->getName()->willReturn('file_field_name');
+
+        $builder->add('file_field_name', 'file_field_type', array(
+            'label' => false,
+            'some_file_field_option' => 'file_option_value'
         ))->shouldBeCalled();
 
-        $builder->add('delete', 'checkbox', array(
-                'compound' => false,
-                'mapped' => false,
-                'required' => false,
-                'label' => 'fsi_removable_file.delete'
-            )
-        )->shouldBeCalled();
+        $builder->add('remove_field_name', 'remove_field_type', array(
+            'label' => 'fsi_removable_file.remove',
+            'mapped' => false,
+            'translation_domain' => 'FSiDoctrineExtensionsBundle',
+            'some_remove_field_option' => 'remove_option_value'
+        ))->shouldBeCalled();
 
-        $builder->addEventSubscriber($fileSubscriber)
+        $builder->get('file_field_name')->willReturn($fileBuilder);
+
+        $fileBuilder->getEventDispatcher()->willReturn($fileEventDispatcher);
+        $fileEventDispatcher->getListeners(FormEvents::PRE_SUBMIT)->willReturn(array(
+            array($fileSubscriber)
+        ));
+        $fileEventDispatcher->removeSubscriber($fileSubscriber)->shouldBeCalled();
+
+        $builder->addEventSubscriber($removableFileSubscriber)
             ->shouldBeCalled();
 
         $this->buildForm($builder, array(
-            'property_path' => 'field',
-            'required' => true,
-            'delete_label' => 'fsi_removable_file.delete'
+            'file_type' => 'file_field_type',
+            'file_options' => array('some_file_field_option' => 'file_option_value'),
+            'remove_name' => 'remove_field_name',
+            'remove_type' => 'remove_field_type',
+            'remove_options' => array('some_remove_field_option' => 'remove_option_value')
         ));
     }
 }

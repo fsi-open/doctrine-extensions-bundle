@@ -2,4 +2,4 @@ fsi_file:
     refresh: Please refresh this page to display file preview
 
 fsi_removable_file:
-    delete: Delete file
+    remove: Delete file

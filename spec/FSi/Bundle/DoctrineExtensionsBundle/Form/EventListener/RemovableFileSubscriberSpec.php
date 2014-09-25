@@ -9,6 +9,7 @@
 
 namespace spec\FSi\Bundle\DoctrineExtensionsBundle\Form\EventListener;
 
+use FSi\DoctrineExtensions\Uploadable\File;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use Symfony\Component\Form\FormConfigInterface;
@@ -19,9 +20,9 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 class RemovableFileSubscriberSpec extends ObjectBehavior
 {
-    function let(PropertyAccessor $accessor)
+    function let(PropertyAccessor $propertyAccessor)
     {
-        $this->beConstructedWith($accessor);
+        $this->beConstructedWith($propertyAccessor);
     }
 
     function it_is_initializable()
@@ -32,106 +33,56 @@ class RemovableFileSubscriberSpec extends ObjectBehavior
     function it_passes_form_data_as_submitted_data_when_there_is_no_submitted_data(
         FormEvent $event,
         FormInterface $form,
-        FormConfigInterface $config,
-        PropertyAccessor $accessor
+        FormConfigInterface $formConfig,
+        File $file,
+        PropertyAccessor $propertyAccessor
     ) {
-
-        $event->getData()->shouldBeCalled()->willReturn(null);
-
-        //set data
-        $event->getForm()->shouldBeCalled()->willReturn($form);
-        $form->getData()->shouldBeCalled()->willReturn(array('file'=> null));
+        $formData = new \stdClass();
+        $event->getData()->willReturn(array('file_field_name' => null));
         $event->getForm()->willReturn($form);
-        $event->setData(array('file'=> null))->shouldBeCalled();
+        $form->getName()->willReturn('file_field_name');
+        $form->getData()->willReturn($formData);
+        $form->getPropertyPath()->willReturn('file_field_name');
+        $form->getConfig()->willReturn($formConfig);
+        $formConfig->getOption('remove_name')->willReturn('remove_field_name');
+        $propertyAccessor->getValue($formData, 'file_field_name')->willReturn($file);
 
-        //get entity
-        $event->getForm()->willReturn($form);
-        $form->getViewData()->willReturn(array('file' => 'value'));
-
-        //get property path
-        $event->getForm()->willReturn($form);
-        $form->get('file')->willReturn($form);
-        $form->getConfig()->willReturn($config);
-        $config->getOption('property_path')->willReturn('[file]');
-
-        $accessor->setValue(Argument::any(), Argument::any(), null)->shouldNotBeCalled();
-
-        //passed previous data
-        $accessor->getValue(array('file'=>'value'), '[file]')->shouldBeCalled();
-        $event->setData(array('file' => 'value'))->shouldNotBeCalled();
+        $event->setData(array('file_field_name' => $file))->shouldBeCalled();
 
         $this->preSubmit($event);
     }
 
-    function it_does_not_modify_submitted_data(
+    function it_removes_file_from_form_data(
         FormEvent $event,
         FormInterface $form,
-        FormConfigInterface $config,
-        PropertyAccessor $accessor
+        FormConfigInterface $formConfig,
+        PropertyAccessor $propertyAccessor
     ) {
-        $event->getData()->shouldBeCalled()->willReturn(array('file'=>'submittedFile'));
-
-        //get entity
+        $formData = new \stdClass();
+        $event->getData()->willReturn(array('remove_field_name' => true));
         $event->getForm()->willReturn($form);
-        $form->getViewData()->willReturn(array('file' => 'value'));
+        $form->getName()->willReturn('file_field_name');
+        $form->getData()->willReturn($formData);
+        $form->getPropertyPath()->willReturn('file_field_name');
+        $form->getConfig()->willReturn($formConfig);
+        $formConfig->getOption('remove_name')->willReturn('remove_field_name');
 
-        //get property path
-        $event->getForm()->willReturn($form);
-        $form->get('file')->willReturn($form);
-        $form->getConfig()->willReturn($config);
-        $config->getOption('property_path')->willReturn('[file]');
-
-//        $accessor->setValue(Argument::any(), Argument::any(), null)->shouldNotBeCalled();
-
-//        $event->setData(array('file' => 'submittedFile'))->shouldBeCalled();
+        $propertyAccessor->setValue($formData, 'file_field_name', null)->shouldBeCalled();
 
         $this->preSubmit($event);
     }
 
-    function it_removes_old_file(
+    function it_does_nothing_if_form_data_is_empty(
         FormEvent $event,
         FormInterface $form,
-        FormConfigInterface $config,
-        PropertyAccessor $accessor
+        PropertyAccessor $propertyAccessor
     ) {
-        $event->getData()->shouldBeCalled()->willReturn(array('delete' => '1', 'file' => 'value'));
-
-        //get entity
         $event->getForm()->willReturn($form);
-        $form->getViewData()->willReturn(array('file' => 'value'));
+        $form->getData()->willReturn(null);
 
-        //get property path
-        $event->getForm()->willReturn($form);
-        $form->get('file')->willReturn($form);
-        $form->getConfig()->willReturn($config);
-        $config->getOption('property_path')->willReturn('[file]');
-
-        $accessor->setValue(Argument::any(), Argument::any(), null)->shouldBeCalled();
+        $event->setData(Argument::any())->shouldNotBeCalled();
+        $propertyAccessor->setValue(Argument::any(), Argument::any(), Argument::any())->shouldNotBeCalled();
 
         $this->preSubmit($event);
     }
-
-    function it_does_not_modify_data_if_object_data_is_empty(
-        FormEvent $event,
-        FormInterface $form,
-        FormConfigInterface $config
-    ) {
-        $event->getData()->shouldBeCalled()->willReturn(null);
-
-        $event->getForm()->shouldBeCalled()->willReturn($form);
-        $form->getData()->shouldBeCalled()->willReturn(null);
-        $event->setData(null)->shouldBeCalled();
-
-        $event->getForm()->willReturn($form);
-        $form->getViewData()->willReturn(null);
-
-        $form->get('file')->shouldNotBeCalled();
-        $form->getConfig()->shouldNotBeCalled();
-        $config->getOption('property_path')->shouldNotBeCalled();
-
-        $event->setData(array('file' => 'value'))->shouldNotBeCalled();
-
-        $this->preSubmit($event);
-    }
-
 }

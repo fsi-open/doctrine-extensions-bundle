@@ -9,9 +9,11 @@
 
 namespace FSi\Bundle\DoctrineExtensionsBundle\Form\Type\FSi;
 
+use FSi\Bundle\DoctrineExtensionsBundle\Form\EventListener\FileSubscriber;
 use FSi\Bundle\DoctrineExtensionsBundle\Form\EventListener\RemovableFileSubscriber;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
@@ -51,20 +53,25 @@ class RemovableFileType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('file', 'file', array(
-            'mapped' => true,
-            'required' => $options['required'],
-            'data_class' => 'FSi\DoctrineExtensions\Uploadable\File',
-            'property_path' => $options['property_path'],
-            'label' => false
-        ));
-        $builder->add('delete', 'checkbox', array(
-            'compound' => false,
-            'mapped' => false,
-            'required' => false,
-            'label' => $options['delete_label']
-        ));
+        $fileOptions = array_merge(
+            array(
+                'label' => false,
+            ),
+            $options['file_options']
+        );
+        $builder->add($builder->getName(), $options['file_type'], $fileOptions);
 
+        $removeOptions = array_merge(
+            array(
+                'label' => 'fsi_removable_file.remove',
+                'mapped' => false,
+                'translation_domain' => 'FSiDoctrineExtensionsBundle'
+            ),
+            $options['remove_options']
+        );
+        $builder->add($options['remove_name'], $options['remove_type'], $removeOptions);
+
+        $this->removeFSiFileEventSubscriber($builder);
         $builder->addEventSubscriber($this->fileSubscriber);
     }
 
@@ -73,16 +80,36 @@ class RemovableFileType extends AbstractType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(
-            array(
-                'compound' => true,
-                'inherit_data' => true,
-                'delete_label' => 'fsi_removable_file.delete'
-            )
-        );
-
-        $resolver->setRequired(array(
-            'property_path'
+        $resolver->setDefaults(array(
+            'compound' => true,
+            'inherit_data' => true,
+            'remove_name' => 'remove',
+            'remove_type' => 'checkbox',
+            'remove_options' => array(),
+            'file_type' => 'fsi_file',
+            'file_options' => array(),
         ));
+
+        $resolver->setAllowedTypes(array(
+            'remove_name' => 'string',
+            'remove_type' => 'string',
+            'remove_options' => 'array',
+            'file_type' => 'string',
+            'file_options' => 'array'
+        ));
+    }
+
+    /**
+     * @param \Symfony\Component\Form\FormBuilderInterface $builder
+     */
+    private function removeFSiFileEventSubscriber(FormBuilderInterface $builder)
+    {
+        $fsiFileEventDispatcher = $builder->get($builder->getName())->getEventDispatcher();
+        $preSubmitListeners = $fsiFileEventDispatcher->getListeners(FormEvents::PRE_SUBMIT);
+        foreach ($preSubmitListeners as $preSubmitListener) {
+            if ($preSubmitListener[0] instanceof FileSubscriber) {
+                $fsiFileEventDispatcher->removeSubscriber($preSubmitListener[0]);
+            }
+        }
     }
 }

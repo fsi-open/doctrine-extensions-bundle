@@ -21,10 +21,10 @@
         <parameter key="fsi_doctrine_extensions.form.type.fsi.file.class">FSi\Bundle\DoctrineExtensionsBundle\Form\Type\FSi\FileType</parameter>
         <parameter key="fsi_doctrine_extensions.form.type.fsi.image.class">FSi\Bundle\DoctrineExtensionsBundle\Form\Type\FSi\ImageType</parameter>
         <parameter key="fsi_doctrine_extensions.form.type.fsi.removable_file.class">FSi\Bundle\DoctrineExtensionsBundle\Form\Type\FSi\RemovableFileType</parameter>
-        <parameter key="fsi_doctrine_extensions.resource.type.fsi_removable_file.class">FSi\Bundle\DoctrineExtensionsBundle\ResourceType\FSi\RemovableFileType</parameter>
         <parameter key="fsi_doctrine_extensions.resolver.fsi.file_path.class">FSi\Bundle\DoctrineExtensionsBundle\Resolver\FSiFilePathResolver</parameter>
         <parameter key="fsi_doctrine_extensions.validator.file.class">FSi\Bundle\DoctrineExtensionsBundle\Validator\Constraints\FileValidator</parameter>
         <parameter key="fsi_doctrine_extensions.validator.image.class">FSi\Bundle\DoctrineExtensionsBundle\Validator\Constraints\ImageValidator</parameter>
+        <parameter key="fsi_doctrine_extensions.form.subscriber.removable_file.class">FSi\Bundle\DoctrineExtensionsBundle\Form\EventListener\RemovableFileSubscriber</parameter>
     </parameters>
 
     <services>
@@ -69,7 +69,7 @@
             <argument>%fsi_doctrine_extensions.default.filesystem.adapter.prefix%</argument>
         </service>
 
-        <service id="fsi_doctrine_extenstions.subscriber.removable_file">
+        <service id="fsi_doctrine_extensions.form.subscriber.removable_file" class="%fsi_doctrine_extenstions.form.subscriber.removable_file.class%">
             <argument type="service" id="property_accessor"/>
         </service>
 
@@ -92,8 +92,8 @@
             <tag name="form.type" alias="fsi_image" />
         </service>
 
-        <service id="fsi_doctrine_extensions.form.type.fsi.fsi_removable_file" class="%fsi_doctrine_extensions.form.type.fsi.removable_file.class%">
-            <argument type="service" id="fsi_doctrine_extenstions.subscriber.removable_file"/>
+        <service id="fsi_doctrine_extensions.form.type.fsi.removable_file" class="%fsi_doctrine_extensions.form.type.fsi.removable_file.class%">
+            <argument type="service" id="fsi_doctrine_extenstions.form.subscriber.removable_file"/>
             <tag name="form.type" alias="fsi_removable_file" />
         </service>
 

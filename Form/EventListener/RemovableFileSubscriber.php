@@ -39,7 +39,7 @@ class RemovableFileSubscriber implements EventSubscriberInterface
     {
         return array(
             FormEvents::PRE_SUBMIT => 'preSubmit',
-           );
+        );
     }
 
     /**
@@ -47,26 +47,79 @@ class RemovableFileSubscriber implements EventSubscriberInterface
      */
     public function preSubmit(FormEvent $event)
     {
-
-        $data = $event->getData();
-        if (empty($data)) {
-            $data = $event->getForm()->getData();
-            $event->setData($data);
+        if ($this->isEventFormDataEmpty($event)) {
+            return;
         }
 
-        $entity = $event->getForm()->getViewData();
-        if (!empty($entity)) {
-
-            $propertyPath = $event->getForm()->get('file')->getConfig()->getOption('property_path');
-
-            if (!empty($data['delete'])) {
-                $this->propertyAccessor->setValue($entity, $propertyPath, null);
-            }
-            //passed previous data if user doesn't select checkbox
-            if (empty($data['file'])) {
-                $data['file'] = $this->propertyAccessor->getValue($entity, $propertyPath);
-                $event->setData($data);
-            }
+        if ($this->shouldFileBeRemoved($event)) {
+            $this->removeFile($event);
+        } elseif (!$this->isNewFileSubmitted($event)) {
+            $this->copyFileFromFormDataToEventData($event);
         }
+    }
+
+    /**
+     * @param \Symfony\Component\Form\FormEvent $event
+     * @return bool
+     */
+    private function isEventFormDataEmpty(FormEvent $event)
+    {
+        return null === $event->getForm()->getData();
+    }
+
+    /**
+     * @param \Symfony\Component\Form\FormEvent $event
+     * @return bool
+     */
+    private function shouldFileBeRemoved(FormEvent $event)
+    {
+        $submittedData = $event->getData();
+        $removeName = $event->getForm()->getConfig()->getOption('remove_name');
+
+        return !empty($submittedData[$removeName]);
+    }
+
+    /**
+     * @param \Symfony\Component\Form\FormEvent $event
+     */
+    private function removeFile(FormEvent $event)
+    {
+        $formData = $event->getForm()->getData();
+        $propertyPath = $this->getEventFormPropertyPath($event);
+        $this->propertyAccessor->setValue($formData, $propertyPath, null);
+    }
+
+    /**
+     * @param \Symfony\Component\Form\FormEvent $event
+     * @return bool
+     */
+    private function isNewFileSubmitted(FormEvent $event)
+    {
+        $submittedData = $event->getData();
+        $formName = $event->getForm()->getName();
+
+        return !empty($submittedData[$formName]);
+    }
+
+    /**
+     * @param \Symfony\Component\Form\FormEvent $event
+     */
+    private function copyFileFromFormDataToEventData(FormEvent $event)
+    {
+        $formData = $event->getForm()->getData();
+        $formName = $event->getForm()->getName();
+        $propertyPath = $this->getEventFormPropertyPath($event);
+        $submittedData = $event->getData();
+        $submittedData[$formName] = $this->propertyAccessor->getValue($formData, $propertyPath);
+        $event->setData($submittedData);
+    }
+
+    /**
+     * @param \Symfony\Component\Form\FormEvent $event
+     * @return \Symfony\Component\PropertyAccess\PropertyPathInterface
+     */
+    private function getEventFormPropertyPath(FormEvent $event)
+    {
+        return $event->getForm()->getPropertyPath();
     }
 }
