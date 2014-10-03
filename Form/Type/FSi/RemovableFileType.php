@@ -104,12 +104,40 @@ class RemovableFileType extends AbstractType
      */
     private function removeFSiFileEventSubscriber(FormBuilderInterface $builder)
     {
-        $fsiFileEventDispatcher = $builder->get($builder->getName())->getEventDispatcher();
-        $preSubmitListeners = $fsiFileEventDispatcher->getListeners(FormEvents::PRE_SUBMIT);
-        foreach ($preSubmitListeners as $preSubmitListener) {
-            if ($preSubmitListener[0] instanceof FileSubscriber) {
-                $fsiFileEventDispatcher->removeSubscriber($preSubmitListener[0]);
+        foreach ($this->getFilePreSubmitListeners($builder) as $preSubmitListener) {
+            if ($this->isFileSubscriber($preSubmitListener)) {
+                $this->getFileEventDispatcher($builder)->removeSubscriber($preSubmitListener[0]);
             }
         }
+    }
+
+    /**
+     * @param \Symfony\Component\Form\FormBuilderInterface $builder
+     * @return array|callable[]
+     */
+    private function getFilePreSubmitListeners(FormBuilderInterface $builder)
+    {
+        return $this->getFileEventDispatcher($builder)
+            ->getListeners(FormEvents::PRE_SUBMIT);
+    }
+
+    /**
+     * @param \Symfony\Component\Form\FormBuilderInterface $builder
+     * @return \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     */
+    private function getFileEventDispatcher(FormBuilderInterface $builder)
+    {
+        return $builder->get($builder->getName())
+            ->getEventDispatcher();
+    }
+
+    /**
+     * @param callable $listener
+     */
+    private function isFileSubscriber($listener)
+    {
+        return is_array($listener) &&
+            isset($listener[0]) &&
+            ($listener[0] instanceof FileSubscriber);
     }
 }
