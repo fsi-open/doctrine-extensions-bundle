@@ -16,7 +16,6 @@ use Prophecy\Argument;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
-use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 class RemovableFileTypeSpec extends ObjectBehavior
 {
@@ -25,9 +24,9 @@ class RemovableFileTypeSpec extends ObjectBehavior
         $this->beConstructedWith($removableFileSubscriber);
     }
 
-    function it_is_initializable()
+    function it_is_form_type()
     {
-        $this->shouldHaveType('FSi\Bundle\DoctrineExtensionsBundle\Form\Type\FSi\RemovableFileType');
+        $this->shouldBeAnInstanceOf('Symfony\Component\Form\AbstractType');
     }
 
     function it_should_have_valid_name()

@@ -16,7 +16,6 @@ use Symfony\Component\Form\FormConfigInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\Test\FormInterface;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
-use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 class RemovableFileSubscriberSpec extends ObjectBehavior
 {
@@ -25,9 +24,9 @@ class RemovableFileSubscriberSpec extends ObjectBehavior
         $this->beConstructedWith($propertyAccessor);
     }
 
-    function it_is_initializable()
+    function it_is_event_subscriber()
     {
-        $this->shouldHaveType('FSi\Bundle\DoctrineExtensionsBundle\Form\EventListener\RemovableFileSubscriber');
+        $this->shouldBeAnInstanceOf('Symfony\Component\EventDispatcher\EventSubscriberInterface');
     }
 
     function it_passes_form_data_as_submitted_data_when_there_is_no_submitted_data(
