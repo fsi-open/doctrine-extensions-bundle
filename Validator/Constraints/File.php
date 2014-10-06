@@ -16,4 +16,8 @@ use Symfony\Component\Validator\Constraints\File as BaseConstraint;
  */
 class File extends BaseConstraint
 {
+    public function validatedBy()
+    {
+        return 'fsi_file';
+    }
 }

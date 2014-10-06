@@ -21,6 +21,8 @@
         <parameter key="fsi_doctrine_extensions.form.type.fsi.file.class">FSi\Bundle\DoctrineExtensionsBundle\Form\Type\FSi\FileType</parameter>
         <parameter key="fsi_doctrine_extensions.form.type.fsi.image.class">FSi\Bundle\DoctrineExtensionsBundle\Form\Type\FSi\ImageType</parameter>
         <parameter key="fsi_doctrine_extensions.resolver.fsi.file_path.class">FSi\Bundle\DoctrineExtensionsBundle\Resolver\FSiFilePathResolver</parameter>
+        <parameter key="fsi_doctrine_extensions.validator.file.class">FSi\Bundle\DoctrineExtensionsBundle\Validator\Constraints\FileValidator</parameter>
+        <parameter key="fsi_doctrine_extensions.validator.image.class">FSi\Bundle\DoctrineExtensionsBundle\Validator\Constraints\ImageValidator</parameter>
     </parameters>
 
     <services>
@@ -82,6 +84,20 @@
 
         <service id="fsi_doctrine_extensions.form.type.fsi.image" class="%fsi_doctrine_extensions.form.type.fsi.image.class%">
             <tag name="form.type" alias="fsi_image" />
+        </service>
+
+        <!-- Validators -->
+        <service id="fsi_doctrine_extensions.validator.symfony_file" class="Symfony\Component\Validator\Constraints\FileValidator" />
+        <service id="fsi_doctrine_extensions.validator.symfony_image" class="Symfony\Component\Validator\Constraints\ImageValidator" />
+
+        <service id="fsi_doctrine_extensions.validator.file" class="%fsi_doctrine_extensions.validator.file.class%">
+            <argument type="service" id="fsi_doctrine_extensions.validator.symfony_file" />
+            <tag name="validator.constraint_validator" alias="fsi_file" />
+        </service>
+
+        <service id="fsi_doctrine_extensions.validator.image" class="%fsi_doctrine_extensions.validator.image.class%">
+            <argument type="service" id="fsi_doctrine_extensions.validator.symfony_image" />
+            <tag name="validator.constraint_validator" alias="fsi_image" />
         </service>
     </services>
 
