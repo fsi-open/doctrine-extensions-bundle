@@ -53,22 +53,10 @@ class RemovableFileType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $fileOptions = array_merge(
-            array(
-                'label' => false,
-            ),
-            $options['file_options']
-        );
+        $fileOptions = array_merge($this->getDefaultFileOptions(), $options['file_options']);
         $builder->add($builder->getName(), $options['file_type'], $fileOptions);
 
-        $removeOptions = array_merge(
-            array(
-                'label' => 'fsi_removable_file.remove',
-                'mapped' => false,
-                'translation_domain' => 'FSiDoctrineExtensionsBundle'
-            ),
-            $options['remove_options']
-        );
+        $removeOptions = array_merge($this->getDefaultRemoveOptions(), $options['remove_options']);
         $builder->add($options['remove_name'], $options['remove_type'], $removeOptions);
 
         $this->removeFSiFileEventSubscriber($builder);
@@ -139,5 +127,27 @@ class RemovableFileType extends AbstractType
         return is_array($listener) &&
             isset($listener[0]) &&
             ($listener[0] instanceof FileSubscriber);
+    }
+
+    /**
+     * @return array
+     */
+    private function getDefaultFileOptions()
+    {
+        return array(
+            'label' => false,
+        );
+    }
+
+    /**
+     * @return array
+     */
+    private function getDefaultRemoveOptions()
+    {
+        return array(
+            'label' => 'fsi_removable_file.remove',
+            'mapped' => false,
+            'translation_domain' => 'FSiDoctrineExtensionsBundle'
+        );
     }
 }
