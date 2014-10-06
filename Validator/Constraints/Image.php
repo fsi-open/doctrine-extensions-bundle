@@ -16,4 +16,8 @@ use Symfony\Component\Validator\Constraints\Image as BaseConstraint;
  */
 class Image extends BaseConstraint
 {
+    public function validatedBy()
+    {
+        return 'fsi_image';
+    }
 }
