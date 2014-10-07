@@ -76,7 +76,7 @@
             <argument>%fsi_doctrine_extensions.default.filesystem.adapter.prefix%</argument>
         </service>
 
-        <service id="fsi_doctrine_extensions.form.subscriber.removable_file" class="%fsi_doctrine_extenstions.form.subscriber.removable_file.class%">
+        <service id="fsi_doctrine_extensions.form.subscriber.removable_file" class="%fsi_doctrine_extensions.form.subscriber.removable_file.class%">
             <argument type="service" id="property_accessor"/>
         </service>
 
