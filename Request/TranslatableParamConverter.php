@@ -113,7 +113,7 @@ class TranslatableParamConverter implements ParamConverterInterface
         $options = $configuration->getOptions();
 
         if (isset($options['mapping'])) {
-            $options['mapping'];
+            return $options['mapping'];
         }
 
         return array();
@@ -128,7 +128,7 @@ class TranslatableParamConverter implements ParamConverterInterface
         $options = $configuration->getOptions();
 
         if (isset($options['exclude'])) {
-            $options['exclude'];
+            return $options['exclude'];
         }
 
         return array();
