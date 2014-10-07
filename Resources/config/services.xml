@@ -100,7 +100,7 @@
         </service>
 
         <service id="fsi_doctrine_extensions.form.type.fsi.removable_file" class="%fsi_doctrine_extensions.form.type.fsi.removable_file.class%">
-            <argument type="service" id="fsi_doctrine_extenstions.form.subscriber.removable_file"/>
+            <argument type="service" id="fsi_doctrine_extensions.form.subscriber.removable_file"/>
             <tag name="form.type" alias="fsi_removable_file" />
         </service>
 
