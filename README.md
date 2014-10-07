@@ -9,7 +9,7 @@ Modify composer.json file
 ```
 {
     "require": {
-        "fsi/doctrine-extensions-bundle": "1.0.*",
+        "fsi/doctrine-extensions-bundle": "~1.1",
     }
 }
 ```
