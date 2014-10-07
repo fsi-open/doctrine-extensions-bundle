@@ -37,8 +37,9 @@ class FSiFilePathResolver
     public function filePath(File $file, $prefix = null)
     {
         if ($file->getFilesystem()->getAdapter() instanceof Local
-            || $file->getFilesystem()->getAdapter() instanceof Cache) {
-            return  '/' . $this->generatePath($file, $prefix);
+            || $file->getFilesystem()->getAdapter() instanceof Cache
+        ) {
+            return '/' . $this->generatePath($file, $prefix);
         }
 
         $this->writeFileToLocalAdapter($file);
@@ -99,4 +100,4 @@ class FSiFilePathResolver
 
         return $file->getKey();
     }
-} 
+}

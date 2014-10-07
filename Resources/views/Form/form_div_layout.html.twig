@@ -1,15 +1,46 @@
 {% block fsi_file_widget %}
-{% spaceless %}
-    {% if form.vars.data is not null %}
-        {% if is_fsi_file(form.vars.data) %}
-        <div>
-            <a href="{{ fsi_file_path(form.vars.data, 'uploaded') }}" data-for="{{ form.vars.id }}" target="_blank">{{ form.vars.data|fsi_file_basename }}</a>
-        </div>
-        {% elseif form.vars.valid %}
-            <div>{{ 'fsi_file.refresh'|trans({}, 'FSiDoctrineExtensionsBundle') }}</div>
+    {% spaceless %}
+        {% set type = type|default('file') %}
+        {{ block('form_widget') }}
+        {% if form.vars.data is not null %}
+            {% if is_fsi_file(form.vars.data) %}
+                <div>
+                    <a href="{{ fsi_file_path(form.vars.data, 'uploaded') }}" data-for="{{ form.vars.id }}" target="_blank">{{ form.vars.data|fsi_file_basename }}</a>
+                </div>
+            {% elseif form.vars.valid %}
+                <div>{{ 'fsi_file.refresh'|trans({}, 'FSiDoctrineExtensionsBundle') }}</div>
+            {% endif %}
         {% endif %}
-    {% endif %}
-    {% set type = type|default('file') %}
-    {{ block('form_widget_simple') }}
-{% endspaceless %}
+    {% endspaceless %}
+{% endblock %}
+
+{% block fsi_image_widget %}
+    {% spaceless %}
+        {% set type = type|default('file') %}
+        {{ block('form_widget') }}
+        {% if form.vars.data is not null %}
+            {% if is_fsi_file(form.vars.data) %}
+                <img src="{{ fsi_file_path(form.vars.data, 'uploaded') }}" class="img-thumbnail" />
+            {% elseif form.vars.valid %}
+                <div>{{ 'fsi_file.refresh'|trans({}, 'FSiDoctrineExtensionsBundle') }}</div>
+            {% endif %}
+        {% endif %}
+    {% endspaceless %}
+{% endblock %}
+
+{% block fsi_removable_file_widget %}
+    {% spaceless %}
+        {% set fileForm = form[form.vars.name] %}
+        {% set type = type|default('file') %}
+        {{ form_widget(fileForm) }}
+        {% if fileForm.vars.data is not null %}
+            {% if is_fsi_file(fileForm.vars.data) %}
+                <p>
+                    {{ form_widget(form.remove) }}&nbsp;
+                    {{ form_label(form.remove) }}
+                    {#<label for="{{ form.remove.vars.id }}">{{ 'fsi_removable_file.remove'|trans({}, 'FSiDoctrineExtensionsBundle') }}</label>#}
+                </p>
+            {% endif %}
+        {% endif %}
+    {% endspaceless %}
 {% endblock %}
