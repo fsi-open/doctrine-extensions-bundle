@@ -83,26 +83,6 @@ class TranslatableParamConverter implements ParamConverterInterface
             $this->hasTranslatableProperties($configuration);
     }
 
-    private function getOption(ConfigurationInterface $configuration, $option)
-    {
-        $defaults = array(
-            'exclude'        => array(),
-            'mapping'        => array(),
-            'strip_null'     => false,
-        );
-        $options = $configuration->getOptions();
-
-        if (isset($options[$option])) {
-            return $options[$option];
-        }
-
-        if (isset($defaults[$option])) {
-            return $defaults[$option];
-        }
-
-        return null;
-    }
-
     /**
      * @param \Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface $configuration
      * @param \Symfony\Component\HttpFoundation\Request $request
@@ -110,13 +90,13 @@ class TranslatableParamConverter implements ParamConverterInterface
      */
     private function getMapping(ConfigurationInterface $configuration, Request $request)
     {
-        $mapping = $this->getOption($configuration, 'mapping');
+        $mapping = $this->getMappingOption($configuration);
         if (empty($mapping)) {
             $keys = $request->attributes->keys();
             $mapping = $keys ? array_combine($keys, $keys) : array();
         }
 
-        $exclude = $this->getOption($configuration, 'exclude');
+        $exclude = $this->getExcludeOption($configuration);
         foreach ($exclude as $excluded) {
             unset($mapping[$excluded]);
         }
@@ -126,14 +106,44 @@ class TranslatableParamConverter implements ParamConverterInterface
 
     /**
      * @param \Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface $configuration
+     * @return array
+     */
+    private function getMappingOption(ConfigurationInterface $configuration)
+    {
+        $options = $configuration->getOptions();
+
+        if (isset($options['mapping'])) {
+            $options['mapping'];
+        }
+
+        return array();
+    }
+
+    /**
+     * @param \Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface $configuration
+     * @return array
+     */
+    private function getExcludeOption(ConfigurationInterface $configuration)
+    {
+        $options = $configuration->getOptions();
+
+        if (isset($options['exclude'])) {
+            $options['exclude'];
+        }
+
+        return array();
+    }
+
+    /**
+     * @param \Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface $configuration
      * @return \Doctrine\Common\Persistence\ObjectManager|null
      */
     private function getManager(ConfigurationInterface $configuration)
     {
-        $managerName = $this->getOption($configuration, 'entity_manager');
+        $options = $configuration->getOptions();
 
-        if (null !== $managerName) {
-            return $this->registry->getManager($managerName);
+        if (isset($options['entity_manager'])) {
+            return $this->registry->getManager($options['entity_manager']);
         }
 
         return $this->registry->getManagerForClass($configuration->getClass());
@@ -167,11 +177,26 @@ class TranslatableParamConverter implements ParamConverterInterface
      */
     private function filterNullCriteria(array $criteria, ConfigurationInterface $configuration)
     {
-        if ($this->getOption($configuration, 'strip_null')) {
+        if ($this->getStripNullOption($configuration)) {
             return array_filter($criteria, function ($value) { return !is_null($value); });
         }
 
         return $criteria;
+    }
+
+    /**
+     * @param \Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface $configuration
+     * @return bool
+     */
+    private function getStripNullOption(ConfigurationInterface $configuration)
+    {
+        $options = $configuration->getOptions();
+
+        if (isset($options['strip_null'])) {
+            return (bool) $options['strip_null'];
+        }
+
+        return false;
     }
 
     /**
@@ -182,7 +207,7 @@ class TranslatableParamConverter implements ParamConverterInterface
     private function isFieldSearchable(ClassMetadata $classMetadata, $field)
     {
         return $classMetadata->hasField($field) ||
-        ($classMetadata->hasAssociation($field) && $classMetadata->isSingleValuedAssociation($field));
+            ($classMetadata->hasAssociation($field) && $classMetadata->isSingleValuedAssociation($field));
     }
 
     /**
