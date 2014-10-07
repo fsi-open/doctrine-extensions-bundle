@@ -355,6 +355,7 @@ class ArticleTranslation
 
 * [Twig Extensions](Resources/doc/twig.md)
 * [Symfony Form](Resources/doc/form.md)
+* [Request TranslatableParamConverter](Resources/doc/param_converter.md)
 
 ## Extended validators
 
