@@ -84,6 +84,7 @@ class RemovableFileTypeSpec extends ObjectBehavior
         ))->shouldBeCalled();
 
         $builder->add('remove_field_name', 'remove_field_type', array(
+            'required' => false,
             'label' => 'fsi_removable_file.remove',
             'mapped' => false,
             'translation_domain' => 'FSiDoctrineExtensionsBundle',

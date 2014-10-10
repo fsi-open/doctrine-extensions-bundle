@@ -121,6 +121,7 @@ class RemovableFileType extends AbstractType
 
     /**
      * @param callable $listener
+     * @return boolean
      */
     private function isFileSubscriber($listener)
     {
@@ -145,6 +146,7 @@ class RemovableFileType extends AbstractType
     private function getDefaultRemoveOptions()
     {
         return array(
+            'required' => false,
             'label' => 'fsi_removable_file.remove',
             'mapped' => false,
             'translation_domain' => 'FSiDoctrineExtensionsBundle'
