@@ -111,11 +111,11 @@ class FileTypeTest extends FormIntegrationTestCase
 
         $file->expects($this->any())
             ->method('getKey')
-            ->will($this->returnValue('Article/file/1/image.jpg'));
+            ->will($this->returnValue('Article/file/1/image name.jpg'));
 
         $file->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue('Article/file/1/image.jpg'));
+            ->will($this->returnValue('Article/file/1/image name.jpg'));
 
         $article = new Article();
         $article->setFile($file);

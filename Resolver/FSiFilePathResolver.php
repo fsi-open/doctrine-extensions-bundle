@@ -110,9 +110,24 @@ class FSiFilePathResolver
         if (isset($prefix)) {
             $prefix = trim($prefix, '/');
 
-            return $prefix . '/' . ltrim($file->getKey(), '/');
+            return $prefix . '/' . ltrim($this->encodeUrl($file->getKey()), '/');
         }
 
-        return $file->getKey();
+        return $this->encodeUrl($file->getKey());
+    }
+
+    /**
+     * @param string $url
+     * @return string
+     */
+    protected function encodeUrl($url)
+    {
+        $encodeUrl = function ($part) {
+            return rawurlencode($part);
+        };
+
+        $encodedUrlParts = array_map($encodeUrl, explode("/", $url));
+
+        return implode("/", $encodedUrlParts);
     }
 }
