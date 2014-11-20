@@ -122,11 +122,7 @@ class FSiFilePathResolver
      */
     protected function encodeUrl($url)
     {
-        $encodeUrl = function ($part) {
-            return rawurlencode($part);
-        };
-
-        $encodedUrlParts = array_map($encodeUrl, explode("/", $url));
+        $encodedUrlParts = array_map('rawurlencode', explode("/", $url));
 
         return implode("/", $encodedUrlParts);
     }
