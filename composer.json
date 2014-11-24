@@ -13,14 +13,14 @@
     "require": {
         "php": ">=5.3.3",
         "twig/twig": "~1.2",
-        "symfony/framework-bundle": "~2.2",
-        "symfony/twig-bundle": "~2.2",
-        "symfony/http-foundation": "~2.2",
-        "symfony/form" : "~2.2",
-        "symfony/validator": "~2.2",
+        "symfony/framework-bundle": "~2.4",
+        "symfony/twig-bundle": "~2.4",
+        "symfony/http-foundation": "~2.4",
+        "symfony/form" : "~2.4",
+        "symfony/validator": "~2.4",
         "doctrine/doctrine-bundle": "~1.2",
         "fsi/doctrine-extensions": "~1.1",
-        "sensio/framework-extra-bundle": "~2.3",
+        "sensio/framework-extra-bundle": "~3.0",
         "knplabs/knp-gaufrette-bundle": "0.1.*"
     },
     "require-dev": {
