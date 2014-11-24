@@ -12,8 +12,8 @@ namespace FSi\Bundle\DoctrineExtensionsBundle\Request;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\ORM\NoResultException;
-use FSi\DoctrineExtensions\Translatable\Entity\Repository\TranslatableRepository;
 use FSi\DoctrineExtensions\Translatable\Mapping\ClassMetadata as TranslatableClassMetadata;
+use FSi\DoctrineExtensions\Translatable\Model\TranslatableRepositoryInterface;
 use FSi\DoctrineExtensions\Translatable\TranslatableListener;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterInterface;
@@ -266,7 +266,7 @@ class TranslatableParamConverter implements ParamConverterInterface
      */
     private function validateRepository(ParamConverter $configuration)
     {
-        return $this->getRepository($configuration) instanceof TranslatableRepository;
+        return $this->getRepository($configuration) instanceof TranslatableRepositoryInterface;
     }
 
     /**
