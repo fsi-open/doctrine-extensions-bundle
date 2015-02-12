@@ -9,7 +9,7 @@
 
 namespace FSi\Bundle\DoctrineExtensionsBundle\Twig\Extension;
 
-use FSi\Bundle\DoctrineExtensionsBundle\Exception\Uploadable\InvalidFilesystem;
+use FSi\Bundle\DoctrineExtensionsBundle\Exception\Uploadable\InvalidFilesystemException;
 use FSi\Bundle\DoctrineExtensionsBundle\Listener\Uploadable\Filesystem;
 use FSi\Bundle\DoctrineExtensionsBundle\Resolver\FSiFilePathResolver;
 use FSi\DoctrineExtensions\Uploadable\File;

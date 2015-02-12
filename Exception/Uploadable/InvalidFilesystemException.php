@@ -11,6 +11,6 @@ namespace FSi\Bundle\DoctrineExtensionsBundle\Exception\Uploadable;
 
 use FSi\DoctrineExtensions\Uploadable\Exception\RuntimeException;
 
-class InvalidFile extends RuntimeException
+class InvalidFilesystemException extends RuntimeException
 {
 }

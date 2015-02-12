@@ -9,7 +9,7 @@
 
 namespace FSi\Bundle\DoctrineExtensionsBundle\Resolver;
 
-use FSi\Bundle\DoctrineExtensionsBundle\Exception\Uploadable\InvalidFilesystem;
+use FSi\Bundle\DoctrineExtensionsBundle\Exception\Uploadable\InvalidFilesystemException;
 use FSi\Bundle\DoctrineExtensionsBundle\Listener\Uploadable\Filesystem;
 use FSi\DoctrineExtensions\Uploadable\File;
 use Gaufrette\Adapter\Cache;
@@ -62,7 +62,7 @@ class FSiFilePathResolver
     {
         $filesystem = $file->getFilesystem();
         if (!($filesystem instanceof Filesystem)) {
-            throw new InvalidFilesystem(sprintf(
+            throw new InvalidFilesystemException(sprintf(
                 'Expected instance of \FSi\Bundle\DoctrineExtensionsBundle\Listener\Uploadable\Filesystem got %s',
                 is_object($filesystem) ? get_class($filesystem) : gettype($filesystem)
             ));
