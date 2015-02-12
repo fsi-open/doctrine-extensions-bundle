@@ -12,7 +12,7 @@ namespace FSi\Bundle\DoctrineExtensionsBundle\Listener\Uploadable\FileHandler;
 use FSi\DoctrineExtensions\Uploadable\Exception\RuntimeException;
 use FSi\DoctrineExtensions\Uploadable\FileHandler\AbstractHandler;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use FSi\Bundle\DoctrineExtensionsBundle\Exception\Uploadable\InvalidFile;
+use FSi\Bundle\DoctrineExtensionsBundle\Exception\Uploadable\InvalidFileException;
 
 class SymfonyUploadedFileHandler extends AbstractHandler
 {
@@ -42,7 +42,7 @@ class SymfonyUploadedFileHandler extends AbstractHandler
         }
 
         if (!$file->isValid()) {
-            throw new InvalidFile(sprintf('File isn\'t uploaded properly! Code of error was "%s".', $file->getError()));
+            throw new InvalidFileException(sprintf('File isn\'t uploaded properly! Code of error was "%s".', $file->getError()));
         }
 
         $level = error_reporting(0);

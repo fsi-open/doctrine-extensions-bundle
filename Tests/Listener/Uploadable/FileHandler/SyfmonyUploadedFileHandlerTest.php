@@ -21,7 +21,7 @@ class SymfonyUploadedFileHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($handler->supports($file));
 
-        $this->setExpectedException('FSi\Bundle\DoctrineExtensionsBundle\Exception\Uploadable\InvalidFile');
+        $this->setExpectedException('FSi\Bundle\DoctrineExtensionsBundle\Exception\Uploadable\InvalidFileException');
         $handler->getContent($file);
     }
 }

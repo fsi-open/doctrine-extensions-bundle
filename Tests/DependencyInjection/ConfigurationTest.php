@@ -107,9 +107,11 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
                             )
                         )
                     ),
+                    'uploadable_filesystems' => array(),
                     'default_locale' => '%locale%',
                     'default_key_maker_service' =>  'fsi_doctrine_extensions.default.key_maker',
                     'default_filesystem_prefix' => 'uploaded',
+                    'default_filesystem_base_url' => '/uploaded',
                     'default_filesystem_path' => '%kernel.root_dir%/../web/uploaded',
                     'default_filesystem_service' => 'fsi_doctrine_extensions.default.filesystem',
                 )
@@ -146,13 +148,31 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testUploadableFilesystemsOptions()
+    {
+        $filestystemsConfig = array(
+            'uploadable_filesystems' => array(
+                'default' => array('base_url' => '/'),
+                'remote_filesystem' => array('base_url' => 'http://domain.com/basepath/')
+            )
+        );
+        $config = $this->getProcessor()->processConfiguration(new Configuration(), array($filestystemsConfig));
+
+        $this->assertSame(
+            $config['uploadable_filesystems'],
+            $filestystemsConfig['uploadable_filesystems']
+        );
+    }
+
     public static function getBundleDefaultOptions()
     {
         return array(
             'orm' => array(),
+            'uploadable_filesystems' => array(),
             'default_locale' => '%locale%',
             'default_key_maker_service' =>  'fsi_doctrine_extensions.default.key_maker',
             'default_filesystem_prefix' => 'uploaded',
+            'default_filesystem_base_url' => '/uploaded',
             'default_filesystem_path' => '%kernel.root_dir%/../web/uploaded',
             'default_filesystem_service' => 'fsi_doctrine_extensions.default.filesystem',
             'uploadable_configuration' => array()

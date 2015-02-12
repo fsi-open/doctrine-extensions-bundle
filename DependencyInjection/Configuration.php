@@ -25,9 +25,11 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->append($this->getVendorNode('orm'))
+                ->append($this->getFilesystemsNode())
                 ->scalarNode('default_locale')->defaultValue('%locale%')->end()
                 ->scalarNode('default_key_maker_service')->defaultValue('fsi_doctrine_extensions.default.key_maker')->end()
                 ->scalarNode('default_filesystem_prefix')->defaultValue('uploaded')->end()
+                ->scalarNode('default_filesystem_base_url')->defaultValue('/uploaded')->end()
                 ->scalarNode('default_filesystem_path')->defaultValue('%kernel.root_dir%/../web/uploaded')->end()
                 ->scalarNode('default_filesystem_service')->defaultValue('fsi_doctrine_extensions.default.filesystem')->end()
                 ->arrayNode('uploadable_configuration')
@@ -49,6 +51,21 @@ class Configuration implements ConfigurationInterface
             ->end();
 
         return $treeBuilder;
+    }
+
+    private function getFilesystemsNode()
+    {
+        $treeBuilder = new TreeBuilder();
+        $node = $treeBuilder->root('uploadable_filesystems');
+        $node
+            ->useAttributeAsKey('filesystem')
+            ->prototype('array')
+            ->children()
+                ->scalarNode('filesystem')->end()
+                ->scalarNode('base_url')->end()
+            ->end();
+
+        return $node;
     }
 
     /**

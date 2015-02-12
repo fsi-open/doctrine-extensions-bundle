@@ -9,6 +9,8 @@
 
 namespace FSi\Bundle\DoctrineExtensionsBundle\Twig\Extension;
 
+use FSi\Bundle\DoctrineExtensionsBundle\Exception\Uploadable\InvalidFilesystemException;
+use FSi\Bundle\DoctrineExtensionsBundle\Listener\Uploadable\Filesystem;
 use FSi\Bundle\DoctrineExtensionsBundle\Resolver\FSiFilePathResolver;
 use FSi\DoctrineExtensions\Uploadable\File;
 use Twig_Environment;
@@ -70,7 +72,8 @@ class Assets extends \Twig_Extension
     {
         return array(
            new \Twig_SimpleFunction('fsi_file_asset', array($this, 'fileAsset')),
-           new \Twig_SimpleFunction('fsi_file_path', array($this->filePathResolver, 'filePath'))
+           new \Twig_SimpleFunction('fsi_file_path', array($this->filePathResolver, 'filePath')),
+           new \Twig_SimpleFunction('fsi_file_url', array($this->filePathResolver, 'fileUrl'))
         );
     }
 

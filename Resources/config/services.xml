@@ -15,7 +15,7 @@
         <parameter key="fsi_doctrine_extensions.listener.translatable.class">FSi\DoctrineExtensions\Translatable\TranslatableListener</parameter>
         <parameter key="fsi_doctrine_extensions.listener.translatable_locale_listener.class">FSi\Bundle\DoctrineExtensionsBundle\EventListener\TranslatableLocaleListener</parameter>
         <parameter key="fsi_doctrine_extensions.default.key_maker.class">FSi\DoctrineExtensions\Uploadable\Keymaker\Entity</parameter>
-        <parameter key="fsi_doctrine_extensions.default.filesystem.class">Gaufrette\Filesystem</parameter>
+        <parameter key="fsi_doctrine_extensions.default.filesystem.class">FSi\Bundle\DoctrineExtensionsBundle\Listener\Uploadable\Filesystem</parameter>
         <parameter key="fsi_doctrine_extensions.default.filesystem.adapter.class">Gaufrette\Adapter\Local</parameter>
         <parameter key="fsi_doctrine_extensions.request.translatable_param_converter.class">FSi\Bundle\DoctrineExtensionsBundle\Request\TranslatableParamConverter</parameter>
         <parameter key="fsi_doctrine_extensions.twig.extension.assets.class">FSi\Bundle\DoctrineExtensionsBundle\Twig\Extension\Assets</parameter>
@@ -55,6 +55,9 @@
 
         <service id="fsi_doctrine_extensions.default.filesystem" class="%fsi_doctrine_extensions.default.filesystem.class%">
             <argument type="service" id="fsi_doctrine_extensions.default.filesystem.adapter" />
+            <call method="setBaseUrl">
+                <argument type="string">%fsi_doctrine_extensions.default.filesystem.base_url%</argument>
+            </call>
         </service>
 
         <!-- Listeners -->
@@ -78,6 +81,10 @@
 
         <service id="fsi_doctrine_extensions.form.subscriber.removable_file" class="%fsi_doctrine_extensions.form.subscriber.removable_file.class%">
             <argument type="service" id="property_accessor"/>
+        </service>
+
+        <service id="knp_gaufrette.filesystem" class="%fsi_doctrine_extensions.default.filesystem.class%" abstract="true">
+            <argument />
         </service>
 
         <!-- Twig Extension -->

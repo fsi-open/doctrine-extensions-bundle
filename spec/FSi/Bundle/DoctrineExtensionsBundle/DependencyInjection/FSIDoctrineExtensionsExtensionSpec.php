@@ -46,6 +46,8 @@ class FSIDoctrineExtensionsExtensionSpec extends ObjectBehavior
         $builder->setParameter('fsi_doctrine_extensions.listener.uploadable.configuration', array())->shouldBeCalled();
         $builder->setParameter('fsi_doctrine_extensions.default.filesystem.adapter.prefix', 'uploaded')
             ->shouldBeCalled();
+        $builder->setParameter('fsi_doctrine_extensions.default.filesystem.base_url', '/uploaded')
+            ->shouldBeCalled();
 
         $uploadable->addMethodCall('setDefaultFilesystem', Argument::type('array'))->shouldBeCalled();
         $uploadable->addTag('doctrine.event_subscriber', array('connection' => 'default'))->shouldBeCalled();
@@ -82,6 +84,8 @@ class FSIDoctrineExtensionsExtensionSpec extends ObjectBehavior
             ->shouldBeCalled();
 
         $builder->setParameter('fsi_doctrine_extensions.default.filesystem.adapter.prefix', 'uploaded')
+            ->shouldBeCalled();
+        $builder->setParameter('fsi_doctrine_extensions.default.filesystem.base_url', '/uploaded')
             ->shouldBeCalled();
 
         $builder->hasDefinition('fsi_doctrine_extensions.listener.translatable')->shouldBeCalled()->willReturn(true);
@@ -130,6 +134,8 @@ class FSIDoctrineExtensionsExtensionSpec extends ObjectBehavior
         ))->shouldBeCalled();
 
         $builder->setParameter('fsi_doctrine_extensions.default.filesystem.adapter.prefix', 'uploaded')
+            ->shouldBeCalled();
+        $builder->setParameter('fsi_doctrine_extensions.default.filesystem.base_url', '/uploaded')
             ->shouldBeCalled();
 
         $this->load(array(

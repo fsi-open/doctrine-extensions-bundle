@@ -72,6 +72,11 @@ class FSIDoctrineExtensionsExtension extends Extension
             'fsi_doctrine_extensions.default.filesystem.adapter.prefix',
             $config['default_filesystem_prefix']
         );
+
+        $container->setParameter(
+            'fsi_doctrine_extensions.default.filesystem.base_url',
+            $config['default_filesystem_base_url']
+        );
     }
 
     /**

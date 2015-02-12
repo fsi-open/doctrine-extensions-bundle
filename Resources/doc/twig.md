@@ -2,6 +2,35 @@
 
 ## Functions
 
+### fsi_file_url
+
+This function generates url to passed ``FSi\DoctrineExtensions\Uploadable\File`` object. This URL is generated
+from base URL configured in one of two places. One for default filesystem:
+
+```yml
+fsi_doctrine_extensions:
+    default_filesystem_base_url: '/uploaded'
+```
+
+And the other for any filesystem configured through KnpGaufretteBundle's configuration.
+
+```yml
+knp_gaufrette:
+    adapters:
+        some_adapter:
+            aws_s3:
+                service_id: amazon_aws_client_service_id
+                bucket_name: your_bucket_name
+    filesystems:
+        some_filesystem:
+            adapter: some_adapter
+
+fsi_doctrine_extensions:
+    uploaded_filesystems:
+        some_filesystem:
+            base_url: https://s3-eu-west-1.amazonaws.com/your_bucket_name
+```
+
 ### fsi_file_path
 
 This function generate **relative** url to ``FSi\DoctrineExtensions\Uploadable\File`` resource.
