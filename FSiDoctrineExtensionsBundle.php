@@ -11,6 +11,7 @@ namespace FSi\Bundle\DoctrineExtensionsBundle;
 
 use FSi\Bundle\DoctrineExtensionsBundle\DependencyInjection\Compiler\CustomHydratorPass;
 use FSi\Bundle\DoctrineExtensionsBundle\DependencyInjection\Compiler\GaufretteFilesystemsPass;
+use FSi\Bundle\DoctrineExtensionsBundle\DependencyInjection\Compiler\TwigDataGridPass;
 use FSi\Bundle\DoctrineExtensionsBundle\DependencyInjection\Compiler\TwigGlobalsPass;
 use FSi\Bundle\DoctrineExtensionsBundle\DependencyInjection\FSIDoctrineExtensionsExtension;
 use FSi\Bundle\DoctrineExtensionsBundle\DependencyInjection\Compiler\TwigFormPass;
@@ -28,6 +29,7 @@ class FSiDoctrineExtensionsBundle extends Bundle
         parent::build($container);
 
         $container->addCompilerPass(new TwigFormPass());
+        $container->addCompilerPass(new TwigDataGridPass());
         $container->addCompilerPass(new TwigGlobalsPass());
         $container->addCompilerPass(new CustomHydratorPass());
         $container->addCompilerPass(new GaufretteFilesystemsPass(), PassConfig::TYPE_AFTER_REMOVING);
