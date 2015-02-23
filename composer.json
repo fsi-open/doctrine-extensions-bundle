@@ -19,11 +19,12 @@
         "symfony/form" : "~2.4",
         "symfony/validator": "~2.4",
         "doctrine/doctrine-bundle": "~1.2",
-        "fsi/doctrine-extensions": "~1.1@dev",
+        "fsi/doctrine-extensions": "~1.1",
         "sensio/framework-extra-bundle": "~3.0",
         "knplabs/knp-gaufrette-bundle": "0.1.*"
     },
     "require-dev": {
+        "fsi/datagrid-bundle": "~1.1",
         "phpspec/phpspec": "2.0.*@dev",
         "doctrine/orm": "~2.3",
         "symfony/twig-bridge": "~2.2",

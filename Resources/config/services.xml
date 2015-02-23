@@ -131,6 +131,20 @@
             <argument type="service" id="fsi_doctrine_extensions.listener.translatable"/>
             <tag name="request.param_converter" priority="10" />
         </service>
+
+        <!-- DataGrid columns -->
+        <service id="fsi_doctrine_extensions.datagrid.column.fsi_file" class="FSi\Bundle\DoctrineExtensionsBundle\DataGrid\ColumnType\FSiFile">
+            <tag name="datagrid.column" alias="fsi_file" />
+        </service>
+
+        <service id="fsi_doctrine_extensions.datagrid.column.fsi_image" class="FSi\Bundle\DoctrineExtensionsBundle\DataGrid\ColumnType\FSiImage">
+            <tag name="datagrid.column" alias="fsi_image" />
+        </service>
+
+        <service id="fsi_doctrine_extensions.datagrid.column_extension.default" class="FSi\Bundle\DoctrineExtensionsBundle\DataGrid\Extension\Core\DefaultColumnOptionsExtension">
+            <tag name="datagrid.column_extension" alias="fsi_doctrine_extensions.default" />
+        </service>
+
     </services>
 
 </container>
