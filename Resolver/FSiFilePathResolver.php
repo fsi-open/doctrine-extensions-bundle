@@ -58,6 +58,10 @@ class FSiFilePathResolver
         return basename($file->getName());
     }
 
+    /**
+     * @param File $file
+     * @return string
+     */
     public function fileUrl(File $file)
     {
         $filesystem = $file->getFilesystem();
@@ -68,7 +72,7 @@ class FSiFilePathResolver
             ));
         }
 
-        return $filesystem->getBaseUrl() . $file->getKey();
+        return $filesystem->getBaseUrl() . $this->encodeUrl($file->getKey());
     }
 
     /**
