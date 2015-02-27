@@ -14,6 +14,7 @@ use Gaufrette\Adapter\Local;
 use Gaufrette\Adapter\Cache;
 use Gaufrette\Filesystem;
 use PhpSpec\ObjectBehavior;
+use FSi\Bundle\DoctrineExtensionsBundle\Listener\Uploadable\Filesystem as UploadableFilesystem;
 use Twig_Environment;
 
 class FSiFilePathResolverSpec extends ObjectBehavior
@@ -23,7 +24,7 @@ class FSiFilePathResolverSpec extends ObjectBehavior
         $this->beConstructedWith(__DIR__ . '/tmp', 'uploaded');
     }
 
-    function it_generate_url_for_fsi_file_with_local_adapter(File $file, Filesystem $filesystem, Local $adapter)
+    function it_generate_path_for_fsi_file_with_local_adapter(File $file, Filesystem $filesystem, Local $adapter)
     {
         $file->getKey()->willReturn('TestFolder/File/file name.jpg');
         $file->getFilesystem()->willReturn($filesystem);
@@ -32,7 +33,7 @@ class FSiFilePathResolverSpec extends ObjectBehavior
         $this->filePath($file)->shouldReturn('/uploaded/TestFolder/File/file%20name.jpg');
     }
 
-    function it_generate_url_for_fsi_file_with_cache_adapter(File $file, Filesystem $filesystem, Local $adapter)
+    function it_generate_path_for_fsi_file_with_cache_adapter(File $file, Filesystem $filesystem, Local $adapter)
     {
         $file->getKey()->willReturn('/TestFolder/File/file&name.jpg');
         $file->getFilesystem()->willReturn($filesystem);
@@ -41,7 +42,7 @@ class FSiFilePathResolverSpec extends ObjectBehavior
         $this->filePath($file)->shouldReturn('/uploaded/TestFolder/File/file%26name.jpg');
     }
 
-    function it_generate_url_with_file_path_prefix(File $file, Filesystem $filesystem, Cache $adapter)
+    function it_generate_path_with_file_path_prefix(File $file, Filesystem $filesystem, Cache $adapter)
     {
         $file->getKey()->willReturn('/TestFolder/File/file:name.jpg');
         $file->getFilesystem()->willReturn($filesystem);
@@ -50,7 +51,7 @@ class FSiFilePathResolverSpec extends ObjectBehavior
         $this->filePath($file, 'uploaded')->shouldReturn('/uploaded/TestFolder/File/file%3Aname.jpg');
     }
 
-    function it_generate_url_with_file_path_prefix_that_should_be_trimed(
+    function it_generate_path_with_file_path_prefix_that_should_be_trimed(
         File $file, Filesystem $filesystem, Local $adapter
     ) {
         $file->getKey()->willReturn('TestFolder/File/file<>name.jpg');
@@ -60,7 +61,7 @@ class FSiFilePathResolverSpec extends ObjectBehavior
         $this->filePath($file, '/uploaded/')->shouldReturn('/uploaded/TestFolder/File/file%3C%3Ename.jpg');
     }
 
-    function it_generate_url_for_fsi_file_with_external_adapter(
+    function it_generate_path_for_fsi_file_with_external_adapter(
         File $file, Filesystem $filesystem, Local $adapter
     ) {
         $file->getKey()->willReturn('Test Folder/File/nazwy plików.jpg');
@@ -72,7 +73,7 @@ class FSiFilePathResolverSpec extends ObjectBehavior
         $this->filePath($file)->shouldReturn('/uploaded/Test%20Folder/File/nazwy%20plik%C3%B3w.jpg');
     }
 
-    function it_generate_url_with_prefix_from_globals(
+    function it_generate_path_with_prefix_from_globals(
         Twig_Environment $environment, File $file, Filesystem $filesystem, Local $adapter
     ) {
         $environment->getGlobals()->willReturn(array('fsi_file_prefix' => 'uploaded'));
@@ -85,7 +86,7 @@ class FSiFilePathResolverSpec extends ObjectBehavior
         $this->filePath($file)->shouldReturn('/uploaded/TestFolder/File/file%25name.jpg');
     }
 
-    function it_generate_url_with_passed_prefix_even_if_there_is_a_prefix_in_globals(
+    function it_generate_path_with_passed_prefix_even_if_there_is_a_prefix_in_globals(
         Twig_Environment $environment, File $file, Filesystem $filesystem, Local $adapter
     ) {
         $environment->getGlobals()->willReturn(array(
@@ -99,6 +100,16 @@ class FSiFilePathResolverSpec extends ObjectBehavior
 
 
         $this->filePath($file, 'my_prefix')->shouldReturn('/my_prefix/TestFolder/File/file1%402.jpg');
+    }
+
+    function it_generate_url_for_fsi_file_with_base_url_set(
+        File $file, UploadableFilesystem $filesystem, Local $adapter
+    ) {
+        $file->getKey()->willReturn('TestFolder/File/file name.jpg');
+        $file->getFilesystem()->willReturn($filesystem);
+        $filesystem->getBaseUrl()->willReturn("http://domain.com/basepath/");
+
+        $this->fileUrl($file)->shouldReturn('http://domain.com/basepath/TestFolder/File/file%20name.jpg');
     }
 
     /**
