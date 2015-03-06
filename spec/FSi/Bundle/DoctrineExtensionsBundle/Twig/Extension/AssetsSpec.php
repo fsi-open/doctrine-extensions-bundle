@@ -14,6 +14,7 @@ use FSi\DoctrineExtensions\Uploadable\File;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use Symfony\Bundle\TwigBundle\Extension\AssetsExtension;
+use Symfony\Component\Routing\RequestContext;
 
 class AssetsSpec extends ObjectBehavior
 {
@@ -41,13 +42,14 @@ class AssetsSpec extends ObjectBehavior
         $this->getFunctions()->shouldHaveFunction('fsi_file_asset');
     }
 
-    function it_compute_file_asset_path(File $file, AssetsExtension $assets, FSiFilePathResolver $filePathResolver)
-    {
+    function it_compute_file_asset_path(
+        File $file, AssetsExtension $assets, FSiFilePathResolver $filePathResolver
+    ) {
         $file->getKey()->willReturn('file-name.txt');
-        $filePathResolver->filePath($file, 'uploaded')->willReturn('/uploaded/file-name.txt');
-        $assets->getAssetUrl('/uploaded/file-name.txt')->willReturn('/uploaded/file-name.txt');
+        $filePathResolver->filePath($file, 'uploaded')->willReturn('/uploaded/file%20name.txt');
+        $assets->getAssetUrl('/uploaded/file%20name.txt')->willReturn('/uploaded/file%20name.txt');
 
-        $this->fileAsset($file, 'uploaded')->shouldReturn('/uploaded/file-name.txt');
+        $this->fileAsset($file, 'uploaded')->shouldReturn('/uploaded/file%20name.txt');
     }
 
     function it_have_fsi_file_path_function()

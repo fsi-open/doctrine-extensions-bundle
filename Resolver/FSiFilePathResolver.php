@@ -58,6 +58,10 @@ class FSiFilePathResolver
         return basename($file->getName());
     }
 
+    /**
+     * @param File $file
+     * @return string
+     */
     public function fileUrl(File $file)
     {
         $filesystem = $file->getFilesystem();
@@ -68,7 +72,7 @@ class FSiFilePathResolver
             ));
         }
 
-        return $filesystem->getBaseUrl() . $file->getKey();
+        return $filesystem->getBaseUrl() . $this->encodeUrl($file->getKey());
     }
 
     /**
@@ -110,9 +114,20 @@ class FSiFilePathResolver
         if (isset($prefix)) {
             $prefix = trim($prefix, '/');
 
-            return $prefix . '/' . ltrim($file->getKey(), '/');
+            return $prefix . '/' . ltrim($this->encodeUrl($file->getKey()), '/');
         }
 
-        return $file->getKey();
+        return $this->encodeUrl($file->getKey());
+    }
+
+    /**
+     * @param string $url
+     * @return string
+     */
+    protected function encodeUrl($url)
+    {
+        $encodedUrlParts = array_map('rawurlencode', explode("/", $url));
+
+        return implode("/", $encodedUrlParts);
     }
 }
