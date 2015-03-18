@@ -93,7 +93,7 @@ class FileTypeTest extends FormIntegrationTestCase
 
                 $fileSystem->expects($self->any())
                     ->method('getBaseUrl')
-                    ->will($this->returnValue('/uploaded/'));
+                    ->will($self->returnValue('/uploaded/'));
 
                 $fileSystem->expects($self->any())
                     ->method('getAdapter')
