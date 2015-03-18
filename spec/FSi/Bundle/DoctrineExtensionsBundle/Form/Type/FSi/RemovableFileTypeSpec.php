@@ -48,6 +48,7 @@ class RemovableFileTypeSpec extends ObjectBehavior
             'compound' => true,
             'error_bubbling' => false,
             'inherit_data' => true,
+            'required' => false,
             'remove_name' => 'remove',
             'remove_type' => 'checkbox',
             'remove_options' => array(),

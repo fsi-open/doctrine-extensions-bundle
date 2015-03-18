@@ -14,6 +14,8 @@ use FSi\Bundle\DoctrineExtensionsBundle\Form\EventListener\RemovableFileSubscrib
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
@@ -66,12 +68,21 @@ class RemovableFileType extends AbstractType
     /**
      * {@inheritdoc}
      */
+    public function finishView(FormView $view, FormInterface $form, array $options)
+    {
+        $view->vars['label_attr']['for'] = $view[$form->getName()]->vars['id'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
             'compound' => true,
             'error_bubbling' => false,
             'inherit_data' => true,
+            'required' => false,
             'remove_name' => 'remove',
             'remove_type' => 'checkbox',
             'remove_options' => array(),
