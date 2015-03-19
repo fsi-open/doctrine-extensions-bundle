@@ -16,6 +16,8 @@ use Prophecy\Argument;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 
 class RemovableFileTypeSpec extends ObjectBehavior
 {
@@ -69,7 +71,10 @@ class RemovableFileTypeSpec extends ObjectBehavior
 
     /**
      * @param \Symfony\Component\Form\FormBuilderInterface $builder
-     * @param \FSi\Bundle\DoctrineExtensionsBundle\Form\EventListener\RemovableFileSubscriber $fileSubscriber
+     * @param \Symfony\Component\Form\FormBuilderInterface $fileBuilder
+     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $fileEventDispatcher
+     * @param \FSi\Bundle\DoctrineExtensionsBundle\Form\EventListener\FileSubscriber $fileSubscriber
+     * @param \FSi\Bundle\DoctrineExtensionsBundle\Form\EventListener\RemovableFileSubscriber $removableFileSubscriber
      */
     function it_should_build_form_remove_original_listener_and_register_own_listener(
         FormBuilderInterface $builder,
@@ -112,5 +117,22 @@ class RemovableFileTypeSpec extends ObjectBehavior
             'remove_type' => 'remove_field_type',
             'remove_options' => array('some_remove_field_option' => 'remove_option_value')
         ));
+    }
+
+    function it_changes_label_attribute_for(
+        FormInterface $form,
+        FormView $view,
+        FormView $fileView
+    ) {
+        $form->getName()->willReturn('file');
+
+        $view->offsetGet('file')->willReturn($fileView);
+        $view->vars = array('label_attr' => array());
+
+        $fileView->vars = array('id' => 'form_file_file');
+
+        $this->finishView($view, $form, array());
+
+        expect($view->vars['label_attr']['for'])->toBe('form_file_file');
     }
 }

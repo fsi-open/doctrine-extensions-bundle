@@ -25,7 +25,8 @@
     },
     "require-dev": {
         "fsi/datagrid-bundle": "~1.1",
-        "phpspec/phpspec": "2.0.*@dev",
+        "phpspec/phpspec": "~2.1",
+        "bossa/phpspec2-expect": "~1.0",
         "doctrine/orm": "~2.3",
         "symfony/twig-bridge": "~2.2",
         "phpunit/phpunit": "3.7.*"
