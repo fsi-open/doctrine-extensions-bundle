@@ -30,7 +30,7 @@ class FSiFilePathResolverSpec extends ObjectBehavior
         $file->getFilesystem()->willReturn($filesystem);
         $filesystem->getAdapter()->willReturn($adapter);
 
-        $this->filePath($file)->shouldReturn('/uploaded/TestFolder/File/file%20name.jpg');
+        $this->filePath($file)->shouldReturn('/uploaded/TestFolder/File/file name.jpg');
     }
 
     function it_generate_path_for_fsi_file_with_cache_adapter(File $file, Filesystem $filesystem, Local $adapter)
@@ -39,7 +39,7 @@ class FSiFilePathResolverSpec extends ObjectBehavior
         $file->getFilesystem()->willReturn($filesystem);
         $filesystem->getAdapter()->willReturn($adapter);
 
-        $this->filePath($file)->shouldReturn('/uploaded/TestFolder/File/file%26name.jpg');
+        $this->filePath($file)->shouldReturn('/uploaded/TestFolder/File/file&name.jpg');
     }
 
     function it_generate_path_with_file_path_prefix(File $file, Filesystem $filesystem, Cache $adapter)
@@ -48,7 +48,7 @@ class FSiFilePathResolverSpec extends ObjectBehavior
         $file->getFilesystem()->willReturn($filesystem);
         $filesystem->getAdapter()->willReturn($adapter);
 
-        $this->filePath($file, 'uploaded')->shouldReturn('/uploaded/TestFolder/File/file%3Aname.jpg');
+        $this->filePath($file, 'uploaded')->shouldReturn('/uploaded/TestFolder/File/file:name.jpg');
     }
 
     function it_generate_path_with_file_path_prefix_that_should_be_trimed(
@@ -58,7 +58,7 @@ class FSiFilePathResolverSpec extends ObjectBehavior
         $file->getFilesystem()->willReturn($filesystem);
         $filesystem->getAdapter()->willReturn($adapter);
 
-        $this->filePath($file, '/uploaded/')->shouldReturn('/uploaded/TestFolder/File/file%3C%3Ename.jpg');
+        $this->filePath($file, '/uploaded/')->shouldReturn('/uploaded/TestFolder/File/file<>name.jpg');
     }
 
     function it_generate_path_for_fsi_file_with_external_adapter(
@@ -70,7 +70,7 @@ class FSiFilePathResolverSpec extends ObjectBehavior
 
         $file->getContent()->willReturn('file content');
 
-        $this->filePath($file)->shouldReturn('/uploaded/Test%20Folder/File/nazwy%20plik%C3%B3w.jpg');
+        $this->filePath($file)->shouldReturn('/uploaded/Test Folder/File/nazwy plików.jpg');
     }
 
     function it_generate_path_with_prefix_from_globals(
@@ -83,7 +83,7 @@ class FSiFilePathResolverSpec extends ObjectBehavior
         $file->getFilesystem()->willReturn($filesystem);
         $filesystem->getAdapter()->willReturn($adapter);
 
-        $this->filePath($file)->shouldReturn('/uploaded/TestFolder/File/file%25name.jpg');
+        $this->filePath($file)->shouldReturn('/uploaded/TestFolder/File/file%name.jpg');
     }
 
     function it_generate_path_with_passed_prefix_even_if_there_is_a_prefix_in_globals(
@@ -99,7 +99,7 @@ class FSiFilePathResolverSpec extends ObjectBehavior
         $filesystem->getAdapter()->willReturn($adapter);
 
 
-        $this->filePath($file, 'my_prefix')->shouldReturn('/my_prefix/TestFolder/File/file1%402.jpg');
+        $this->filePath($file, 'my_prefix')->shouldReturn('/my_prefix/TestFolder/File/file1@2.jpg');
     }
 
     function it_generate_url_for_fsi_file_with_base_url_set(
@@ -109,7 +109,7 @@ class FSiFilePathResolverSpec extends ObjectBehavior
         $file->getFilesystem()->willReturn($filesystem);
         $filesystem->getBaseUrl()->willReturn("http://domain.com/basepath/");
 
-        $this->fileUrl($file)->shouldReturn('http://domain.com/basepath/TestFolder/File/file%20name.jpg');
+        $this->fileUrl($file)->shouldReturn('http://domain.com/basepath/TestFolder/File/file name.jpg');
     }
 
     /**
