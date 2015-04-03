@@ -16,6 +16,8 @@ use Prophecy\Argument;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class RemovableFileTypeSpec extends ObjectBehavior
 {
@@ -39,10 +41,7 @@ class RemovableFileTypeSpec extends ObjectBehavior
         $this->getParent()->shouldReturn('form');
     }
 
-    /**
-     * @param \Symfony\Component\OptionsResolver\OptionsResolverInterface $resolver
-     */
-    function it_should_set_default_options($resolver)
+    function it_should_set_default_options(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'compound' => true,
@@ -65,22 +64,20 @@ class RemovableFileTypeSpec extends ObjectBehavior
         $this->setDefaultOptions($resolver);
     }
 
-    /**
-     * @param \Symfony\Component\Form\FormBuilderInterface $builder
-     * @param \FSi\Bundle\DoctrineExtensionsBundle\Form\EventListener\RemovableFileSubscriber $fileSubscriber
-     */
     function it_should_build_form_remove_original_listener_and_register_own_listener(
         FormBuilderInterface $builder,
         FormBuilderInterface $fileBuilder,
         EventDispatcherInterface $fileEventDispatcher,
         FileSubscriber $fileSubscriber,
+        NotBlank $notBlank,
         RemovableFileSubscriber $removableFileSubscriber)
     {
         $builder->getName()->willReturn('file_field_name');
 
         $builder->add('file_field_name', 'file_field_type', array(
             'label' => false,
-            'some_file_field_option' => 'file_option_value'
+            'some_file_field_option' => 'file_option_value',
+            'constraints' => array($notBlank)
         ))->shouldBeCalled();
 
         $builder->add('remove_field_name', 'remove_field_type', array(
@@ -103,6 +100,7 @@ class RemovableFileTypeSpec extends ObjectBehavior
             ->shouldBeCalled();
 
         $this->buildForm($builder, array(
+            'constraints' => array($notBlank),
             'file_type' => 'file_field_type',
             'file_options' => array('some_file_field_option' => 'file_option_value'),
             'remove_name' => 'remove_field_name',
