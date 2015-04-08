@@ -53,7 +53,7 @@ class RemovableFileType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $fileOptions = array_merge($this->getDefaultFileOptions($options), $options['file_options']);
+        $fileOptions = array_merge($this->getDefaultFileOptions(), $options['file_options']);
         $builder->add($builder->getName(), $options['file_type'], $fileOptions);
 
         $removeOptions = array_merge($this->getDefaultRemoveOptions(), $options['remove_options']);
@@ -131,21 +131,13 @@ class RemovableFileType extends AbstractType
     }
 
     /**
-     * @param array $options
      * @return array
      */
-    private function getDefaultFileOptions(array &$options)
+    private function getDefaultFileOptions()
     {
-        $fileOptions = array(
+        return array(
             'label' => false,
         );
-
-        if (isset($options['constraints'])) {
-            $fileOptions['constraints'] = $options['constraints'];
-            unset($options['constraints']);
-        }
-
-        return $fileOptions;
     }
 
     /**
