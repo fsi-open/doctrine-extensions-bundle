@@ -33,12 +33,12 @@
         {% set fileForm = form[form.vars.name] %}
         {% set type = type|default('file') %}
         {{ form_widget(fileForm) }}
+        {{ form_errors(fileForm) }}
         {% if fileForm.vars.data is not null %}
             {% if is_fsi_file(fileForm.vars.data) %}
                 <p>
                     {{ form_widget(form.remove) }}&nbsp;
                     {{ form_label(form.remove) }}
-                    {#<label for="{{ form.remove.vars.id }}">{{ 'fsi_removable_file.remove'|trans({}, 'FSiDoctrineExtensionsBundle') }}</label>#}
                 </p>
             {% endif %}
         {% endif %}
