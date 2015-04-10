@@ -70,6 +70,7 @@ class RemovableFileType extends AbstractType
     {
         $resolver->setDefaults(array(
             'compound' => true,
+            'error_bubbling' => false,
             'inherit_data' => true,
             'remove_name' => 'remove',
             'remove_type' => 'checkbox',
@@ -137,6 +138,7 @@ class RemovableFileType extends AbstractType
     {
         return array(
             'label' => false,
+            'error_bubbling' => true
         );
     }
 

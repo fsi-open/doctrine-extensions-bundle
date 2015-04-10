@@ -46,6 +46,7 @@ class RemovableFileTypeSpec extends ObjectBehavior
     {
         $resolver->setDefaults(array(
             'compound' => true,
+            'error_bubbling' => false,
             'inherit_data' => true,
             'remove_name' => 'remove',
             'remove_type' => 'checkbox',
@@ -80,6 +81,7 @@ class RemovableFileTypeSpec extends ObjectBehavior
 
         $builder->add('file_field_name', 'file_field_type', array(
             'label' => false,
+            'error_bubbling' => true,
             'some_file_field_option' => 'file_option_value'
         ))->shouldBeCalled();
 
