@@ -24,7 +24,7 @@ use Symfony\Bundle\TwigBundle\Extension\AssetsExtension;
 use Symfony\Component\Form\Test\FormIntegrationTestCase;
 use Symfony\Component\Templating\Asset\UrlPackage;
 
-class FileTypeTest extends FormIntegrationTestCase
+class RemovableFileTypeTest extends FormIntegrationTestCase
 {
     /**
      * @var \Twig_Environment
@@ -121,12 +121,12 @@ class FileTypeTest extends FormIntegrationTestCase
 
         $form = $this->factory->create('form', $article);
 
-        $form->add('file', 'fsi_file');
+        $form->add('file', 'fsi_removable_file');
 
         $html = $this->twig->render('form_with_fsi_file.html.twig', array(
             'form' => $form->createView()
         ));
-        $this->assertSame($html, $this->getExpectedHtml('form_with_fsi_file.html'));
+        $this->assertSame($this->getExpectedHtml('form_with_fsi_removable_file.html'), $html);
     }
 
     /**

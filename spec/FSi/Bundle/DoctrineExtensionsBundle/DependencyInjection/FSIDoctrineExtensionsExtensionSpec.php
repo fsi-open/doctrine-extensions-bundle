@@ -33,13 +33,16 @@ class FSIDoctrineExtensionsExtensionSpec extends ObjectBehavior
         $builder->hasExtension(Argument::type('string'))->willReturn(false);
         $builder->addResource(Argument::type('\Symfony\Component\Config\Resource\FileResource'))->shouldBeCalled();
         $builder->setDefinition(Argument::type('string'), Argument::type('Symfony\Component\DependencyInjection\Definition'))->shouldBeCalled();
-        $builder->getParameterBag()->shouldBeCalled()->willReturn($parameterBag);
+        $builder->getParameterBag()->willReturn($parameterBag);
         /* Above code is added only because builder is used in services loader. */
 
-        $builder->getDefinition('fsi_doctrine_extensions.listener.translatable')->shouldBeCalled()->willReturn($translatable);
+        $builder->findTaggedServiceIds('fsi_doctrine_extensions.listener.uploadable')
+            ->willReturn(array('fsi_doctrine_extensions.listener.uploadable' => array()));
 
-        $builder->hasDefinition('fsi_doctrine_extensions.listener.uploadable')->shouldBeCalled()->willReturn(true);
-        $builder->getDefinition('fsi_doctrine_extensions.listener.uploadable')->shouldBeCalled()->willReturn($uploadable);
+        $builder->getDefinition('fsi_doctrine_extensions.listener.translatable')->willReturn($translatable);
+
+        $builder->getDefinition('fsi_doctrine_extensions.listener.uploadable')->willReturn($uploadable);
+
         $uploadable->addMethodCall('setDefaultKeymaker', Argument::type('array'))->shouldBeCalled();
         $builder->setParameter('fsi_doctrine_extensions.default.filesystem.adapter.path', '%kernel.root_dir%/../web/uploaded')
             ->shouldBeCalled();
@@ -70,11 +73,13 @@ class FSIDoctrineExtensionsExtensionSpec extends ObjectBehavior
         $builder->hasExtension(Argument::type('string'))->willReturn(false);
         $builder->addResource(Argument::type('\Symfony\Component\Config\Resource\FileResource'))->shouldBeCalled();
         $builder->setDefinition(Argument::type('string'), Argument::type('Symfony\Component\DependencyInjection\Definition'))->shouldBeCalled();
-        $builder->getParameterBag()->shouldBeCalled()->willReturn($parameterBag);
+        $builder->getParameterBag()->willReturn($parameterBag);
         /* Above code is added only because builder is used in services loader. */
 
+        $builder->findTaggedServiceIds('fsi_doctrine_extensions.listener.translatable')
+            ->willReturn(array('fsi_doctrine_extensions.listener.translatable' => array()));
+
         $builder->getDefinition('fsi_doctrine_extensions.listener.uploadable')
-            ->shouldBeCalled()
             ->willReturn($uploadable);
 
         $builder->setParameter('fsi_doctrine_extensions.default.filesystem.adapter.path',
@@ -88,8 +93,7 @@ class FSIDoctrineExtensionsExtensionSpec extends ObjectBehavior
         $builder->setParameter('fsi_doctrine_extensions.default.filesystem.base_url', '/uploaded')
             ->shouldBeCalled();
 
-        $builder->hasDefinition('fsi_doctrine_extensions.listener.translatable')->shouldBeCalled()->willReturn(true);
-        $builder->getDefinition('fsi_doctrine_extensions.listener.translatable')->shouldBeCalled()->willReturn($translatable);
+        $builder->getDefinition('fsi_doctrine_extensions.listener.translatable')->willReturn($translatable);
         $translatable->addTag('doctrine.event_subscriber', array('connection' => 'default'))->shouldBeCalled();
         $translatable->addMethodCall('setDefaultLocale', array('defaultLocale' => 'pl'))
             ->shouldBeCalled();

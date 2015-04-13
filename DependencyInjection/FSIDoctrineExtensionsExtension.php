@@ -39,12 +39,19 @@ class FSIDoctrineExtensionsExtension extends Extension
     {
         foreach ($config['orm'] as $connection => $subscribers) {
             foreach ($subscribers as $name => $enabled) {
-                $subscriber = sprintf('fsi_doctrine_extensions.listener.%s', $name);
+                $tag = sprintf('fsi_doctrine_extensions.listener.%s', $name);
 
-                if ($enabled && $container->hasDefinition($subscriber)) {
-                    $attributes = array('connection' => $connection);
-                    $definition = $container->getDefinition($subscriber);
-                    $definition->addTag('doctrine.event_subscriber', $attributes);
+                if ($enabled) {
+                    $listenersIds = $container->findTaggedServiceIds($tag);
+                    if (empty($listenersIds)) {
+                        continue;
+                    }
+
+                    foreach ($listenersIds as $listenerId => $tags) {
+                        $subscriberDefinition = $container->getDefinition($listenerId);
+                        $attributes = array('connection' => $connection);
+                        $subscriberDefinition->addTag('doctrine.event_subscriber', $attributes);
+                    }
                 }
             }
         }

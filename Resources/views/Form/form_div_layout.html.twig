@@ -5,7 +5,7 @@
         {% if form.vars.data is not null %}
             {% if is_fsi_file(form.vars.data) %}
                 <div>
-                    <a href="{{ fsi_file_path(form.vars.data, 'uploaded') }}" data-for="{{ form.vars.id }}" target="_blank">{{ form.vars.data|fsi_file_basename }}</a>
+                    <a href="{{ fsi_file_url(form.vars.data) }}" data-for="{{ form.vars.id }}" target="_blank">{{ form.vars.data|fsi_file_basename }}</a>
                 </div>
             {% elseif form.vars.valid %}
                 <div>{{ 'fsi_file.refresh'|trans({}, 'FSiDoctrineExtensionsBundle') }}</div>
@@ -20,7 +20,7 @@
         {{ block('form_widget') }}
         {% if form.vars.data is not null %}
             {% if is_fsi_file(form.vars.data) %}
-                <img src="{{ fsi_file_path(form.vars.data, 'uploaded') }}" class="img-thumbnail" />
+                <img src="{{ fsi_file_url(form.vars.data) }}" class="img-thumbnail" />
             {% elseif form.vars.valid %}
                 <div>{{ 'fsi_file.refresh'|trans({}, 'FSiDoctrineExtensionsBundle') }}</div>
             {% endif %}
@@ -33,14 +33,10 @@
         {% set fileForm = form[form.vars.name] %}
         {% set type = type|default('file') %}
         {{ form_widget(fileForm) }}
-        {% if fileForm.vars.data is not null %}
-            {% if is_fsi_file(fileForm.vars.data) %}
-                <p>
-                    {{ form_widget(form.remove) }}&nbsp;
-                    {{ form_label(form.remove) }}
-                </p>
-            {% endif %}
-        {% endif %}
+        <div{% if fileForm.vars.data is null or not is_fsi_file(fileForm.vars.data) %} class="hidden"{% endif %}>
+            {{ form_widget(form.remove) }}
+            {{ form_label(form.remove) }}
+        </div>
     {% endspaceless %}
 {% endblock %}
 

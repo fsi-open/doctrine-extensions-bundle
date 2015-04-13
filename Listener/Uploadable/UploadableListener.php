@@ -41,6 +41,19 @@ class UploadableListener extends BaseListener
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getSubscribedEvents()
+    {
+        return array(
+            'preFlush',
+            'postPersist',
+            'postFlush',
+            'postRemove',
+        );
+    }
+
+    /**
      * @param \Doctrine\Common\Persistence\ObjectManager $objectManager
      * @param string $class
      * @return \FSi\DoctrineExtensions\Uploadable\Mapping\ClassMetadata
