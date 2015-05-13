@@ -1,6 +1,7 @@
 {% block fsi_file_widget %}
     {% spaceless %}
         {% set type = type|default('file') %}
+        {% set required = false %}
         {{ block('form_widget') }}
         {% if form.vars.data is not null %}
             {% if is_fsi_file(form.vars.data) %}
@@ -17,6 +18,7 @@
 {% block fsi_image_widget %}
     {% spaceless %}
         {% set type = type|default('file') %}
+        {% set required = false %}
         {{ block('form_widget') }}
         {% if form.vars.data is not null %}
             {% if is_fsi_file(form.vars.data) %}

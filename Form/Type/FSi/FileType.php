@@ -47,7 +47,6 @@ class FileType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'required' => false,
             'data_class' => 'FSi\DoctrineExtensions\Uploadable\File',
             'constraints' => array(
                 new File(),
