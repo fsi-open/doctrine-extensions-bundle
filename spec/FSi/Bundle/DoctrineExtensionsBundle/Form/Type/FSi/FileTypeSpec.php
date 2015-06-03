@@ -31,7 +31,7 @@ class FileTypeSpec extends ObjectBehavior
     }
 
     /**
-     * @param \Symfony\Component\OptionsResolver\OptionsResolverInterface $resolver
+     * @param \Symfony\Component\OptionsResolver\OptionsResolver $resolver
      */
     function it_should_set_default_options($resolver)
     {

@@ -42,7 +42,7 @@ class RemovableFileTypeSpec extends ObjectBehavior
     }
 
     /**
-     * @param \Symfony\Component\OptionsResolver\OptionsResolverInterface $resolver
+     * @param \Symfony\Component\OptionsResolver\OptionsResolver $resolver
      */
     function it_should_set_default_options($resolver)
     {
@@ -58,13 +58,11 @@ class RemovableFileTypeSpec extends ObjectBehavior
             'file_options' => array(),
         ))->shouldBeCalled();
 
-        $resolver->setAllowedTypes(array(
-            'remove_name' => 'string',
-            'remove_type' => 'string',
-            'remove_options' => 'array',
-            'file_type' => 'string',
-            'file_options' => 'array'
-        ))->shouldBeCalled();
+        $resolver->setAllowedTypes('remove_name', 'string')->shouldBeCalled();
+        $resolver->setAllowedTypes('remove_type', 'string')->shouldBeCalled();
+        $resolver->setAllowedTypes('remove_options', 'array')->shouldBeCalled();
+        $resolver->setAllowedTypes('file_type', 'string')->shouldBeCalled();
+        $resolver->setAllowedTypes('file_options', 'array')->shouldBeCalled();
 
         $this->setDefaultOptions($resolver);
     }

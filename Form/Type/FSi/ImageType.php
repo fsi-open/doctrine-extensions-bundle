@@ -11,6 +11,7 @@ namespace FSi\Bundle\DoctrineExtensionsBundle\Form\Type\FSi;
 
 use FSi\Bundle\DoctrineExtensionsBundle\Validator\Constraints\Image;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class ImageType extends AbstractType
@@ -35,6 +36,14 @@ class ImageType extends AbstractType
      * {@inheritdoc}
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        $this->configureOptions($resolver);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'constraints' => array(

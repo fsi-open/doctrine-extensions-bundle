@@ -16,6 +16,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
@@ -78,6 +79,14 @@ class RemovableFileType extends AbstractType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
+        $this->configureOptions($resolver);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function configureOptions(OptionsResolver $resolver)
+    {
         $resolver->setDefaults(array(
             'compound' => true,
             'error_bubbling' => false,
@@ -90,13 +99,11 @@ class RemovableFileType extends AbstractType
             'file_options' => array(),
         ));
 
-        $resolver->setAllowedTypes(array(
-            'remove_name' => 'string',
-            'remove_type' => 'string',
-            'remove_options' => 'array',
-            'file_type' => 'string',
-            'file_options' => 'array'
-        ));
+        $resolver->setAllowedTypes('remove_name', 'string');
+        $resolver->setAllowedTypes('remove_type', 'string');
+        $resolver->setAllowedTypes('remove_options', 'array');
+        $resolver->setAllowedTypes('file_type', 'string');
+        $resolver->setAllowedTypes('file_options', 'array');
     }
 
     /**

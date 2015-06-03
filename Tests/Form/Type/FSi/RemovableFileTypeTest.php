@@ -9,63 +9,11 @@
 
 namespace FSi\Bundle\DoctrineExtensionsBundle\Tests\Form\Type\FSi;
 
-use FSi\Bundle\DoctrineExtensionsBundle\Resolver\FSiFilePathResolver;
 use FSi\Bundle\DoctrineExtensionsBundle\Tests\Fixtures\Entity\Article;
 use FSi\Bundle\DoctrineExtensionsBundle\Tests\Fixtures\Form\Extension\FSiFileExtension;
-use FSi\Bundle\DoctrineExtensionsBundle\Twig\Extension\Assets;
-use FSi\Bundle\DoctrineExtensionsBundle\Twig\Extension\FSi\File as FileTwigExtension;
-use Symfony\Bridge\Twig\Extension\FormExtension;
-use Symfony\Bridge\Twig\Extension\TranslationExtension;
-use Symfony\Bridge\Twig\Form\TwigRenderer;
-use Symfony\Bridge\Twig\Form\TwigRendererEngine;
-use Symfony\Bridge\Twig\Tests\Extension\Fixtures\StubFilesystemLoader;
-use Symfony\Bridge\Twig\Tests\Extension\Fixtures\StubTranslator;
-use Symfony\Bundle\TwigBundle\Extension\AssetsExtension;
-use Symfony\Component\Form\Test\FormIntegrationTestCase;
-use Symfony\Component\Templating\Asset\UrlPackage;
 
-class RemovableFileTypeTest extends FormIntegrationTestCase
+class RemovableFileTypeTest extends FormTypeTest
 {
-    /**
-     * @var \Twig_Environment
-     */
-    protected $twig;
-
-    public function setUp()
-    {
-        parent::setUp();
-
-        $loader = new StubFilesystemLoader(array(
-            __DIR__ . '/../../../../vendor/symfony/twig-bridge/Symfony/Bridge/Twig/Resources/views',
-            __DIR__ . '/../../../../Resources/views/Form',
-            __DIR__ . '/../../../Resources/views', // templates used in tests
-        ));
-
-        $rendererEngine = new TwigRendererEngine(array(
-            'form_div_layout.html.twig',
-            'Form/form_div_layout.html.twig'
-        ));
-        $renderer = new TwigRenderer($rendererEngine, $this->getMock('Symfony\Component\Form\Extension\Csrf\CsrfProvider\CsrfProviderInterface'));
-
-        $twig = new \Twig_Environment($loader, array('strict_variables' => true));
-        $twig->addGlobal('global', '');
-        $twig->addExtension(new TranslationExtension(new StubTranslator()));
-        $twig->addExtension(new FormExtension($renderer));
-        $twig->addExtension(new Assets(new FSiFilePathResolver('/adapter/path', 'uploaded')));
-        $twig->addExtension(new FileTwigExtension());
-
-
-        $container = $this->getMock('Symfony\Component\DependencyInjection\ContainerInterface');
-        $container->expects($this->any())
-            ->method('get')
-            ->with('templating.helper.assets')
-            ->will($this->returnValue(new UrlPackage()));
-
-        $request = $this->getMock('Symfony\Component\Routing\RequestContext');
-        $twig->addExtension(new AssetsExtension($container, $request));
-        $this->twig = $twig;
-    }
-
     /**
      * @return \FSi\Bundle\DoctrineExtensionsBundle\Tests\Fixtures\Form\Extension\FSiFileExtension
      */
@@ -127,19 +75,5 @@ class RemovableFileTypeTest extends FormIntegrationTestCase
             'form' => $form->createView()
         ));
         $this->assertSame($this->getExpectedHtml('form_with_fsi_removable_file.html'), $html);
-    }
-
-    /**
-     * @param string $filename
-     * @return string
-     */
-    private function getExpectedHtml($filename)
-    {
-        $path = __DIR__ . '/../../../Resources/views/' . $filename;
-        if (!file_exists($path)) {
-            throw new \RuntimeException(sprintf('Invalid expected html file path "%s"', $path));
-        }
-
-        return file_get_contents($path);
     }
 }
