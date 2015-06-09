@@ -13,6 +13,7 @@ use FSi\Bundle\DoctrineExtensionsBundle\Form\EventListener\FileSubscriber;
 use FSi\Bundle\DoctrineExtensionsBundle\Validator\Constraints\File;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class FileType extends AbstractType
@@ -45,6 +46,14 @@ class FileType extends AbstractType
      * {@inheritdoc}
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        $this->configureOptions($resolver);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'data_class' => 'FSi\DoctrineExtensions\Uploadable\File',

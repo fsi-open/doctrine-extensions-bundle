@@ -13,8 +13,13 @@ use FSi\Bundle\DoctrineExtensionsBundle\Resolver\FSiFilePathResolver;
 use FSi\DoctrineExtensions\Uploadable\File;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
-use Symfony\Bundle\TwigBundle\Extension\AssetsExtension;
-use Symfony\Component\Routing\RequestContext;
+
+class AssetsExtension
+{
+    public function getAssetUrl($path)
+    {
+    }
+}
 
 class AssetsSpec extends ObjectBehavior
 {

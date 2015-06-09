@@ -45,11 +45,14 @@ class Assets extends \Twig_Extension
      */
     public function initRuntime(Twig_Environment $environment)
     {
-        if (!$environment->hasExtension('assets')) {
+        if ($environment->hasExtension('assets')) {
+            $this->assets = $environment->getExtension('assets');
+        } elseif ($environment->hasExtension('asset')) {
+            $this->assets = $environment->getExtension('asset');
+        } else {
             throw new \Twig_Error("assets extension must be loaded.");
         }
 
-        $this->assets = $environment->getExtension('assets');
         $globals = $environment->getGlobals();
 
         if (array_key_exists('fsi_file_prefix', $globals)) {
