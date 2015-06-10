@@ -16,6 +16,7 @@
         <parameter key="fsi_doctrine_extensions.listener.translatable.class">FSi\DoctrineExtensions\Translatable\TranslatableListener</parameter>
         <parameter key="fsi_doctrine_extensions.listener.translatable_locale_listener.class">FSi\Bundle\DoctrineExtensionsBundle\EventListener\TranslatableLocaleListener</parameter>
         <parameter key="fsi_doctrine_extensions.default.key_maker.class">FSi\DoctrineExtensions\Uploadable\Keymaker\Entity</parameter>
+        <parameter key="fsi_doctrine_extensions.transliterate.key_maker.class">FSi\DoctrineExtensions\Uploadable\Keymaker\TransliterateEntity</parameter>
         <parameter key="fsi_doctrine_extensions.default.filesystem.class">FSi\Bundle\DoctrineExtensionsBundle\Listener\Uploadable\Filesystem</parameter>
         <parameter key="fsi_doctrine_extensions.default.filesystem.adapter.class">Gaufrette\Adapter\Local</parameter>
         <parameter key="fsi_doctrine_extensions.request.translatable_param_converter.class">FSi\Bundle\DoctrineExtensionsBundle\Request\TranslatableParamConverter</parameter>
@@ -48,7 +49,8 @@
         </service>
 
         <service id="fsi_doctrine_extensions.default.key_maker" class="%fsi_doctrine_extensions.default.key_maker.class%"/>
-
+        <service id="fsi_doctrine_extensions.transliterate.key_maker" class="%fsi_doctrine_extensions.transliterate.key_maker.class%"/>
+        
         <service id="fsi_doctrine_extensions.default.filesystem.adapter" class="%fsi_doctrine_extensions.default.filesystem.adapter.class%">
             <argument>%fsi_doctrine_extensions.default.filesystem.adapter.path%</argument>
             <argument>true</argument>
