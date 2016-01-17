@@ -22,7 +22,10 @@ class ImageTypeSpec extends ObjectBehavior
 
     function it_should_be_child_of_fsi_file_type()
     {
-        $this->getParent()->shouldReturn('fsi_file');
+        $this->getParent()->shouldReturn($this->isSymfony3()
+            ? 'FSi\Bundle\DoctrineExtensionsBundle\Form\Type\FSi\FileType'
+            : 'fsi_file'
+        );
     }
 
     function it_should_set_default_options(OptionsResolver $resolver)
@@ -35,5 +38,13 @@ class ImageTypeSpec extends ObjectBehavior
         ))->shouldBeCalled();
 
         $this->setDefaultOptions($resolver);
+    }
+
+    /**
+     * @return bool
+     */
+    private function isSymfony3()
+    {
+        return method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix');
     }
 }

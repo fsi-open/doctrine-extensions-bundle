@@ -67,13 +67,24 @@ class FileTypeTest extends FormTypeTest
         $article = new Article();
         $article->setFile($file);
 
-        $form = $this->factory->create('form', $article);
+        $form = $this->factory->create(
+            $this->isSymfony3() ? 'Symfony\Component\Form\Extension\Core\Type\FormType' : 'form', 
+            $article
+        );
 
-        $form->add('file', 'fsi_file');
+        $form->add('file', $this->isSymfony3() ? 'FSi\Bundle\DoctrineExtensionsBundle\Form\Type\FSi\FileType' : 'fsi_file');
 
         $html = $this->twig->render('form_with_fsi_file.html.twig', array(
             'form' => $form->createView()
         ));
         $this->assertSame($html, $this->getExpectedHtml('form_with_fsi_file.html'));
+    }
+
+    /**
+     * @return bool
+     */
+    private function isSymfony3()
+    {
+        return method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix');
     }
 }

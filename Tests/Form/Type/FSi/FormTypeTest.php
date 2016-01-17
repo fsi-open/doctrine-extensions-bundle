@@ -37,12 +37,16 @@ class FormTypeTest extends FormIntegrationTestCase
     {
         parent::setUp();
 
-        $subPath = version_compare(Kernel::VERSION, '2.7.0', '<') ? 'Symfony/Bridge/Twig/' : '';
-        $loader = new StubFilesystemLoader(array(
-            __DIR__ . '/../../../../vendor/symfony/twig-bridge/' . $subPath . 'Resources/views',
+        $paths = array(
             __DIR__ . '/../../../../Resources/views/Form',
-            __DIR__ . '/../../../Resources/views', // templates used in tests
-        ));
+            __DIR__ . '/../../../Resources/views',
+        );
+
+        $paths[] = (file_exists(VENDOR_DIR . '/symfony/twig-bridge/Resources/views')) 
+            ? VENDOR_DIR . '/symfony/twig-bridge/Resources/views' 
+            : VENDOR_DIR . '/symfony/twig-bridge/Symfony/Bridge/Twig/Resources/views';
+        
+        $loader = new StubFilesystemLoader($paths);
 
         $rendererEngine = new TwigRendererEngine(array(
             'form_div_layout.html.twig',

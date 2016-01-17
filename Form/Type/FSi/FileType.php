@@ -23,7 +23,9 @@ class FileType extends AbstractType
      */
     public function getParent()
     {
-        return 'file';
+        return $this->isSymfony3() 
+            ? 'Symfony\Component\Form\Extension\Core\Type\FileType'
+            : 'file';
     }
 
     /**
@@ -32,6 +34,14 @@ class FileType extends AbstractType
     public function getName()
     {
         return 'fsi_file';
+    }
+
+    /**
+     * @return string
+     */
+    public function getBlockPrefix()
+    {
+        return $this->getName();
     }
 
     /**
@@ -61,5 +71,13 @@ class FileType extends AbstractType
                 new File(),
             )
         ));
+    }
+
+    /**
+     * @return bool
+     */
+    private function isSymfony3()
+    {
+        return method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix');
     }
 }

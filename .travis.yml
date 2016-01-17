@@ -1,35 +1,36 @@
 language: php
 
-php:
-  - 5.4
-  - 5.5
-  - 5.6
-  - 7.0
-  - hhvm
+cache:
+    directories:
+        - $HOME/.composer/cache
 
 sudo: false
 
 matrix:
-  allow_failures:
-    - php: hhvm
-    - php: 7.0
-
-env:
-  - SYMFONY_VERSION=2.4.*
-    COMPOSER_FLAGS="--prefer-lowest"
-  - SYMFONY_VERSION=2.5.*
-    COMPOSER_FLAGS="--prefer-lowest"
-  - SYMFONY_VERSION=2.6.*
-    COMPOSER_FLAGS="--prefer-lowest"
-  - SYMFONY_VERSION=2.7.*
-    COMPOSER_FLAGS=""
-
+    include:
+        - php: 5.4
+          env: 
+              - DEPENDENCIES='low'
+        - php: 5.5
+        - php: 5.6
+          env:
+              - SYMFONY_VERSION=2.6.*
+        - php: 5.6
+          env:
+              - SYMFONY_VERSION=2.7.*    
+        - php: 5.6
+          env:
+              - SYMFONY_VERSION=2.8.*
+        - php: 7.0
+          env:
+              - SYMFONY_VERSION=3.0.*
+    fast_finish: true
+    
 before_install:
-  - composer self-update
-  - composer require symfony/framework-bundle:${SYMFONY_VERSION} -n --prefer-source
-
-install:
-  - composer update  ${COMPOSER_FLAGS}
+    - composer self-update
+    - if [[ "$DEPENDENCIES" != "low" && ! $SYMFONY_VERSION ]]; then composer update; fi;
+    - if [[ "$DEPENDENCIES" != "low" && $SYMFONY_VERSION ]]; then composer require symfony/framework-bundle:${SYMFONY_VERSION} -n --prefer-source; fi;
+    - if [[ "$DEPENDENCIES" == "low" ]]; then composer update --prefer-lowest; fi;
 
 script:
   - ./bin/phpunit -v

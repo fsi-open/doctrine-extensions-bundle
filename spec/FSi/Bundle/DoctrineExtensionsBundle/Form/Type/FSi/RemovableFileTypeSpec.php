@@ -38,7 +38,10 @@ class RemovableFileTypeSpec extends ObjectBehavior
 
     function it_should_be_child_of_form_type()
     {
-        $this->getParent()->shouldReturn('form');
+        $this->getParent()->shouldReturn($this->isSymfony3()
+            ? 'Symfony\Component\Form\Extension\Core\Type\FormType'
+            : 'form'
+        );
     }
 
     /**
@@ -52,9 +55,13 @@ class RemovableFileTypeSpec extends ObjectBehavior
             'inherit_data' => true,
             'required' => false,
             'remove_name' => 'remove',
-            'remove_type' => 'checkbox',
+            'remove_type' => $this->isSymfony3()
+                ? 'Symfony\Component\Form\Extension\Core\Type\CheckboxType'
+                : 'checkbox',
             'remove_options' => array(),
-            'file_type' => 'fsi_file',
+            'file_type' => $this->isSymfony3()
+                ? 'FSi\Bundle\DoctrineExtensionsBundle\Form\Type\FSi\FileType'
+                : 'fsi_file',
             'file_options' => array(),
         ))->shouldBeCalled();
 
@@ -132,5 +139,13 @@ class RemovableFileTypeSpec extends ObjectBehavior
         $this->finishView($view, $form, array());
 
         expect($view->vars['label_attr']['for'])->toBe('form_file_file');
+    }
+
+    /**
+     * @return bool
+     */
+    private function isSymfony3()
+    {
+        return method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix');
     }
 }
