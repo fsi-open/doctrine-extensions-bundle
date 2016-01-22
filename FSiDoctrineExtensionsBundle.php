@@ -9,6 +9,7 @@
 
 namespace FSi\Bundle\DoctrineExtensionsBundle;
 
+use FSi\Bundle\DoctrineExtensionsBundle\DependencyInjection\Compiler\AliceCompilerPass;
 use FSi\Bundle\DoctrineExtensionsBundle\DependencyInjection\Compiler\CustomHydratorPass;
 use FSi\Bundle\DoctrineExtensionsBundle\DependencyInjection\Compiler\GaufretteFilesystemsPass;
 use FSi\Bundle\DoctrineExtensionsBundle\DependencyInjection\Compiler\Symfony3ValidatorPass;
@@ -35,6 +36,7 @@ class FSiDoctrineExtensionsBundle extends Bundle
         $container->addCompilerPass(new CustomHydratorPass());
         $container->addCompilerPass(new Symfony3ValidatorPass());
         $container->addCompilerPass(new GaufretteFilesystemsPass(), PassConfig::TYPE_AFTER_REMOVING);
+        $container->addCompilerPass(new AliceCompilerPass());
     }
 
     /**

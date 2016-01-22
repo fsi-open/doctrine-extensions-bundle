@@ -21,6 +21,7 @@
         "symfony/validator": "^2.4|^3.0",
         "doctrine/doctrine-bundle": "~1.2",
         "fsi/doctrine-extensions": "~1.1,>=1.1.4",
+        "hautelook/alice-bundle": "~1.1",
         "sensio/framework-extra-bundle": "~3.0",
         "knplabs/knp-gaufrette-bundle": "~0.1"
     },
@@ -36,7 +37,7 @@
         "bin-dir": "bin"
     },
     "autoload": {
-        "psr-0": { "FSi\\Bundle\\DoctrineExtensionsBundle": "" }
+        "psr-4": { "FSi\\Bundle\\DoctrineExtensionsBundle\\": "" }
     },
     "target-dir": "FSi/Bundle/DoctrineExtensionsBundle",
     "extra": {
