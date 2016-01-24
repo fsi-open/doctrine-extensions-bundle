@@ -27,7 +27,10 @@ class FileTypeSpec extends ObjectBehavior
 
     function it_should_be_child_of_form_type()
     {
-        $this->getParent()->shouldReturn('file');
+        $this->getParent()->shouldReturn($this->isSymfony3() 
+            ? 'Symfony\Component\Form\Extension\Core\Type\FileType' 
+            : 'file'
+        );
     }
 
     /**
@@ -55,5 +58,13 @@ class FileTypeSpec extends ObjectBehavior
             ->shouldBeCalled();
 
         $this->buildForm($builder, array());
+    }
+
+    /**
+     * @return bool
+     */
+    private function isSymfony3()
+    {
+        return method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix');
     }
 }

@@ -21,7 +21,9 @@ class ImageType extends AbstractType
      */
     public function getParent()
     {
-        return 'fsi_file';
+        return $this->isSymfony3()
+            ? 'FSi\Bundle\DoctrineExtensionsBundle\Form\Type\FSi\FileType'
+            : 'fsi_file';
     }
 
     /**
@@ -30,6 +32,14 @@ class ImageType extends AbstractType
     public function getName()
     {
         return 'fsi_image';
+    }
+
+    /**
+     * @return string
+     */
+    public function getBlockPrefix()
+    {
+        return $this->getName();
     }
 
     /**
@@ -50,5 +60,13 @@ class ImageType extends AbstractType
                 new Image(),
             ),
         ));
+    }
+
+    /**
+     * @return bool
+     */
+    private function isSymfony3()
+    {
+        return method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix');
     }
 }

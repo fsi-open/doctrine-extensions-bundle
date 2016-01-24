@@ -7,13 +7,13 @@
  * file that was distributed with this source code.
  */
 
-namespace FSi\Bundle\DoctrineExtensionsBundle\Validator\Constraints;
+namespace FSi\Bundle\DoctrineExtensionsBundle\Validator\Constraints\Symfony3;
 
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints\FileValidator as BaseValidator;
 use FSi\DoctrineExtensions\Uploadable\File as FSiFile;
 use Symfony\Component\Validator\ConstraintValidator;
-use Symfony\Component\Validator\ExecutionContextInterface;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 class FileValidator extends ConstraintValidator
 {

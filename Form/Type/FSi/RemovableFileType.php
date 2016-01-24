@@ -40,7 +40,9 @@ class RemovableFileType extends AbstractType
      */
     public function getParent()
     {
-        return 'form';
+        return $this->isSymfony3()
+            ? 'Symfony\Component\Form\Extension\Core\Type\FormType'
+            : 'form';
     }
 
     /**
@@ -49,6 +51,14 @@ class RemovableFileType extends AbstractType
     public function getName()
     {
         return 'fsi_removable_file';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
+    {
+        return $this->getName();
     }
 
     /**
@@ -93,9 +103,13 @@ class RemovableFileType extends AbstractType
             'inherit_data' => true,
             'required' => false,
             'remove_name' => 'remove',
-            'remove_type' => 'checkbox',
+            'remove_type' => $this->isSymfony3()
+                ? 'Symfony\Component\Form\Extension\Core\Type\CheckboxType'
+                : 'checkbox',
             'remove_options' => array(),
-            'file_type' => 'fsi_file',
+            'file_type' => $this->isSymfony3()
+                ? 'FSi\Bundle\DoctrineExtensionsBundle\Form\Type\FSi\FileType'
+                : 'fsi_file',
             'file_options' => array(),
         ));
 
@@ -171,5 +185,13 @@ class RemovableFileType extends AbstractType
             'mapped' => false,
             'translation_domain' => 'FSiDoctrineExtensionsBundle'
         );
+    }
+
+    /**
+     * @return bool
+     */
+    private function isSymfony3()
+    {
+        return method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix');
     }
 }
