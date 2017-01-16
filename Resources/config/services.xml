@@ -50,7 +50,7 @@
 
         <service id="fsi_doctrine_extensions.default.key_maker" class="%fsi_doctrine_extensions.default.key_maker.class%"/>
         <service id="fsi_doctrine_extensions.transliterate.key_maker" class="%fsi_doctrine_extensions.transliterate.key_maker.class%"/>
-        
+
         <service id="fsi_doctrine_extensions.default.filesystem.adapter" class="%fsi_doctrine_extensions.default.filesystem.adapter.class%">
             <argument>%fsi_doctrine_extensions.default.filesystem.adapter.path%</argument>
             <argument>true</argument>
@@ -156,6 +156,19 @@
             <tag name="datagrid.column_extension" alias="fsi_doctrine_extensions.default" />
         </service>
 
+        <!-- Fixtures -->
+        <service id="fsi_doctrine_extensions.faker.instantiator" class="FSi\Bundle\DoctrineExtensionsBundle\DataFixtures\Generator\Instantiator">
+            <argument type="string">%hautelook_alice.locale%</argument>
+        </service>
+
+        <service id="fsi_doctrine_extensions.faker.generator" class="Faker\Generator" lazy="true">
+            <factory service="fsi_doctrine_extensions.faker.instantiator" method="getGenerator" />
+        </service>
+
+        <service id="fsi_doctrine_extensions.faker.provider.text" class="FSi\Bundle\DoctrineExtensionsBundle\DataFixtures\Provider\TextProvider">
+            <argument type="service" id="fsi_doctrine_extensions.faker.generator" />
+            <tag name="hautelook_alice.faker.provider" />
+        </service>
     </services>
 
 </container>
