@@ -16,9 +16,11 @@ use FSi\Bundle\DoctrineExtensionsBundle\DependencyInjection\Compiler\TwigDataGri
 use FSi\Bundle\DoctrineExtensionsBundle\DependencyInjection\Compiler\TwigGlobalsPass;
 use FSi\Bundle\DoctrineExtensionsBundle\DependencyInjection\FSIDoctrineExtensionsExtension;
 use FSi\Bundle\DoctrineExtensionsBundle\DependencyInjection\Compiler\TwigFormPass;
+use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader;
 
 class FSiDoctrineExtensionsBundle extends Bundle
 {
@@ -29,16 +31,16 @@ class FSiDoctrineExtensionsBundle extends Bundle
     {
         parent::build($container);
 
-        $loader = new Loader\XmlFileLoader(
-            $container,
-            new FileLocator(__DIR__.'/Resources/config/services')
-        );
         $container->addCompilerPass(new TwigFormPass());
         $container->addCompilerPass(new TwigGlobalsPass());
         $container->addCompilerPass(new CustomHydratorPass());
         $container->addCompilerPass(new Symfony3ValidatorPass());
         $container->addCompilerPass(new GaufretteFilesystemsPass(), PassConfig::TYPE_AFTER_REMOVING);
 
+        $loader = new Loader\XmlFileLoader(
+            $container,
+            new FileLocator(__DIR__.'/Resources/config/services')
+        );
         if ($container->hasExtension('fsi_data_grid')) {
             $container->addCompilerPass(new TwigDataGridPass());
             $loader->load('datagrid.xml');
