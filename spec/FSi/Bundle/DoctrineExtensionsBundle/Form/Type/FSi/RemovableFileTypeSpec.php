@@ -68,16 +68,13 @@ class RemovableFileTypeSpec extends ObjectBehavior
         $resolver->setAllowedTypes('file_type', 'string')->shouldBeCalled();
         $resolver->setAllowedTypes('file_options', 'array')->shouldBeCalled();
 
-        $this->setDefaultOptions($resolver);
+        if ($this->isSymfony3()) {
+            $this->configureOptions($resolver);
+        } else {
+            $this->setDefaultOptions($resolver);
+        }
     }
 
-    /**
-     * @param \Symfony\Component\Form\FormBuilderInterface $builder
-     * @param \Symfony\Component\Form\FormBuilderInterface $fileBuilder
-     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $fileEventDispatcher
-     * @param \FSi\Bundle\DoctrineExtensionsBundle\Form\EventListener\FileSubscriber $fileSubscriber
-     * @param \FSi\Bundle\DoctrineExtensionsBundle\Form\EventListener\RemovableFileSubscriber $removableFileSubscriber
-     */
     function it_should_build_form_remove_original_listener_and_register_own_listener(
         FormBuilderInterface $builder,
         FormBuilderInterface $fileBuilder,

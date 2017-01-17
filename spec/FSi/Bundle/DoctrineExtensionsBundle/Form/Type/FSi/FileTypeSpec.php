@@ -44,7 +44,11 @@ class FileTypeSpec extends ObjectBehavior
             )
         ))->shouldBeCalled();
 
-        $this->setDefaultOptions($resolver);
+        if ($this->isSymfony3()) {
+            $this->configureOptions($resolver);
+        } else {
+            $this->setDefaultOptions($resolver);
+        }
     }
 
     function it_should_register_listener(FormBuilderInterface $builder)
