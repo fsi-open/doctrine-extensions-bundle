@@ -39,11 +39,10 @@ abstract class FormTypeTest extends FormIntegrationTestCase
         $paths = array(
             __DIR__ . '/../../../../Resources/views/Form',
             __DIR__ . '/../../../Resources/views',
+            (file_exists(VENDOR_DIR . '/symfony/twig-bridge/Resources/views'))
+                ? VENDOR_DIR . '/symfony/twig-bridge/Resources/views'
+                : VENDOR_DIR . '/symfony/twig-bridge/Symfony/Bridge/Twig/Resources/views'
         );
-
-        $paths[] = (file_exists(VENDOR_DIR . '/symfony/twig-bridge/Resources/views'))
-            ? VENDOR_DIR . '/symfony/twig-bridge/Resources/views'
-            : VENDOR_DIR . '/symfony/twig-bridge/Symfony/Bridge/Twig/Resources/views';
 
         $loader = new StubFilesystemLoader($paths);
 
@@ -53,7 +52,10 @@ abstract class FormTypeTest extends FormIntegrationTestCase
             'form_div_layout.html.twig',
             'Form/form_div_layout.html.twig'
         ), $twig);
-        $renderer = new TwigRenderer($rendererEngine, $this->getMock('\Symfony\Component\Security\Csrf\CsrfTokenManagerInterface'));
+        $renderer = new TwigRenderer(
+            $rendererEngine,
+            $this->getMock('\Symfony\Component\Security\Csrf\CsrfTokenManagerInterface')
+        );
         $renderer->setEnvironment($twig);
         $twig->addGlobal('global', '');
         $twig->addExtension(new TranslationExtension(new StubTranslator()));
@@ -82,7 +84,7 @@ abstract class FormTypeTest extends FormIntegrationTestCase
             $container->expects($this->any())
                 ->method('get')
                 ->with('templating.helper.assets')
-                ->will($this->returnValue(new \Symfony\Component\Templating\Asset\UrlPackage()));
+                ->will($this->returnValue(new UrlPackage()));
 
             $request = $this->getMock('Symfony\Component\Routing\RequestContext');
             $twig->addExtension(new AssetsExtension($container, $request));

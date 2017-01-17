@@ -28,7 +28,7 @@ class FileTypeSpec extends ObjectBehavior
 
     function it_should_be_child_of_form_type()
     {
-        $this->getParent()->shouldReturn($this->isSymfony3()
+        $this->getParent()->shouldReturn($this->isSymfony28()
             ? 'Symfony\Component\Form\Extension\Core\Type\FileType'
             : 'file'
         );
@@ -44,7 +44,7 @@ class FileTypeSpec extends ObjectBehavior
             )
         ))->shouldBeCalled();
 
-        if ($this->isSymfony3()) {
+        if ($this->isSymfony27()) {
             $this->configureOptions($resolver);
         } else {
             $this->setDefaultOptions($resolver);
@@ -62,7 +62,15 @@ class FileTypeSpec extends ObjectBehavior
     /**
      * @return bool
      */
-    private function isSymfony3()
+    private function isSymfony27()
+    {
+        return method_exists('Symfony\Component\Form\AbstractType', 'configureOptions');
+    }
+
+    /**
+     * @return bool
+     */
+    private function isSymfony28()
     {
         return method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix');
     }
