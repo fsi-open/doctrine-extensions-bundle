@@ -12,12 +12,12 @@ namespace spec\FSi\Bundle\DoctrineExtensionsBundle\Form\Type\FSi;
 use FSi\Bundle\DoctrineExtensionsBundle\Form\EventListener\FileSubscriber;
 use FSi\Bundle\DoctrineExtensionsBundle\Form\EventListener\RemovableFileSubscriber;
 use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class RemovableFileTypeSpec extends ObjectBehavior
 {
@@ -44,10 +44,7 @@ class RemovableFileTypeSpec extends ObjectBehavior
         );
     }
 
-    /**
-     * @param \Symfony\Component\OptionsResolver\OptionsResolver $resolver
-     */
-    function it_should_set_default_options($resolver)
+    function it_should_set_default_options(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'compound' => true,

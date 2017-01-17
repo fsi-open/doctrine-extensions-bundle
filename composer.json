@@ -29,6 +29,7 @@
         "phpspec/phpspec": "~2.1",
         "bossa/phpspec2-expect": "~1.0",
         "doctrine/orm": "~2.3",
+        "symfony/asset": "^2.7|^3.0",
         "symfony/twig-bridge": "^2.4|^3.0",
         "phpunit/phpunit": "3.7.*"
     },
