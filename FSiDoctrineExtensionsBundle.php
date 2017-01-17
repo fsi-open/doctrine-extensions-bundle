@@ -29,16 +29,24 @@ class FSiDoctrineExtensionsBundle extends Bundle
     {
         parent::build($container);
 
+        $loader = new Loader\XmlFileLoader(
+            $container,
+            new FileLocator(__DIR__.'/Resources/config/services')
+        );
         $container->addCompilerPass(new TwigFormPass());
-        $container->addCompilerPass(new TwigDataGridPass());
         $container->addCompilerPass(new TwigGlobalsPass());
         $container->addCompilerPass(new CustomHydratorPass());
         $container->addCompilerPass(new Symfony3ValidatorPass());
         $container->addCompilerPass(new GaufretteFilesystemsPass(), PassConfig::TYPE_AFTER_REMOVING);
+
+        if ($container->hasExtension('fsi_data_grid')) {
+            $container->addCompilerPass(new TwigDataGridPass());
+            $loader->load('datagrid.xml');
+        }
     }
 
     /**
-     * @return null|\FSi\Bundle\DoctrineExtensionsBundle\DependencyInjection\FSIDoctrineExtensionsExtension|\Symfony\Component\DependencyInjection\Extension\ExtensionInterface
+     * @return \FSi\Bundle\DoctrineExtensionsBundle\DependencyInjection\FSIDoctrineExtensionsExtension|\Symfony\Component\DependencyInjection\Extension\ExtensionInterface
      */
     public function getContainerExtension()
     {

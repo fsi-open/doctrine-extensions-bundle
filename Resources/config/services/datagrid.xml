@@ -1,0 +1,30 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="fsi_doctrine_extensions.datagrid.column.fsi_file.class">FSi\Bundle\DoctrineExtensionsBundle\DataGrid\ColumnType\FSiFile</parameter>
+        <parameter key="fsi_doctrine_extensions.datagrid.column.fsi_image.class">FSi\Bundle\DoctrineExtensionsBundle\DataGrid\ColumnType\FSiImage</parameter>
+        <parameter key="fsi_doctrine_extensions.datagrid.column_extension.default.class">FSi\Bundle\DoctrineExtensionsBundle\DataGrid\Extension\Core\DefaultColumnOptionsExtension</parameter>
+    </parameters>
+
+    <services>
+
+        <!-- Columns -->
+        <service id="fsi_doctrine_extensions.datagrid.column.fsi_file" class="%fsi_doctrine_extensions.datagrid.column.fsi_file.class%">
+            <tag name="datagrid.column" alias="fsi_file" />
+        </service>
+
+        <service id="fsi_doctrine_extensions.datagrid.column.fsi_image" class="%fsi_doctrine_extensions.datagrid.column.fsi_image.class%">
+            <tag name="datagrid.column" alias="fsi_image" />
+        </service>
+
+        <service id="fsi_doctrine_extensions.datagrid.column_extension.default" class="%fsi_doctrine_extensions.datagrid.column_extension.default.class%">
+            <tag name="datagrid.column_extension" alias="fsi_doctrine_extensions.default" />
+        </service>
+
+    </services>
+
+</container>
