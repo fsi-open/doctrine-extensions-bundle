@@ -41,7 +41,7 @@ class FSiDoctrineExtensionsBundle extends Bundle
             $container->addCompilerPass(new TwigDataGridPass());
             $loader = new Loader\XmlFileLoader(
                 $container,
-                new FileLocator(__DIR__.'/../Resources/config/services')
+                new FileLocator(__DIR__.'/Resources/config/services')
             );
             $loader->load('datagrid.xml');
         }

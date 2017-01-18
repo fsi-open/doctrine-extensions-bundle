@@ -4,7 +4,6 @@ namespace spec\FSi\Bundle\DoctrineExtensionsBundle\Twig\Extension\FSi;
 
 use FSi\DoctrineExtensions\Uploadable\File;
 use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
 
 class FileSpec extends ObjectBehavior
 {

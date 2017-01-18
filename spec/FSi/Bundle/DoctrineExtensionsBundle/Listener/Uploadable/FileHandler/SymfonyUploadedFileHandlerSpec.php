@@ -10,7 +10,6 @@
 namespace spec\FSi\Bundle\DoctrineExtensionsBundle\Listener\Uploadable\FileHandler;
 
 use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
 use Symfony\Component\HttpFoundation\File\UploadedFile as SymfonyUploadedFile;
 
 class SymfonyUploadedFileHandlerSpec extends ObjectBehavior
@@ -25,18 +24,12 @@ class SymfonyUploadedFileHandlerSpec extends ObjectBehavior
         $this->shouldBeAnInstanceOf('FSi\DoctrineExtensions\Uploadable\FileHandler\AbstractHandler');
     }
 
-    /**
-     * @param \spec\FSi\Bundle\DoctrineExtensionsBundle\Listener\Uploadable\FileHandler\UploadedFile $file
-     */
-    function it_should_supports_symfony_uploaded_file($file)
+    function it_should_supports_symfony_uploaded_file(UploadedFile $file)
     {
         $this->supports($file)->shouldReturn(true);
     }
 
-    /**
-     * @param \spec\FSi\Bundle\DoctrineExtensionsBundle\Listener\Uploadable\FileHandler\UploadedFile $file
-     */
-    function it_should_return_original_file_name($file)
+    function it_should_return_original_file_name(UploadedFile $file)
     {
         $file->getClientOriginalName()->shouldBeCalled()->willReturn('name.jpg');
         $this->getName($file)->shouldReturn('name.jpg');
