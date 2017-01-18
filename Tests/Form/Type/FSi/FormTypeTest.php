@@ -23,6 +23,8 @@ use Symfony\Bundle\TwigBundle\Extension\AssetsExtension;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\Asset\UrlPackage;
 use Symfony\Component\Asset\VersionStrategy\EmptyVersionStrategy;
+// prior to 2.7 asset component was part of FrameworkBundle
+use Symfony\Component\Templating\Asset\UrlPackage as LegacyUrlPackage;
 use Symfony\Component\Form\Test\FormIntegrationTestCase;
 
 abstract class FormTypeTest extends FormIntegrationTestCase
@@ -84,7 +86,7 @@ abstract class FormTypeTest extends FormIntegrationTestCase
             $container->expects($this->any())
                 ->method('get')
                 ->with('templating.helper.assets')
-                ->will($this->returnValue(new UrlPackage()));
+                ->will($this->returnValue(new LegacyUrlPackage()));
 
             $request = $this->getMock('Symfony\Component\Routing\RequestContext');
             $twig->addExtension(new AssetsExtension($container, $request));
