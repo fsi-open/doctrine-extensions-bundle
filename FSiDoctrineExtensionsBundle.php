@@ -16,10 +16,8 @@ use FSi\Bundle\DoctrineExtensionsBundle\DependencyInjection\Compiler\TwigDataGri
 use FSi\Bundle\DoctrineExtensionsBundle\DependencyInjection\Compiler\TwigGlobalsPass;
 use FSi\Bundle\DoctrineExtensionsBundle\DependencyInjection\FSIDoctrineExtensionsExtension;
 use FSi\Bundle\DoctrineExtensionsBundle\DependencyInjection\Compiler\TwigFormPass;
-use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class FSiDoctrineExtensionsBundle extends Bundle
@@ -39,11 +37,6 @@ class FSiDoctrineExtensionsBundle extends Bundle
 
         if ($container->hasExtension('fsi_data_grid')) {
             $container->addCompilerPass(new TwigDataGridPass());
-            $loader = new Loader\XmlFileLoader(
-                $container,
-                new FileLocator(__DIR__.'/Resources/config/services')
-            );
-            $loader->load('datagrid.xml');
         }
     }
 

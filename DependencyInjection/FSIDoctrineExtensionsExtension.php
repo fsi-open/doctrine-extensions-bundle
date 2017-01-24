@@ -27,6 +27,9 @@ class FSIDoctrineExtensionsExtension extends Extension
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
 
+        if (class_exists('\FSi\Bundle\DataGridBundle\DataGridBundle')) {
+            $loader->load('services/datagrid.xml');
+        }
         $this->setListenersConfiguration($container, $config);
         $this->setUploadabbleConfigurationParameter($container, $config['uploadable_configuration']);
     }
