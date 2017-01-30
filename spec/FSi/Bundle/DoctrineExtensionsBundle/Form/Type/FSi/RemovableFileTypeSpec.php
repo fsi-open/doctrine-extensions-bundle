@@ -12,12 +12,12 @@ namespace spec\FSi\Bundle\DoctrineExtensionsBundle\Form\Type\FSi;
 use FSi\Bundle\DoctrineExtensionsBundle\Form\EventListener\FileSubscriber;
 use FSi\Bundle\DoctrineExtensionsBundle\Form\EventListener\RemovableFileSubscriber;
 use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class RemovableFileTypeSpec extends ObjectBehavior
 {
@@ -38,16 +38,13 @@ class RemovableFileTypeSpec extends ObjectBehavior
 
     function it_should_be_child_of_form_type()
     {
-        $this->getParent()->shouldReturn($this->isSymfony3()
+        $this->getParent()->shouldReturn($this->isSymfony28()
             ? 'Symfony\Component\Form\Extension\Core\Type\FormType'
             : 'form'
         );
     }
 
-    /**
-     * @param \Symfony\Component\OptionsResolver\OptionsResolver $resolver
-     */
-    function it_should_set_default_options($resolver)
+    function it_should_set_default_options(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'compound' => true,
@@ -55,11 +52,11 @@ class RemovableFileTypeSpec extends ObjectBehavior
             'inherit_data' => true,
             'required' => false,
             'remove_name' => 'remove',
-            'remove_type' => $this->isSymfony3()
+            'remove_type' => $this->isSymfony28()
                 ? 'Symfony\Component\Form\Extension\Core\Type\CheckboxType'
                 : 'checkbox',
             'remove_options' => array(),
-            'file_type' => $this->isSymfony3()
+            'file_type' => $this->isSymfony28()
                 ? 'FSi\Bundle\DoctrineExtensionsBundle\Form\Type\FSi\FileType'
                 : 'fsi_file',
             'file_options' => array(),
@@ -71,16 +68,13 @@ class RemovableFileTypeSpec extends ObjectBehavior
         $resolver->setAllowedTypes('file_type', 'string')->shouldBeCalled();
         $resolver->setAllowedTypes('file_options', 'array')->shouldBeCalled();
 
-        $this->setDefaultOptions($resolver);
+        if ($this->isSymfony27()) {
+            $this->configureOptions($resolver);
+        } else {
+            $this->setDefaultOptions($resolver);
+        }
     }
 
-    /**
-     * @param \Symfony\Component\Form\FormBuilderInterface $builder
-     * @param \Symfony\Component\Form\FormBuilderInterface $fileBuilder
-     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $fileEventDispatcher
-     * @param \FSi\Bundle\DoctrineExtensionsBundle\Form\EventListener\FileSubscriber $fileSubscriber
-     * @param \FSi\Bundle\DoctrineExtensionsBundle\Form\EventListener\RemovableFileSubscriber $removableFileSubscriber
-     */
     function it_should_build_form_remove_original_listener_and_register_own_listener(
         FormBuilderInterface $builder,
         FormBuilderInterface $fileBuilder,
@@ -144,7 +138,15 @@ class RemovableFileTypeSpec extends ObjectBehavior
     /**
      * @return bool
      */
-    private function isSymfony3()
+    private function isSymfony27()
+    {
+        return method_exists('Symfony\Component\Form\AbstractType', 'configureOptions');
+    }
+
+    /**
+     * @return bool
+     */
+    private function isSymfony28()
     {
         return method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix');
     }

@@ -12,7 +12,6 @@ namespace spec\FSi\Bundle\DoctrineExtensionsBundle\Twig\Extension;
 use FSi\Bundle\DoctrineExtensionsBundle\Resolver\FSiFilePathResolver;
 use FSi\DoctrineExtensions\Uploadable\File;
 use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
 
 class AssetsExtension
 {

@@ -12,6 +12,7 @@ namespace spec\FSi\Bundle\DoctrineExtensionsBundle\Form\Type\FSi;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class FileTypeSpec extends ObjectBehavior
 {
@@ -27,16 +28,13 @@ class FileTypeSpec extends ObjectBehavior
 
     function it_should_be_child_of_form_type()
     {
-        $this->getParent()->shouldReturn($this->isSymfony3() 
-            ? 'Symfony\Component\Form\Extension\Core\Type\FileType' 
+        $this->getParent()->shouldReturn($this->isSymfony28()
+            ? 'Symfony\Component\Form\Extension\Core\Type\FileType'
             : 'file'
         );
     }
 
-    /**
-     * @param \Symfony\Component\OptionsResolver\OptionsResolver $resolver
-     */
-    function it_should_set_default_options($resolver)
+    function it_should_set_default_options(OptionsResolver $resolver)
     {
         $resolver->setDefaults(Argument::allOf(
             Argument::withEntry('data_class', 'FSi\DoctrineExtensions\Uploadable\File'),
@@ -46,12 +44,13 @@ class FileTypeSpec extends ObjectBehavior
             )
         ))->shouldBeCalled();
 
-        $this->setDefaultOptions($resolver);
+        if ($this->isSymfony27()) {
+            $this->configureOptions($resolver);
+        } else {
+            $this->setDefaultOptions($resolver);
+        }
     }
 
-    /**
-     * @param \Symfony\Component\Form\FormBuilderInterface $builder
-     */
     function it_should_register_listener(FormBuilderInterface $builder)
     {
         $builder->addEventSubscriber(Argument::type('FSi\Bundle\DoctrineExtensionsBundle\Form\EventListener\FileSubscriber'))
@@ -63,7 +62,15 @@ class FileTypeSpec extends ObjectBehavior
     /**
      * @return bool
      */
-    private function isSymfony3()
+    private function isSymfony27()
+    {
+        return method_exists('Symfony\Component\Form\AbstractType', 'configureOptions');
+    }
+
+    /**
+     * @return bool
+     */
+    private function isSymfony28()
     {
         return method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix');
     }

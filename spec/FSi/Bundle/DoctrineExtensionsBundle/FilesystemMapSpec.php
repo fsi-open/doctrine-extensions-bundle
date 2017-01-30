@@ -9,16 +9,13 @@
 
 namespace spec\FSi\Bundle\DoctrineExtensionsBundle;
 
+use Gaufrette\Filesystem;
+use Knp\Bundle\GaufretteBundle\FilesystemMap;
 use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
 
 class FilesystemMapSpec extends ObjectBehavior
 {
-    /**
-     * @param \Knp\Bundle\GaufretteBundle\FilesystemMap $filesystemMap
-     * @param \Gaufrette\Filesystem $filesystem
-     */
-    function let($filesystemMap, $filesystem)
+    function let(FilesystemMap $filesystemMap, Filesystem $filesystem)
     {
         $filesystemMap->getIterator()->shouldBeCalled()->willReturn(array(
             'filesystem' => $filesystem

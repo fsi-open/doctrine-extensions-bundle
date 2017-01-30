@@ -4,7 +4,6 @@ namespace spec\FSi\Bundle\DoctrineExtensionsBundle\EventListener;
 
 use FSi\DoctrineExtensions\Translatable\TranslatableListener;
 use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;

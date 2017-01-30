@@ -23,10 +23,11 @@ use Symfony\Bundle\TwigBundle\Extension\AssetsExtension;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\Asset\UrlPackage;
 use Symfony\Component\Asset\VersionStrategy\EmptyVersionStrategy;
+// prior to 2.7 asset component was part of FrameworkBundle
+use Symfony\Component\Templating\Asset\UrlPackage as LegacyUrlPackage;
 use Symfony\Component\Form\Test\FormIntegrationTestCase;
-use Symfony\Component\HttpKernel\Kernel;
 
-class FormTypeTest extends FormIntegrationTestCase
+abstract class FormTypeTest extends FormIntegrationTestCase
 {
     /**
      * @var \Twig_Environment
@@ -40,28 +41,37 @@ class FormTypeTest extends FormIntegrationTestCase
         $paths = array(
             __DIR__ . '/../../../../Resources/views/Form',
             __DIR__ . '/../../../Resources/views',
+            (file_exists(VENDOR_DIR . '/symfony/twig-bridge/Resources/views'))
+                ? VENDOR_DIR . '/symfony/twig-bridge/Resources/views'
+                : VENDOR_DIR . '/symfony/twig-bridge/Symfony/Bridge/Twig/Resources/views'
         );
 
-        $paths[] = (file_exists(VENDOR_DIR . '/symfony/twig-bridge/Resources/views')) 
-            ? VENDOR_DIR . '/symfony/twig-bridge/Resources/views' 
-            : VENDOR_DIR . '/symfony/twig-bridge/Symfony/Bridge/Twig/Resources/views';
-        
         $loader = new StubFilesystemLoader($paths);
+
+        $twig = new \Twig_Environment($loader, array('strict_variables' => true));
 
         $rendererEngine = new TwigRendererEngine(array(
             'form_div_layout.html.twig',
             'Form/form_div_layout.html.twig'
-        ));
-        $renderer = new TwigRenderer($rendererEngine, $this->getMock('\Symfony\Component\Security\Csrf\CsrfTokenManagerInterface'));
-
-        $twig = new \Twig_Environment($loader, array('strict_variables' => true));
+        ), $twig);
+        $renderer = new TwigRenderer(
+            $rendererEngine,
+            $this->getMock('\Symfony\Component\Security\Csrf\CsrfTokenManagerInterface')
+        );
+        $renderer->setEnvironment($twig);
         $twig->addGlobal('global', '');
         $twig->addExtension(new TranslationExtension(new StubTranslator()));
-        $twig->addExtension(new FormExtension($renderer));
         $twig->addExtension(new Assets(new FSiFilePathResolver('/adapter/path', 'uploaded')));
         $twig->addExtension(new FileTwigExtension());
 
         if (class_exists('Symfony\Bridge\Twig\Extension\AssetExtension')) {
+            $runtimeLoader = $this->getMock('Twig_RuntimeLoaderInterface');
+            $runtimeLoader->expects($this->any())->method('load')->will($this->returnValueMap(array(
+                array('Symfony\Bridge\Twig\Form\TwigRenderer', $renderer),
+            )));
+            $twig->addRuntimeLoader($runtimeLoader);
+
+            $twig->addExtension(new FormExtension());
             $twig->addExtension(new AssetExtension(
                 new Packages(
                     new UrlPackage(
@@ -71,11 +81,12 @@ class FormTypeTest extends FormIntegrationTestCase
                 )
             ));
         } else {
+            $twig->addExtension(new FormExtension($renderer));
             $container = $this->getMock('Symfony\Component\DependencyInjection\ContainerInterface');
             $container->expects($this->any())
                 ->method('get')
                 ->with('templating.helper.assets')
-                ->will($this->returnValue(new \Symfony\Component\Templating\Asset\UrlPackage()));
+                ->will($this->returnValue(new LegacyUrlPackage()));
 
             $request = $this->getMock('Symfony\Component\Routing\RequestContext');
             $twig->addExtension(new AssetsExtension($container, $request));

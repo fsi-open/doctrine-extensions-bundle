@@ -52,7 +52,9 @@ class FSiFilePathResolverSpec extends ObjectBehavior
     }
 
     function it_generate_path_with_file_path_prefix_that_should_be_trimed(
-        File $file, Filesystem $filesystem, Local $adapter
+        File $file,
+        Filesystem $filesystem,
+        Local $adapter
     ) {
         $file->getKey()->willReturn('TestFolder/File/file<>name.jpg');
         $file->getFilesystem()->willReturn($filesystem);
@@ -62,7 +64,9 @@ class FSiFilePathResolverSpec extends ObjectBehavior
     }
 
     function it_generate_path_for_fsi_file_with_external_adapter(
-        File $file, Filesystem $filesystem, Local $adapter
+        File $file,
+        Filesystem $filesystem,
+        Local $adapter
     ) {
         $file->getKey()->willReturn('Test Folder/File/nazwy plików.jpg');
         $file->getFilesystem()->willReturn($filesystem);
@@ -74,7 +78,10 @@ class FSiFilePathResolverSpec extends ObjectBehavior
     }
 
     function it_generate_path_with_prefix_from_globals(
-        Twig_Environment $environment, File $file, Filesystem $filesystem, Local $adapter
+        Twig_Environment $environment,
+        File $file,
+        Filesystem $filesystem,
+        Local $adapter
     ) {
         $environment->getGlobals()->willReturn(array('fsi_file_prefix' => 'uploaded'));
         $environment->initRuntime();
@@ -87,7 +94,10 @@ class FSiFilePathResolverSpec extends ObjectBehavior
     }
 
     function it_generate_path_with_passed_prefix_even_if_there_is_a_prefix_in_globals(
-        Twig_Environment $environment, File $file, Filesystem $filesystem, Local $adapter
+        Twig_Environment $environment,
+        File $file,
+        Filesystem $filesystem,
+        Local $adapter
     ) {
         $environment->getGlobals()->willReturn(array(
                 'fsi_file_prefix' => 'uploaded'
@@ -103,7 +113,8 @@ class FSiFilePathResolverSpec extends ObjectBehavior
     }
 
     function it_generate_url_for_fsi_file_with_base_url_set(
-        File $file, UploadableFilesystem $filesystem, Local $adapter
+        File $file,
+        UploadableFilesystem $filesystem
     ) {
         $file->getKey()->willReturn('TestFolder/File/file name.jpg');
         $file->getFilesystem()->willReturn($filesystem);

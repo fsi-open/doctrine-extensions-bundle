@@ -9,11 +9,11 @@
 
 namespace FSi\Bundle\DoctrineExtensionsBundle\DependencyInjection;
 
+use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
-use Symfony\Component\Config\FileLocator;
-use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
+use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 class FSIDoctrineExtensionsExtension extends Extension
 {
@@ -27,6 +27,9 @@ class FSIDoctrineExtensionsExtension extends Extension
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
 
+        if (class_exists('\FSi\Bundle\DataGridBundle\DataGridBundle')) {
+            $loader->load('services/datagrid.xml');
+        }
         $this->setListenersConfiguration($container, $config);
         $this->setUploadabbleConfigurationParameter($container, $config['uploadable_configuration']);
     }

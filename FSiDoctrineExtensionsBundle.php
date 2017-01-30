@@ -17,8 +17,8 @@ use FSi\Bundle\DoctrineExtensionsBundle\DependencyInjection\Compiler\TwigGlobals
 use FSi\Bundle\DoctrineExtensionsBundle\DependencyInjection\FSIDoctrineExtensionsExtension;
 use FSi\Bundle\DoctrineExtensionsBundle\DependencyInjection\Compiler\TwigFormPass;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
-use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class FSiDoctrineExtensionsBundle extends Bundle
 {
@@ -30,15 +30,18 @@ class FSiDoctrineExtensionsBundle extends Bundle
         parent::build($container);
 
         $container->addCompilerPass(new TwigFormPass());
-        $container->addCompilerPass(new TwigDataGridPass());
         $container->addCompilerPass(new TwigGlobalsPass());
         $container->addCompilerPass(new CustomHydratorPass());
         $container->addCompilerPass(new Symfony3ValidatorPass());
         $container->addCompilerPass(new GaufretteFilesystemsPass(), PassConfig::TYPE_AFTER_REMOVING);
+
+        if ($container->hasExtension('fsi_data_grid')) {
+            $container->addCompilerPass(new TwigDataGridPass());
+        }
     }
 
     /**
-     * @return null|\FSi\Bundle\DoctrineExtensionsBundle\DependencyInjection\FSIDoctrineExtensionsExtension|\Symfony\Component\DependencyInjection\Extension\ExtensionInterface
+     * @return \FSi\Bundle\DoctrineExtensionsBundle\DependencyInjection\FSIDoctrineExtensionsExtension|\Symfony\Component\DependencyInjection\Extension\ExtensionInterface
      */
     public function getContainerExtension()
     {

@@ -28,7 +28,10 @@ class FSIDoctrineExtensionsExtensionSpec extends ObjectBehavior
     }
 
     function it_should_add_tag_to_uploadable_listener_service(
-        ContainerBuilder $builder,ParameterBagInterface $parameterBag, Definition $translatable, Definition $uploadable
+        ContainerBuilder $builder,
+        ParameterBagInterface $parameterBag,
+        Definition $translatable,
+        Definition $uploadable
     ) {
         $builder->hasExtension(Argument::type('string'))->willReturn(false);
         $builder->addResource(Argument::type('\Symfony\Component\Config\Resource\FileResource'))->shouldBeCalled();
@@ -68,7 +71,10 @@ class FSIDoctrineExtensionsExtensionSpec extends ObjectBehavior
     }
 
     function it_should_add_tag_to_translatable_listener_service(
-        ContainerBuilder $builder,ParameterBagInterface $parameterBag, Definition $translatable, Definition $uploadable
+        ContainerBuilder $builder,
+        ParameterBagInterface $parameterBag,
+        Definition $translatable,
+        Definition $uploadable
     ) {
         $builder->hasExtension(Argument::type('string'))->willReturn(false);
         $builder->addResource(Argument::type('\Symfony\Component\Config\Resource\FileResource'))->shouldBeCalled();
@@ -111,7 +117,10 @@ class FSIDoctrineExtensionsExtensionSpec extends ObjectBehavior
     }
 
     function it_should_add_uploadable_configuration_parameter_to_container(
-        ContainerBuilder $builder,ParameterBagInterface $parameterBag, Definition $translatable, Definition $uploadable
+        ContainerBuilder $builder,
+        ParameterBagInterface $parameterBag,
+        Definition $translatable,
+        Definition $uploadable
     ) {
         $builder->hasExtension(Argument::type('string'))->willReturn(false);
         $builder->addResource(Argument::type('\Symfony\Component\Config\Resource\FileResource'))->shouldBeCalled();

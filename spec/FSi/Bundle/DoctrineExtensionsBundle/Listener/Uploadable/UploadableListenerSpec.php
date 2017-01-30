@@ -12,14 +12,9 @@ namespace spec\FSi\Bundle\DoctrineExtensionsBundle\Listener\Uploadable;
 use FSi\Bundle\DoctrineExtensionsBundle\FilesystemMap;
 use FSi\DoctrineExtensions\Uploadable\FileHandler\GaufretteHandler;
 use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
 
 class UploadableListenerSpec extends ObjectBehavior
 {
-    /**
-     * @param \FSi\Bundle\DoctrineExtensionsBundle\FilesystemMap $map
-     * @param \FSi\DoctrineExtensions\Uploadable\FileHandler\GaufretteHandler $handler
-     */
     function let(FilesystemMap $map, GaufretteHandler $handler)
     {
         $map->all()->willReturn(array());
