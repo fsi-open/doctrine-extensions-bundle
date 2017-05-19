@@ -42,6 +42,10 @@ class FileValidator extends ConstraintValidator
      */
     public function validate($value, Constraint $constraint)
     {
+        if (empty($value)) {
+            return;
+        }
+
         if ($value instanceof FSiFile) {
             $tmpFile = sys_get_temp_dir() . '/' . uniqid();
             file_put_contents($tmpFile, $value->getContent());
