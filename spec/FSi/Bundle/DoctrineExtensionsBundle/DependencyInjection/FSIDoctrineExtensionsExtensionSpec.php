@@ -34,7 +34,11 @@ class FSIDoctrineExtensionsExtensionSpec extends ObjectBehavior
         Definition $uploadable
     ) {
         $builder->hasExtension(Argument::type('string'))->willReturn(false);
-        $builder->addResource(Argument::type('\Symfony\Component\Config\Resource\FileResource'))->shouldBeCalled();
+        if (method_exists('Symfony\Component\DependencyInjection\ContainerBuilder', 'fileExists')) {
+            $builder->fileExists(Argument::type('string'))->willReturn(true);
+        } else {
+            $builder->addResource(Argument::type('\Symfony\Component\Config\Resource\FileResource'))->shouldBeCalled();
+        }
         $builder->setDefinition(Argument::type('string'), Argument::type('Symfony\Component\DependencyInjection\Definition'))->shouldBeCalled();
         $builder->getParameterBag()->willReturn($parameterBag);
         /* Above code is added only because builder is used in services loader. */
@@ -77,7 +81,11 @@ class FSIDoctrineExtensionsExtensionSpec extends ObjectBehavior
         Definition $uploadable
     ) {
         $builder->hasExtension(Argument::type('string'))->willReturn(false);
-        $builder->addResource(Argument::type('\Symfony\Component\Config\Resource\FileResource'))->shouldBeCalled();
+        if (method_exists('Symfony\Component\DependencyInjection\ContainerBuilder', 'fileExists')) {
+            $builder->fileExists(Argument::type('string'))->willReturn(true);
+        } else {
+            $builder->addResource(Argument::type('\Symfony\Component\Config\Resource\FileResource'))->shouldBeCalled();
+        }
         $builder->setDefinition(Argument::type('string'), Argument::type('Symfony\Component\DependencyInjection\Definition'))->shouldBeCalled();
         $builder->getParameterBag()->willReturn($parameterBag);
         /* Above code is added only because builder is used in services loader. */
@@ -101,7 +109,7 @@ class FSIDoctrineExtensionsExtensionSpec extends ObjectBehavior
 
         $builder->getDefinition('fsi_doctrine_extensions.listener.translatable')->willReturn($translatable);
         $translatable->addTag('doctrine.event_subscriber', array('connection' => 'default'))->shouldBeCalled();
-        $translatable->addMethodCall('setDefaultLocale', array('defaultLocale' => 'pl'))
+        $translatable->addMethodCall('setDefaultLocale', array('pl'))
             ->shouldBeCalled();
 
         $this->load(array(
@@ -123,7 +131,12 @@ class FSIDoctrineExtensionsExtensionSpec extends ObjectBehavior
         Definition $uploadable
     ) {
         $builder->hasExtension(Argument::type('string'))->willReturn(false);
-        $builder->addResource(Argument::type('\Symfony\Component\Config\Resource\FileResource'))->shouldBeCalled();
+        if (method_exists('Symfony\Component\DependencyInjection\ContainerBuilder', 'fileExists')) {
+            $builder->fileExists(Argument::type('string'))->willReturn(true);
+        } else {
+            $builder->addResource(Argument::type('\Symfony\Component\Config\Resource\FileResource'))->shouldBeCalled();
+        }
+
         $builder->setDefinition(Argument::type('string'), Argument::type('Symfony\Component\DependencyInjection\Definition'))->shouldBeCalled();
         $builder->getParameterBag()->shouldBeCalled()->willReturn($parameterBag);
         /* Above code is added only because builder is used in services loader. */

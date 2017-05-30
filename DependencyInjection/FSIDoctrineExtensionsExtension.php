@@ -111,6 +111,6 @@ class FSIDoctrineExtensionsExtension extends Extension
     protected function setTranslatableConfiguration(ContainerBuilder $container, $config = array())
     {
         $container->getDefinition('fsi_doctrine_extensions.listener.translatable')
-            ->addMethodCall('setDefaultLocale', array('defaultLocale' => $config['default_locale']));
+            ->addMethodCall('setDefaultLocale', array($config['default_locale']));
     }
 }
