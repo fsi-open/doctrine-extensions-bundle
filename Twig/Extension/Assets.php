@@ -9,16 +9,14 @@
 
 namespace FSi\Bundle\DoctrineExtensionsBundle\Twig\Extension;
 
-use FSi\Bundle\DoctrineExtensionsBundle\Exception\Uploadable\InvalidFilesystemException;
-use FSi\Bundle\DoctrineExtensionsBundle\Listener\Uploadable\Filesystem;
 use FSi\Bundle\DoctrineExtensionsBundle\Resolver\FSiFilePathResolver;
 use FSi\DoctrineExtensions\Uploadable\File;
 use Twig_Environment;
 
-class Assets extends \Twig_Extension
+class Assets extends \Twig_Extension implements \Twig_Extension_InitRuntimeInterface
 {
     /**
-     * @var \Symfony\Bundle\TwigBundle\Extension\AssetsExtension
+     * @var \Symfony\Bundle\TwigBundle\Extension\AssetsExtension|\Symfony\Bridge\Twig\Extension\AssetExtension
      */
     protected $assets;
 
@@ -45,16 +43,15 @@ class Assets extends \Twig_Extension
      */
     public function initRuntime(Twig_Environment $environment)
     {
-        if ($environment->hasExtension('assets')) {
+        if ($environment->hasExtension('\Symfony\Bridge\Twig\Extension\AssetExtension')) {
+            $this->assets = $environment->getExtension('\Symfony\Bridge\Twig\Extension\AssetExtension');
+        } elseif ($environment->hasExtension('assets')) {
             $this->assets = $environment->getExtension('assets');
-        } elseif ($environment->hasExtension('asset')) {
-            $this->assets = $environment->getExtension('asset');
         } else {
-            throw new \Twig_Error("assets extension must be loaded.");
+            throw new \Twig_Error("Assets extension must be loaded.");
         }
 
         $globals = $environment->getGlobals();
-
         if (array_key_exists('fsi_file_prefix', $globals)) {
             $this->filePrefix = $globals['fsi_file_prefix'];
         }

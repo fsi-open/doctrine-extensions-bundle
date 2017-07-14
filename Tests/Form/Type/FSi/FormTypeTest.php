@@ -49,7 +49,10 @@ abstract class FormTypeTest extends FormIntegrationTestCase
         $loader = new StubFilesystemLoader($paths);
 
         $twig = new \Twig_Environment($loader, array('strict_variables' => true));
-
+        $twig->addGlobal('global', '');
+        $twig->addExtension(new TranslationExtension(new StubTranslator()));
+        $twig->addExtension(new FileTwigExtension());
+        $twig->addExtension(new Assets(new FSiFilePathResolver('/adapter/path', 'uploaded')));
         $rendererEngine = new TwigRendererEngine(array(
             'form_div_layout.html.twig',
             'Form/form_div_layout.html.twig'
@@ -58,11 +61,6 @@ abstract class FormTypeTest extends FormIntegrationTestCase
             $rendererEngine,
             $this->getMock('\Symfony\Component\Security\Csrf\CsrfTokenManagerInterface')
         );
-        $renderer->setEnvironment($twig);
-        $twig->addGlobal('global', '');
-        $twig->addExtension(new TranslationExtension(new StubTranslator()));
-        $twig->addExtension(new Assets(new FSiFilePathResolver('/adapter/path', 'uploaded')));
-        $twig->addExtension(new FileTwigExtension());
 
         if (class_exists('Symfony\Bridge\Twig\Extension\AssetExtension')) {
             $runtimeLoader = $this->getMock('Twig_RuntimeLoaderInterface');
@@ -74,10 +72,7 @@ abstract class FormTypeTest extends FormIntegrationTestCase
             $twig->addExtension(new FormExtension());
             $twig->addExtension(new AssetExtension(
                 new Packages(
-                    new UrlPackage(
-                        array('http://local.dev/'),
-                        new EmptyVersionStrategy()
-                    )
+                    new UrlPackage(array('http://local.dev/'), new EmptyVersionStrategy())
                 )
             ));
         } else {
