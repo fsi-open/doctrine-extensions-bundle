@@ -11,6 +11,11 @@
          syntaxCheck="false"
          bootstrap="Tests/bootstrap.php"
         >
+
+    <php>
+        <env name="SYMFONY_DEPRECATIONS_HELPER" value="weak"/>
+    </php>
+
     <testsuites>
         <testsuite name="FSiDoctrineExtensionsBundle Test Suite">
             <directory>./Tests</directory>
