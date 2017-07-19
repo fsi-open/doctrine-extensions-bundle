@@ -9,9 +9,10 @@
 
 namespace FSi\Bundle\DoctrineExtensionsBundle\Listener\Uploadable;
 
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\EntityManagerInterface;
 use FSi\DoctrineExtensions\Uploadable\FileHandler\FileHandlerInterface;
 use FSi\DoctrineExtensions\Uploadable\UploadableListener as BaseListener;
+use Gaufrette\FilesystemMap;
 
 class UploadableListener extends BaseListener
 {
@@ -30,7 +31,7 @@ class UploadableListener extends BaseListener
     protected $configuration;
 
     /**
-     * @param array|\Gaufrette\FilesystemMap $filesystems
+     * @param array|FilesystemMap $filesystems
      * @param \FSi\DoctrineExtensions\Uploadable\FileHandler\FileHandlerInterface $fileHandler
      * @param array $configuration
      */
@@ -54,11 +55,11 @@ class UploadableListener extends BaseListener
     }
 
     /**
-     * @param \Doctrine\Common\Persistence\ObjectManager $objectManager
+     * @param EntityManagerInterface $objectManager
      * @param string $class
      * @return \FSi\DoctrineExtensions\Uploadable\Mapping\ClassMetadata
      */
-    public function getExtendedMetadata(ObjectManager $objectManager, $class)
+    public function getExtendedMetadata(EntityManagerInterface $objectManager, $class)
     {
         /* @var $metadata \FSi\DoctrineExtensions\Uploadable\Mapping\ClassMetadata */
         $metadata = parent::getExtendedMetadata($objectManager, $class);
