@@ -11,7 +11,7 @@ namespace spec\FSi\Bundle\DoctrineExtensionsBundle\Request;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\Common\Persistence\Mapping\ClassMetadataFactory;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use FSi\DoctrineExtensions\Translatable\Entity\Repository\TranslatableRepository;
@@ -20,6 +20,7 @@ use FSi\DoctrineExtensions\Translatable\TranslatableListener;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use stdClass;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -28,7 +29,7 @@ class TranslatableParamConverterSpec extends ObjectBehavior
 {
     public function let(
         ManagerRegistry $managerRegistry,
-        ObjectManager $objectManager,
+        EntityManagerInterface $entityManager,
         ClassMetadataFactory $metadataFactory,
         ClassMetadata $classMetadata,
         TranslatableListener $translatableListener,
@@ -37,13 +38,16 @@ class TranslatableParamConverterSpec extends ObjectBehavior
         TranslatableRepository $translatableRepository,
         ParamConverter $paramConverter
     ) {
-        $managerRegistry->getManagerForClass(Argument::type('string'))->willReturn($objectManager);
+        $managerRegistry->getManagerForClass(Argument::type('string'))->willReturn($entityManager);
         $metadataFactory->isTransient(Argument::type('string'))->willReturn(false);
-        $objectManager->getMetadataFactory()->willReturn($metadataFactory);
-        $objectManager->getClassMetadata(Argument::type('string'))->willReturn($classMetadata);
-        $objectManager->getRepository('NonTranslatableEntity')->willReturn($entityRepository);
-        $objectManager->getRepository('TranslatableEntity')->willReturn($translatableRepository);
-        $translatableListener->getExtendedMetadata($objectManager, Argument::type('string'))->willReturn($translatableMetadata);
+        $entityManager->getMetadataFactory()->willReturn($metadataFactory);
+        $entityManager->getClassMetadata(Argument::type('string'))->willReturn($classMetadata);
+        $entityManager->getRepository('NonTranslatableEntity')->willReturn($entityRepository);
+        $entityManager->getRepository('TranslatableEntity')->willReturn($translatableRepository);
+        $translatableListener->getExtendedMetadata(
+            $entityManager,
+            Argument::type('string'))->willReturn($translatableMetadata
+        );
         $paramConverter->getOptions()->willReturn(array());
         $paramConverter->getName()->willReturn('object');
         $this->beConstructedWith($managerRegistry, $translatableListener);
@@ -126,7 +130,7 @@ class TranslatableParamConverterSpec extends ObjectBehavior
         Request $request,
         ParameterBag $attributes,
         TranslatableRepository $translatableRepository,
-        \stdClass $object
+        stdClass $object
     ) {
         $paramConverter->getClass()->willReturn('TranslatableEntity');
         $paramConverter->getName()->willReturn('object');

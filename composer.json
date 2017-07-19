@@ -20,14 +20,14 @@
         "symfony/form" : "^2.4|^3.0",
         "symfony/validator": "^2.4|^3.0",
         "doctrine/doctrine-bundle": "^1.2",
-        "fsi/doctrine-extensions": "^1.1.4",
+        "fsi/doctrine-extensions": "^2.0@dev",
         "sensio/framework-extra-bundle": "^3.0",
         "knplabs/knp-gaufrette-bundle": "~0.1"
     },
     "require-dev": {
         "bossa/phpspec2-expect": "^1.0",
-        "doctrine/orm": "^2.3",
-        "fsi/datagrid-bundle": "^1.1",
+        "doctrine/orm": "^2.5",
+        "fsi/datagrid-bundle": "^1.1|2.0@dev",
         "phpunit/phpunit": "^4.8",
         "phpspec/phpspec": "^2.5|^3.0",
         "symfony/asset": "^2.7|^3.0",
