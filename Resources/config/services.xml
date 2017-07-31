@@ -65,18 +65,18 @@
         <!-- Listeners -->
         <service id="fsi_doctrine_extensions.listener.uploadable_post_load" class="%fsi_doctrine_extensions.listener.uploadable_post_load.class%">
             <argument type="service" id="fsi_doctrine_extensions.listener.uploadable" />
-            <tag name="fsi_doctrine_extensions.listener.uploadable" />
+            <tag name="fsi_doctrine_extensions.listener.uploadable" priority="2" />
         </service>
 
         <service id="fsi_doctrine_extensions.listener.translatable" class="%fsi_doctrine_extensions.listener.translatable.class%">
-            <tag name="fsi_doctrine_extensions.listener.translatable" />
+            <tag name="fsi_doctrine_extensions.listener.translatable" priority="1" />
         </service>
 
         <service id="fsi_doctrine_extensions.listener.uploadable" class="%fsi_doctrine_extensions.listener.uploadable.class%">
             <argument type="service" id="fsi_doctrine_extensions.gaufrette.filesystem_map" />
             <argument type="service" id="fsi_doctrine_extensions.filehandler.chain" />
             <argument type="collection">{%fsi_doctrine_extensions.listener.uploadable.configuration%}</argument>
-            <tag name="fsi_doctrine_extensions.listener.uploadable" />
+            <tag name="fsi_doctrine_extensions.listener.uploadable" priority="0" />
         </service>
 
         <service id="fsi_doctrine_extensions.listener.translatable_locale_listener" class="%fsi_doctrine_extensions.listener.translatable_locale_listener.class%">
