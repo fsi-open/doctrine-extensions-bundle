@@ -59,8 +59,13 @@ class FSIDoctrineExtensionsExtensionSpec extends ObjectBehavior
         $builder->setParameter('fsi_doctrine_extensions.default.filesystem.base_url', '/uploaded')
             ->shouldBeCalled();
 
+        $tag = array(array('priority' => 0));
+        $uploadable->getTag("fsi_doctrine_extensions.listener.uploadable")->willReturn($tag);
         $uploadable->addMethodCall('setDefaultFilesystem', Argument::type('array'))->shouldBeCalled();
-        $uploadable->addTag('doctrine.event_subscriber', array('connection' => 'default'))->shouldBeCalled();
+        $uploadable->addTag(
+            'doctrine.event_subscriber',
+            array('connection' => 'default', 'priority' => 0)
+        )->shouldBeCalled();
 
         $this->load(array(
             0 => array(
@@ -107,10 +112,14 @@ class FSIDoctrineExtensionsExtensionSpec extends ObjectBehavior
         $builder->setParameter('fsi_doctrine_extensions.default.filesystem.base_url', '/uploaded')
             ->shouldBeCalled();
 
+        $tag = array(array('priority' => 1));
+        $translatable->getTag("fsi_doctrine_extensions.listener.translatable")->willReturn($tag);
         $builder->getDefinition('fsi_doctrine_extensions.listener.translatable')->willReturn($translatable);
-        $translatable->addTag('doctrine.event_subscriber', array('connection' => 'default'))->shouldBeCalled();
-        $translatable->addMethodCall('setDefaultLocale', array('pl'))
-            ->shouldBeCalled();
+        $translatable->addTag(
+            'doctrine.event_subscriber',
+            array('connection' => 'default', 'priority' => 1)
+        )->shouldBeCalled();
+        $translatable->addMethodCall('setDefaultLocale', array('pl'))->shouldBeCalled();
 
         $this->load(array(
             0 => array(

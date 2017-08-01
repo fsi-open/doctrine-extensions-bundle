@@ -52,7 +52,11 @@ class FSIDoctrineExtensionsExtension extends Extension
 
                     foreach ($listenersIds as $listenerId => $tags) {
                         $subscriberDefinition = $container->getDefinition($listenerId);
-                        $attributes = array('connection' => $connection);
+                        $definitionTag = $subscriberDefinition->getTag($tag);
+                        $attributes = array(
+                            'connection' => $connection,
+                            'priority' => reset($definitionTag)['priority']
+                        );
                         $subscriberDefinition->addTag('doctrine.event_subscriber', $attributes);
                     }
                 }
