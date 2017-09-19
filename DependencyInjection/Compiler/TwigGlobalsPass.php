@@ -25,10 +25,10 @@ class TwigGlobalsPass implements CompilerPassInterface
 
         $container->findDefinition('twig')->addMethodCall(
             'addGlobal',
-            array(
+            [
                 'fsi_file_prefix',
                 $container->getParameter('fsi_doctrine_extensions.default.filesystem.adapter.prefix')
-            )
+            ]
         );
     }
 }

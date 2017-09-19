@@ -93,7 +93,7 @@ class TranslatableParamConverter implements ParamConverterInterface
         $mapping = $this->getMappingOption($configuration);
         if (empty($mapping)) {
             $keys = $request->attributes->keys();
-            $mapping = $keys ? array_combine($keys, $keys) : array();
+            $mapping = $keys ? array_combine($keys, $keys) : [];
         }
 
         $exclude = $this->getExcludeOption($configuration);
@@ -116,7 +116,7 @@ class TranslatableParamConverter implements ParamConverterInterface
             return $options['mapping'];
         }
 
-        return array();
+        return [];
     }
 
     /**
@@ -131,7 +131,7 @@ class TranslatableParamConverter implements ParamConverterInterface
             return $options['exclude'];
         }
 
-        return array();
+        return [];
     }
 
     /**
@@ -160,7 +160,7 @@ class TranslatableParamConverter implements ParamConverterInterface
         $metadata = $this->getDoctrineMetadata($configuration);
         $translatableMetadata = $this->getTranslatableMetadata($configuration);
 
-        $criteria = array();
+        $criteria = [];
         foreach ($mapping as $attribute => $field) {
             if ($this->isFieldSearchable($metadata, $field) || $this->isFieldTranslatable($translatableMetadata, $field)) {
                 $criteria[$field] = $request->attributes->get($attribute);

@@ -15,6 +15,6 @@ class DefaultColumnOptionsExtension extends BaseExtension
 {
     public function getExtendedColumnTypes()
     {
-        return array('fsi_file', 'fsi_image');
+        return ['fsi_file', 'fsi_image'];
     }
 }

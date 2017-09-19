@@ -27,7 +27,7 @@ class GaufretteFilesystemsPass implements CompilerPassInterface
 
         foreach ($config['uploadable_filesystems'] as $filesystem => $filesystemConfig) {
             $filesystemService = $container->findDefinition(sprintf('gaufrette.%s_filesystem', $filesystem));
-            $filesystemService->addMethodCall('setBaseUrl', array($filesystemConfig['base_url']));
+            $filesystemService->addMethodCall('setBaseUrl', [$filesystemConfig['base_url']]);
         }
     }
 }

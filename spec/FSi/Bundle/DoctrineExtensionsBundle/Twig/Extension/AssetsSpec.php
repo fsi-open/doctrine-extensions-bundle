@@ -27,7 +27,7 @@ class AssetsSpec extends ObjectBehavior
         $this->beConstructedWith($filePathResolver);
         $environment->hasExtension('assets')->shouldBeCalled()->willReturn(true);
         $environment->getExtension('assets')->shouldBeCalled()->willReturn($assets);
-        $environment->getGlobals()->shouldBeCalled()->willReturn(array());
+        $environment->getGlobals()->shouldBeCalled()->willReturn([]);
         $this->initRuntime($environment);
     }
 
@@ -71,7 +71,7 @@ class AssetsSpec extends ObjectBehavior
      */
     public function getMatchers()
     {
-        return array(
+        return [
             'haveFunction' => function($subject, $key) {
                 foreach ($subject as $function) {
                     if ($function instanceof \Twig_SimpleFunction) {
@@ -94,6 +94,6 @@ class AssetsSpec extends ObjectBehavior
 
                 return false;
             }
-        );
+        ];
     }
 }

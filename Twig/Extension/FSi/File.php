@@ -26,9 +26,9 @@ class File extends \Twig_Extension
      */
     public function getFunctions()
     {
-        return array(
-           new \Twig_SimpleFunction('is_fsi_file', array($this, 'isFSiFile'))
-        );
+        return [
+           new \Twig_SimpleFunction('is_fsi_file', [$this, 'isFSiFile'])
+        ];
     }
 
     /**

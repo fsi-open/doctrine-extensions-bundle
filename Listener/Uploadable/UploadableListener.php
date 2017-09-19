@@ -35,7 +35,7 @@ class UploadableListener extends BaseListener
      * @param \FSi\DoctrineExtensions\Uploadable\FileHandler\FileHandlerInterface $fileHandler
      * @param array $configuration
      */
-    public function __construct($filesystems, FileHandlerInterface $fileHandler, $configuration = array())
+    public function __construct($filesystems, FileHandlerInterface $fileHandler, $configuration = [])
     {
         parent::__construct($filesystems, $fileHandler);
         $this->setConfiguration($configuration);
@@ -46,12 +46,12 @@ class UploadableListener extends BaseListener
      */
     public function getSubscribedEvents()
     {
-        return array(
+        return [
             'preFlush',
             'postPersist',
             'postFlush',
             'postRemove',
-        );
+        ];
     }
 
     /**
@@ -106,7 +106,7 @@ class UploadableListener extends BaseListener
      */
     protected function setConfiguration($configuration)
     {
-        $this->configuration = array();
+        $this->configuration = [];
 
         foreach ($configuration as $class => $config) {
             $className = ltrim($class, '\\');

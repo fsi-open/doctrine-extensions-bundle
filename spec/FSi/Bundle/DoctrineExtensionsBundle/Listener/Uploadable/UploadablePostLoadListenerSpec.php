@@ -15,7 +15,7 @@ class UploadablePostLoadListenerSpec extends ObjectBehavior
 
     function it_handles_post_load_event()
     {
-        $this->getSubscribedEvents()->shouldReturn(array('postLoad'));
+        $this->getSubscribedEvents()->shouldReturn(['postLoad']);
     }
 
     function it_delegates_post_load_event(UploadableListener $uploadableListener, LifecycleEventArgs $eventArgs)

@@ -37,7 +37,7 @@ class RemovableFileSubscriberSpec extends ObjectBehavior
         PropertyAccessor $propertyAccessor
     ) {
         $formData = new \stdClass();
-        $event->getData()->willReturn(array('file_field_name' => null));
+        $event->getData()->willReturn(['file_field_name' => null]);
         $event->getForm()->willReturn($form);
         $form->getName()->willReturn('file_field_name');
         $form->getData()->willReturn($formData);
@@ -46,7 +46,7 @@ class RemovableFileSubscriberSpec extends ObjectBehavior
         $formConfig->getOption('remove_name')->willReturn('remove_field_name');
         $propertyAccessor->getValue($formData, 'file_field_name')->willReturn($file);
 
-        $event->setData(array('file_field_name' => $file))->shouldBeCalled();
+        $event->setData(['file_field_name' => $file])->shouldBeCalled();
 
         $this->preSubmit($event);
     }
@@ -58,7 +58,7 @@ class RemovableFileSubscriberSpec extends ObjectBehavior
         PropertyAccessor $propertyAccessor
     ) {
         $formData = new \stdClass();
-        $event->getData()->willReturn(array('remove_field_name' => true));
+        $event->getData()->willReturn(['remove_field_name' => true]);
         $event->getForm()->willReturn($form);
         $form->getName()->willReturn('file_field_name');
         $form->getData()->willReturn($formData);
