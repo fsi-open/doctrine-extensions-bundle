@@ -14,9 +14,6 @@ use FSi\Bundle\DoctrineExtensionsBundle\Tests\Fixtures\Form\Extension\FSiFileExt
 
 class FileTypeTest extends FormTypeTest
 {
-    /**
-     * @return \FSi\Bundle\DoctrineExtensionsBundle\Tests\Fixtures\Form\Extension\FSiFileExtension
-     */
     public function getExtensions()
     {
         return array(
@@ -26,31 +23,27 @@ class FileTypeTest extends FormTypeTest
 
     public function testFormRendering()
     {
-        $self = $this;
-
         $file = $this->getMockBuilder('FSi\DoctrineExtensions\Uploadable\File')
             ->disableOriginalConstructor()
             ->getMock();
 
         $file->expects($this->any())
             ->method('getFilesystem')
-            ->will($this->returnCallback(function() use ($self) {
-                $fileSystem = $self->getMockBuilder('FSi\Bundle\DoctrineExtensionsBundle\Listener\Uploadable\Filesystem')
+            ->will($this->returnCallback(function() {
+                $fileSystem = $this->getMockBuilder('FSi\Bundle\DoctrineExtensionsBundle\Listener\Uploadable\Filesystem')
                     ->disableOriginalConstructor()
                     ->getMock();
 
-                $fileSystem->expects($self->any())
+                $fileSystem->expects($this->any())
                     ->method('getBaseUrl')
-                    ->will($self->returnValue('/uploaded/'));
+                    ->will($this->returnValue('/uploaded/'));
 
-                $fileSystem->expects($self->any())
+                $fileSystem->expects($this->any())
                     ->method('getAdapter')
-                    ->will($self->returnCallback(function() use ($self) {
-                        $adapter = $self->getMockBuilder('Gaufrette\Adapter\Local')
+                    ->will($this->returnCallback(function() {
+                        return $this->getMockBuilder('Gaufrette\Adapter\Local')
                             ->disableOriginalConstructor()
                             ->getMock();
-
-                        return $adapter;
                     }));
 
                 return $fileSystem;
@@ -68,7 +61,7 @@ class FileTypeTest extends FormTypeTest
         $article->setFile($file);
 
         $form = $this->factory->create(
-            $this->isSymfony3() ? 'Symfony\Component\Form\Extension\Core\Type\FormType' : 'form', 
+            $this->isSymfony3() ? 'Symfony\Component\Form\Extension\Core\Type\FormType' : 'form',
             $article
         );
 
@@ -78,13 +71,5 @@ class FileTypeTest extends FormTypeTest
             'form' => $form->createView()
         ));
         $this->assertSame($html, $this->getExpectedHtml('form_with_fsi_file.html'));
-    }
-
-    /**
-     * @return bool
-     */
-    private function isSymfony3()
-    {
-        return method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix');
     }
 }
