@@ -123,10 +123,7 @@ class FSiFilePathResolverSpec extends ObjectBehavior
         $this->fileUrl($file)->shouldReturn('http://domain.com/basepath/TestFolder/File/file name.jpg');
     }
 
-    /**
-     * @param \FSi\DoctrineExtensions\Uploadable\File $file
-     */
-    function it_generate_fsi_file_basename($file)
+    function it_generate_fsi_file_basename(File $file)
     {
         $file->getName()->willReturn('TestFolder/File/file.jpg');
 
