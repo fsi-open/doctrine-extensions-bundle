@@ -36,7 +36,7 @@ class FileSpec extends ObjectBehavior
 
     public function getMatchers()
     {
-        return array(
+        return [
             'haveFunction' => function($subject, $key) {
                 foreach ($subject as $function) {
                     if ($function instanceof \Twig_SimpleFunction) {
@@ -48,6 +48,6 @@ class FileSpec extends ObjectBehavior
 
                 return false;
             },
-        );
+        ];
     }
 }

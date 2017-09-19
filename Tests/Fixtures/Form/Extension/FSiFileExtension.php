@@ -19,9 +19,9 @@ class FSiFileExtension extends AbstractExtension
 {
     protected function loadTypes()
     {
-        return array(
+        return [
             new FileType(),
             new RemovableFileType(new RemovableFileSubscriber(PropertyAccess::createPropertyAccessor()))
-        );
+        ];
     }
 }

@@ -55,11 +55,11 @@ class ImageType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
-            'constraints' => array(
+        $resolver->setDefaults([
+            'constraints' => [
                 new Image(),
-            ),
-        ));
+            ],
+        ]);
     }
 
     /**

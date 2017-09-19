@@ -17,7 +17,7 @@ class UploadableListenerSpec extends ObjectBehavior
 {
     function let(FilesystemMap $map, GaufretteHandler $handler)
     {
-        $map->all()->willReturn(array());
+        $map->all()->willReturn([]);
         $this->beConstructedWith($map, $handler);
     }
 

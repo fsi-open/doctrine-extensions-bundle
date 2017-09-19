@@ -17,9 +17,9 @@ class FilesystemMapSpec extends ObjectBehavior
 {
     function let(FilesystemMap $filesystemMap, Filesystem $filesystem)
     {
-        $filesystemMap->getIterator()->shouldBeCalled()->willReturn(array(
+        $filesystemMap->getIterator()->shouldBeCalled()->willReturn([
             'filesystem' => $filesystem
-        ));
+        ]);
 
         $this->beConstructedWith($filesystemMap);
     }

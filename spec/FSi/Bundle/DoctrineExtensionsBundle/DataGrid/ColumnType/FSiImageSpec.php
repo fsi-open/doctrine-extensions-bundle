@@ -17,7 +17,7 @@ class FSiImageSpec extends ObjectBehavior
     function it_initializes_width_option()
     {
         $this->initOptions();
-        $this->setOptions(array('width' => 100));
+        $this->setOptions(['width' => 100]);
 
         $this->getOption('width')->shouldReturn(100);
     }
@@ -26,20 +26,20 @@ class FSiImageSpec extends ObjectBehavior
     {
         $this->initOptions();
         $this->shouldThrow('Symfony\Component\OptionsResolver\Exception\InvalidOptionsException')
-            ->duringSetOptions(array('width' => 'a'));
+            ->duringSetOptions(['width' => 'a']);
     }
 
     function it_requires_width_option()
     {
         $this->initOptions();
         $this->shouldThrow('Symfony\Component\OptionsResolver\Exception\MissingOptionsException')
-            ->duringSetOptions(array());
+            ->duringSetOptions([]);
     }
 
     function it_passes_width_as_view_attribute(CellViewInterface $cellView)
     {
         $this->initOptions();
-        $this->setOptions(array('width' => 100));
+        $this->setOptions(['width' => 100]);
 
         $cellView->setAttribute('width', 100)->shouldBeCalled();
 

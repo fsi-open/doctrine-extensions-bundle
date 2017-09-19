@@ -46,7 +46,7 @@ class RemovableFileTypeSpec extends ObjectBehavior
 
     function it_should_set_default_options(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'compound' => true,
             'error_bubbling' => false,
             'inherit_data' => true,
@@ -55,12 +55,12 @@ class RemovableFileTypeSpec extends ObjectBehavior
             'remove_type' => $this->isSymfony28()
                 ? 'Symfony\Component\Form\Extension\Core\Type\CheckboxType'
                 : 'checkbox',
-            'remove_options' => array(),
+            'remove_options' => [],
             'file_type' => $this->isSymfony28()
                 ? 'FSi\Bundle\DoctrineExtensionsBundle\Form\Type\FSi\FileType'
                 : 'fsi_file',
-            'file_options' => array(),
-        ))->shouldBeCalled();
+            'file_options' => [],
+        ])->shouldBeCalled();
 
         $resolver->setAllowedTypes('remove_name', 'string')->shouldBeCalled();
         $resolver->setAllowedTypes('remove_type', 'string')->shouldBeCalled();
@@ -84,38 +84,38 @@ class RemovableFileTypeSpec extends ObjectBehavior
     {
         $builder->getName()->willReturn('file_field_name');
 
-        $builder->add('file_field_name', 'file_field_type', array(
+        $builder->add('file_field_name', 'file_field_type', [
             'label' => false,
             'error_bubbling' => true,
             'some_file_field_option' => 'file_option_value'
-        ))->shouldBeCalled();
+        ])->shouldBeCalled();
 
-        $builder->add('remove_field_name', 'remove_field_type', array(
+        $builder->add('remove_field_name', 'remove_field_type', [
             'required' => false,
             'label' => 'fsi_removable_file.remove',
             'mapped' => false,
             'translation_domain' => 'FSiDoctrineExtensionsBundle',
             'some_remove_field_option' => 'remove_option_value'
-        ))->shouldBeCalled();
+        ])->shouldBeCalled();
 
         $builder->get('file_field_name')->willReturn($fileBuilder);
 
         $fileBuilder->getEventDispatcher()->willReturn($fileEventDispatcher);
-        $fileEventDispatcher->getListeners(FormEvents::PRE_SUBMIT)->willReturn(array(
-            array($fileSubscriber)
-        ));
+        $fileEventDispatcher->getListeners(FormEvents::PRE_SUBMIT)->willReturn([
+            [$fileSubscriber]
+        ]);
         $fileEventDispatcher->removeSubscriber($fileSubscriber)->shouldBeCalled();
 
         $builder->addEventSubscriber($removableFileSubscriber)
             ->shouldBeCalled();
 
-        $this->buildForm($builder, array(
+        $this->buildForm($builder, [
             'file_type' => 'file_field_type',
-            'file_options' => array('some_file_field_option' => 'file_option_value'),
+            'file_options' => ['some_file_field_option' => 'file_option_value'],
             'remove_name' => 'remove_field_name',
             'remove_type' => 'remove_field_type',
-            'remove_options' => array('some_remove_field_option' => 'remove_option_value')
-        ));
+            'remove_options' => ['some_remove_field_option' => 'remove_option_value']
+        ]);
     }
 
     function it_changes_label_attribute_for(
@@ -126,11 +126,11 @@ class RemovableFileTypeSpec extends ObjectBehavior
         $form->getName()->willReturn('file');
 
         $view->offsetGet('file')->willReturn($fileView);
-        $view->vars = array('label_attr' => array());
+        $view->vars = ['label_attr' => []];
 
-        $fileView->vars = array('id' => 'form_file_file');
+        $fileView->vars = ['id' => 'form_file_file'];
 
-        $this->finishView($view, $form, array());
+        $this->finishView($view, $form, []);
 
         expect($view->vars['label_attr']['for'])->toBe('form_file_file');
     }

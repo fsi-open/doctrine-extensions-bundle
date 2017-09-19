@@ -20,9 +20,9 @@ class FileSubscriber implements EventSubscriberInterface
      */
     public static function getSubscribedEvents()
     {
-        return array(
+        return [
             FormEvents::PRE_SUBMIT => 'preSubmit'
-        );
+        ];
     }
 
     /**

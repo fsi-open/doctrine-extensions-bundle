@@ -38,7 +38,7 @@ class FSIDoctrineExtensionsExtension extends Extension
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      * @param array $config
      */
-    protected function setListenersConfiguration(ContainerBuilder $container, $config = array())
+    protected function setListenersConfiguration(ContainerBuilder $container, $config = [])
     {
         foreach ($config['orm'] as $connection => $subscribers) {
             foreach ($subscribers as $name => $enabled) {
@@ -53,10 +53,10 @@ class FSIDoctrineExtensionsExtension extends Extension
                     foreach ($listenersIds as $listenerId => $tags) {
                         $subscriberDefinition = $container->getDefinition($listenerId);
                         $definitionTag = $subscriberDefinition->getTag($tag);
-                        $attributes = array(
+                        $attributes = [
                             'connection' => $connection,
                             'priority' => reset($definitionTag)['priority']
-                        );
+                        ];
                         $subscriberDefinition->addTag('doctrine.event_subscriber', $attributes);
                     }
                 }
@@ -70,16 +70,16 @@ class FSIDoctrineExtensionsExtension extends Extension
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      * @param array $config
      */
-    protected function setUploadableConfiguration(ContainerBuilder $container, $config = array())
+    protected function setUploadableConfiguration(ContainerBuilder $container, $config = [])
     {
         $container->getDefinition('fsi_doctrine_extensions.listener.uploadable')->addMethodCall(
             'setDefaultKeymaker',
-            array(new Reference($config['default_key_maker_service']))
+            [new Reference($config['default_key_maker_service'])]
         );
         $container->setParameter('fsi_doctrine_extensions.default.filesystem.adapter.path', $config['default_filesystem_path']);
         $container->getDefinition('fsi_doctrine_extensions.listener.uploadable')->addMethodCall(
             'setDefaultFilesystem',
-            array(new Reference($config['default_filesystem_service']))
+            [new Reference($config['default_filesystem_service'])]
         );
 
         $container->setParameter(
@@ -97,9 +97,9 @@ class FSIDoctrineExtensionsExtension extends Extension
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      * @param array $config
      */
-    protected function setUploadabbleConfigurationParameter(ContainerBuilder $container, $config = array())
+    protected function setUploadabbleConfigurationParameter(ContainerBuilder $container, $config = [])
     {
-        $configuration = array();
+        $configuration = [];
 
         foreach ($config as $entity => $entityConfig) {
             $configuration[$entity] = $entityConfig['configuration'];
@@ -112,9 +112,9 @@ class FSIDoctrineExtensionsExtension extends Extension
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      * @param array $config
      */
-    protected function setTranslatableConfiguration(ContainerBuilder $container, $config = array())
+    protected function setTranslatableConfiguration(ContainerBuilder $container, $config = [])
     {
         $container->getDefinition('fsi_doctrine_extensions.listener.translatable')
-            ->addMethodCall('setDefaultLocale', array($config['default_locale']));
+            ->addMethodCall('setDefaultLocale', [$config['default_locale']]);
     }
 }

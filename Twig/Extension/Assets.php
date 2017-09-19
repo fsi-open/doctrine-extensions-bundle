@@ -70,18 +70,18 @@ class Assets extends \Twig_Extension implements \Twig_Extension_InitRuntimeInter
      */
     public function getFunctions()
     {
-        return array(
-           new \Twig_SimpleFunction('fsi_file_asset', array($this, 'fileAsset')),
-           new \Twig_SimpleFunction('fsi_file_path', array($this->filePathResolver, 'filePath')),
-           new \Twig_SimpleFunction('fsi_file_url', array($this->filePathResolver, 'fileUrl'))
-        );
+        return [
+           new \Twig_SimpleFunction('fsi_file_asset', [$this, 'fileAsset']),
+           new \Twig_SimpleFunction('fsi_file_path', [$this->filePathResolver, 'filePath']),
+           new \Twig_SimpleFunction('fsi_file_url', [$this->filePathResolver, 'fileUrl'])
+        ];
     }
 
     public function getFilters()
     {
-        return array(
-            new \Twig_SimpleFilter('fsi_file_basename', array($this->filePathResolver, 'fileBasename'))
-        );
+        return [
+            new \Twig_SimpleFilter('fsi_file_basename', [$this->filePathResolver, 'fileBasename'])
+        ];
     }
 
     public function fileAsset(File $file, $prefix = null)

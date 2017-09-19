@@ -22,9 +22,9 @@ class TranslatableLocaleListenerSpec extends ObjectBehavior
 
     function it_handles_on_kernel_request_event()
     {
-        $this->getSubscribedEvents()->shouldReturn(array(
+        $this->getSubscribedEvents()->shouldReturn([
             KernelEvents::REQUEST => 'onKernelRequest'
-        ));
+        ]);
     }
 
     function it_passes_locale_from_request_to_translatable_listener(

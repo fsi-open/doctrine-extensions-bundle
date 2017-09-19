@@ -16,9 +16,9 @@ class FileTypeTest extends FormTypeTest
 {
     public function getExtensions()
     {
-        return array(
+        return [
             new FSiFileExtension()
-        );
+        ];
     }
 
     public function testFormRendering()
@@ -67,9 +67,9 @@ class FileTypeTest extends FormTypeTest
 
         $form->add('file', $this->isSymfony3() ? 'FSi\Bundle\DoctrineExtensionsBundle\Form\Type\FSi\FileType' : 'fsi_file');
 
-        $html = $this->twig->render('form_with_fsi_file.html.twig', array(
+        $html = $this->twig->render('form_with_fsi_file.html.twig', [
             'form' => $form->createView()
-        ));
+        ]);
         $this->assertSame($html, $this->getExpectedHtml('form_with_fsi_file.html'));
     }
 }

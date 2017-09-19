@@ -23,7 +23,7 @@ class FileType extends AbstractType
      */
     public function getParent()
     {
-        return $this->isSymfony3() 
+        return $this->isSymfony3()
             ? 'Symfony\Component\Form\Extension\Core\Type\FileType'
             : 'file';
     }
@@ -65,12 +65,12 @@ class FileType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'data_class' => 'FSi\DoctrineExtensions\Uploadable\File',
-            'constraints' => array(
+            'constraints' => [
                 new File(),
-            )
-        ));
+            ]
+        ]);
     }
 
     /**

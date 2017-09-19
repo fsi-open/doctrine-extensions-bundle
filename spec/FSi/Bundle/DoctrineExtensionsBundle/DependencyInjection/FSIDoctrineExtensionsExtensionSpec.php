@@ -44,7 +44,7 @@ class FSIDoctrineExtensionsExtensionSpec extends ObjectBehavior
         /* Above code is added only because builder is used in services loader. */
 
         $builder->findTaggedServiceIds('fsi_doctrine_extensions.listener.uploadable')
-            ->willReturn(array('fsi_doctrine_extensions.listener.uploadable' => array()));
+            ->willReturn(['fsi_doctrine_extensions.listener.uploadable' => []]);
 
         $builder->getDefinition('fsi_doctrine_extensions.listener.translatable')->willReturn($translatable);
 
@@ -53,30 +53,30 @@ class FSIDoctrineExtensionsExtensionSpec extends ObjectBehavior
         $uploadable->addMethodCall('setDefaultKeymaker', Argument::type('array'))->shouldBeCalled();
         $builder->setParameter('fsi_doctrine_extensions.default.filesystem.adapter.path', '%kernel.root_dir%/../web/uploaded')
             ->shouldBeCalled();
-        $builder->setParameter('fsi_doctrine_extensions.listener.uploadable.configuration', array())->shouldBeCalled();
+        $builder->setParameter('fsi_doctrine_extensions.listener.uploadable.configuration', [])->shouldBeCalled();
         $builder->setParameter('fsi_doctrine_extensions.default.filesystem.adapter.prefix', 'uploaded')
             ->shouldBeCalled();
         $builder->setParameter('fsi_doctrine_extensions.default.filesystem.base_url', '/uploaded')
             ->shouldBeCalled();
 
-        $tag = array(array('priority' => 0));
+        $tag = [['priority' => 0]];
         $uploadable->getTag("fsi_doctrine_extensions.listener.uploadable")->willReturn($tag);
         $uploadable->addMethodCall('setDefaultFilesystem', Argument::type('array'))->shouldBeCalled();
         $uploadable->addTag(
             'doctrine.event_subscriber',
-            array('connection' => 'default', 'priority' => 0)
+            ['connection' => 'default', 'priority' => 0]
         )->shouldBeCalled();
 
-        $this->load(array(
-            0 => array(
+        $this->load([
+            0 => [
                 'default_locale' => 'pl',
-                'orm' => array(
-                    'default' => array(
+                'orm' => [
+                    'default' => [
                         'uploadable' => true,
-                    )
-                )
-            )
-        ), $builder);
+                    ]
+                ]
+            ]
+        ], $builder);
     }
 
     function it_should_add_tag_to_translatable_listener_service(
@@ -96,7 +96,7 @@ class FSIDoctrineExtensionsExtensionSpec extends ObjectBehavior
         /* Above code is added only because builder is used in services loader. */
 
         $builder->findTaggedServiceIds('fsi_doctrine_extensions.listener.translatable')
-            ->willReturn(array('fsi_doctrine_extensions.listener.translatable' => array()));
+            ->willReturn(['fsi_doctrine_extensions.listener.translatable' => []]);
 
         $builder->getDefinition('fsi_doctrine_extensions.listener.uploadable')
             ->willReturn($uploadable);
@@ -104,7 +104,7 @@ class FSIDoctrineExtensionsExtensionSpec extends ObjectBehavior
         $builder->setParameter('fsi_doctrine_extensions.default.filesystem.adapter.path',
             '%kernel.root_dir%/../web/uploaded')->shouldBeCalled();
 
-        $builder->setParameter('fsi_doctrine_extensions.listener.uploadable.configuration', array())
+        $builder->setParameter('fsi_doctrine_extensions.listener.uploadable.configuration', [])
             ->shouldBeCalled();
 
         $builder->setParameter('fsi_doctrine_extensions.default.filesystem.adapter.prefix', 'uploaded')
@@ -112,25 +112,25 @@ class FSIDoctrineExtensionsExtensionSpec extends ObjectBehavior
         $builder->setParameter('fsi_doctrine_extensions.default.filesystem.base_url', '/uploaded')
             ->shouldBeCalled();
 
-        $tag = array(array('priority' => 1));
+        $tag = [['priority' => 1]];
         $translatable->getTag("fsi_doctrine_extensions.listener.translatable")->willReturn($tag);
         $builder->getDefinition('fsi_doctrine_extensions.listener.translatable')->willReturn($translatable);
         $translatable->addTag(
             'doctrine.event_subscriber',
-            array('connection' => 'default', 'priority' => 1)
+            ['connection' => 'default', 'priority' => 1]
         )->shouldBeCalled();
-        $translatable->addMethodCall('setDefaultLocale', array('pl'))->shouldBeCalled();
+        $translatable->addMethodCall('setDefaultLocale', ['pl'])->shouldBeCalled();
 
-        $this->load(array(
-            0 => array(
+        $this->load([
+            0 => [
                 'default_locale' => 'pl',
-                'orm' => array(
-                    'default' => array(
+                'orm' => [
+                    'default' => [
                         'translatable' => true,
-                    )
-                )
-            )
-        ), $builder);
+                    ]
+                ]
+            ]
+        ], $builder);
     }
 
     function it_should_add_uploadable_configuration_parameter_to_container(
@@ -159,34 +159,34 @@ class FSIDoctrineExtensionsExtensionSpec extends ObjectBehavior
         $builder->setParameter('fsi_doctrine_extensions.default.filesystem.adapter.path',
             '%kernel.root_dir%/../web/uploaded')->shouldBeCalled();
 
-        $builder->setParameter('fsi_doctrine_extensions.listener.uploadable.configuration', array(
-            'FSi\Bundle\DemoBundle\Entity\Article' => array(
-                'image' => array(
+        $builder->setParameter('fsi_doctrine_extensions.listener.uploadable.configuration', [
+            'FSi\Bundle\DemoBundle\Entity\Article' => [
+                'image' => [
                     'filesystem' => 'some_filesystem',
                     'keymaker' => 'FSi\Bundle\DemoBundle\KeyMaker\SpecificKeyMaker'
-                )
-            )
-        ))->shouldBeCalled();
+                ]
+            ]
+        ])->shouldBeCalled();
 
         $builder->setParameter('fsi_doctrine_extensions.default.filesystem.adapter.prefix', 'uploaded')
             ->shouldBeCalled();
         $builder->setParameter('fsi_doctrine_extensions.default.filesystem.base_url', '/uploaded')
             ->shouldBeCalled();
 
-        $this->load(array(
-            0 => array(
+        $this->load([
+            0 => [
                 'default_locale' => 'pl',
-                'uploadable_configuration' => array(
-                    'FSi\Bundle\DemoBundle\Entity\Article' => array(
-                        'configuration' => array(
-                            'image' => array(
+                'uploadable_configuration' => [
+                    'FSi\Bundle\DemoBundle\Entity\Article' => [
+                        'configuration' => [
+                            'image' => [
                                 'filesystem' => 'some_filesystem',
                                 'keymaker' => 'FSi\Bundle\DemoBundle\KeyMaker\SpecificKeyMaker'
-                            )
-                        )
-                    )
-                ),
-            )
-        ), $builder);
+                            ]
+                        ]
+                    ]
+                ],
+            ]
+        ], $builder);
     }
 }

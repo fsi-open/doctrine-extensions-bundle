@@ -16,9 +16,9 @@ class RemovableFileTypeTest extends FormTypeTest
 {
     public function getExtensions()
     {
-        return array(
+        return [
             new FSiFileExtension()
-        );
+        ];
     }
 
     public function testFormRendering()
@@ -67,9 +67,9 @@ class RemovableFileTypeTest extends FormTypeTest
 
         $form->add('file', $this->isSymfony3() ? 'FSi\Bundle\DoctrineExtensionsBundle\Form\Type\FSi\RemovableFileType' : 'fsi_removable_file');
 
-        $html = $this->twig->render('form_with_fsi_file.html.twig', array(
+        $html = $this->twig->render('form_with_fsi_file.html.twig', [
             'form' => $form->createView()
-        ));
+        ]);
         $this->assertSame($this->getExpectedHtml('form_with_fsi_removable_file.html'), $html);
     }
 }

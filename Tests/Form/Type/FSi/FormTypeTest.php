@@ -38,25 +38,25 @@ abstract class FormTypeTest extends FormIntegrationTestCase
     {
         parent::setUp();
 
-        $paths = array(
+        $paths = [
             __DIR__ . '/../../../../Resources/views/Form',
             __DIR__ . '/../../../Resources/views',
             (file_exists(VENDOR_DIR . '/symfony/twig-bridge/Resources/views'))
                 ? VENDOR_DIR . '/symfony/twig-bridge/Resources/views'
                 : VENDOR_DIR . '/symfony/twig-bridge/Symfony/Bridge/Twig/Resources/views'
-        );
+        ];
 
         $loader = new StubFilesystemLoader($paths);
 
-        $twig = new \Twig_Environment($loader, array('strict_variables' => true));
+        $twig = new \Twig_Environment($loader, ['strict_variables' => true]);
         $twig->addGlobal('global', '');
         $twig->addExtension(new TranslationExtension(new StubTranslator()));
         $twig->addExtension(new FileTwigExtension());
         $twig->addExtension(new Assets(new FSiFilePathResolver('/adapter/path', 'uploaded')));
-        $rendererEngine = new TwigRendererEngine(array(
+        $rendererEngine = new TwigRendererEngine([
             'form_div_layout.html.twig',
             'Form/form_div_layout.html.twig'
-        ), $twig);
+        ], $twig);
         $renderer = new TwigRenderer(
             $rendererEngine,
             $this->getMockBuilder('Symfony\Component\Security\Csrf\CsrfTokenManagerInterface')->getMock()
@@ -64,15 +64,15 @@ abstract class FormTypeTest extends FormIntegrationTestCase
 
         if (class_exists('Symfony\Bridge\Twig\Extension\AssetExtension')) {
             $runtimeLoader = $this->getMockBuilder('Twig_RuntimeLoaderInterface')->getMock();
-            $runtimeLoader->expects($this->any())->method('load')->will($this->returnValueMap(array(
-                array('Symfony\Bridge\Twig\Form\TwigRenderer', $renderer),
-            )));
+            $runtimeLoader->expects($this->any())->method('load')->will($this->returnValueMap([
+                ['Symfony\Bridge\Twig\Form\TwigRenderer', $renderer],
+            ]));
             $twig->addRuntimeLoader($runtimeLoader);
 
             $twig->addExtension(new FormExtension());
             $twig->addExtension(new AssetExtension(
                 new Packages(
-                    new UrlPackage(array('http://local.dev/'), new EmptyVersionStrategy())
+                    new UrlPackage(['http://local.dev/'], new EmptyVersionStrategy())
                 )
             ));
         } else {

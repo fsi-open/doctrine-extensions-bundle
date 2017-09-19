@@ -97,7 +97,7 @@ class RemovableFileType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'compound' => true,
             'error_bubbling' => false,
             'inherit_data' => true,
@@ -106,12 +106,12 @@ class RemovableFileType extends AbstractType
             'remove_type' => $this->isSymfony3()
                 ? 'Symfony\Component\Form\Extension\Core\Type\CheckboxType'
                 : 'checkbox',
-            'remove_options' => array(),
+            'remove_options' => [],
             'file_type' => $this->isSymfony3()
                 ? 'FSi\Bundle\DoctrineExtensionsBundle\Form\Type\FSi\FileType'
                 : 'fsi_file',
-            'file_options' => array(),
-        ));
+            'file_options' => [],
+        ]);
 
         $resolver->setAllowedTypes('remove_name', 'string');
         $resolver->setAllowedTypes('remove_type', 'string');
@@ -168,10 +168,10 @@ class RemovableFileType extends AbstractType
      */
     private function getDefaultFileOptions()
     {
-        return array(
+        return [
             'label' => false,
             'error_bubbling' => true
-        );
+        ];
     }
 
     /**
@@ -179,12 +179,12 @@ class RemovableFileType extends AbstractType
      */
     private function getDefaultRemoveOptions()
     {
-        return array(
+        return [
             'required' => false,
             'label' => 'fsi_removable_file.remove',
             'mapped' => false,
             'translation_domain' => 'FSiDoctrineExtensionsBundle'
-        );
+        ];
     }
 
     /**

@@ -49,7 +49,7 @@ class FSiImage extends ColumnAbstractType
     public function initOptions()
     {
         $this->getOptionsResolver()
-            ->setRequired(array('width'))
+            ->setRequired(['width'])
             ->setAllowedTypes('width', 'integer');
     }
 }

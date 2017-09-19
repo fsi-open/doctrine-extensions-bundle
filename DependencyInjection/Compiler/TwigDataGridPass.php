@@ -22,7 +22,7 @@ class TwigDataGridPass implements CompilerPassInterface
 
         $container->setParameter('datagrid.twig.themes', array_merge(
             $container->getParameter('datagrid.twig.themes'),
-            array('@FSiDoctrineExtensions/DataGrid/datagrid.html.twig')
+            ['@FSiDoctrineExtensions/DataGrid/datagrid.html.twig']
         ));
     }
 }

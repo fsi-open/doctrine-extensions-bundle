@@ -24,7 +24,7 @@ class TwigGlobalsPassSpec extends ObjectBehavior
     function it_adds_globals(ContainerBuilder $container, Definition $def)
     {
         $container->getParameter('fsi_doctrine_extensions.default.filesystem.adapter.prefix')->willReturn('test');
-        $def->addMethodCall('addGlobal', array('fsi_file_prefix', 'test'))->shouldBeCalled();
+        $def->addMethodCall('addGlobal', ['fsi_file_prefix', 'test'])->shouldBeCalled();
 
         $this->process($container);
     }
