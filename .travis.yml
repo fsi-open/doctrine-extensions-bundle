@@ -18,12 +18,9 @@ matrix:
         - php: 7.1
 
 before_install:
-    - phpenv config-rm xdebug.ini || true
-    - composer update $COMPOSER_FLAGS
+    - phpenv config-rm xdebug.ini
+    - travis_wait 15 composer update $COMPOSER_FLAGS
 
 script:
     - ./bin/phpunit -v
     - ./bin/phpspec run -f pretty
-
-notifications:
-  irc: "irc.freenode.org#fsi-open"
