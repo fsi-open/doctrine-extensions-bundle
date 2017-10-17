@@ -84,7 +84,6 @@ class FSiFilePathResolverSpec extends ObjectBehavior
         Local $adapter
     ) {
         $environment->getGlobals()->willReturn(['fsi_file_prefix' => 'uploaded']);
-        $environment->initRuntime();
 
         $file->getKey()->willReturn('TestFolder/File/file%name.jpg');
         $file->getFilesystem()->willReturn($filesystem);
@@ -99,10 +98,7 @@ class FSiFilePathResolverSpec extends ObjectBehavior
         Filesystem $filesystem,
         Local $adapter
     ) {
-        $environment->getGlobals()->willReturn([
-                'fsi_file_prefix' => 'uploaded'
-            ]);
-        $environment->initRuntime();
+        $environment->getGlobals()->willReturn(['fsi_file_prefix' => 'uploaded']);
 
         $file->getKey()->willReturn('TestFolder/File/file1@2.jpg');
         $file->getFilesystem()->willReturn($filesystem);

@@ -1,42 +1,42 @@
-#FSi Doctrine extensions bundle
+# FSi DoctrineExtensionsBundle
 
-This bundle simplify fsi doctrine extensions configuration.
+This bundle provides integration with the [FSi DoctrineExtensions library.](https://github.com/fsi-open/doctrine-extensions)
 
-##Installation
+## Installation
 
-Modify composer.json file
+This is the master branch, which is under development. For a stable release, please
+use version `1.1`.
 
-```
+Add the bundle to `composer.json` and run `composer.phar update`.
+
+```json
 {
     "require": {
-        "fsi/doctrine-extensions-bundle": "~1.1",
+        "fsi/doctrine-extensions-bundle": "2.0@dev",
     }
 }
 ```
-Execute:
 
-```
-php composer.phar update
-```
-Register bundles in AppKernel.php
+### Register bundles in AppKernel.php
 
 ```php
     // app/AppKernel.php
 
     public function registerBundles()
     {
-        return array(
+        return [
             new Knp\Bundle\GaufretteBundle\KnpGaufretteBundle(),
             new FSi\Bundle\DoctrineExtensionsBundle\FSiDoctrineExtensionsBundle(),
-        );
+        ];
     }
 ```
 
-Configure listeners
+### Configure listeners
 
-**Listeners are not registered by default and you need to configure them in ``app/config/config.yml`` file before using.**
+Listeners are not registered by default and you need to enable them in the
+``app/config/config.yml`` file before using.
 
-```
+```yaml
 # app/config/config.yml
 
 fsi_doctrine_extensions:
@@ -46,14 +46,15 @@ fsi_doctrine_extensions:
             uploadable: true
 ```
 
-Enable translations in app/config/config.yml
+Be sure to enable the translations in `app/config/config.yml`, even if you do not
+wish to use the translatable component of the bundle.
 
-```
+```yaml
 framework:
     translator:      { fallback: %locale% }
 ```
 
-## Example entity with uploadable fields
+## Example of an entity with an uploadable field
 
 ```php
 <?php
@@ -61,12 +62,11 @@ framework:
 namespace FSi\DemoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use FSi\Bundle\DoctrineExtensionsBundle\Validator\Constraints as FSiAssert;
 use FSi\DoctrineExtensions\Uploadable\Mapping\Annotation as FSi;
 use Symfony\Component\Validator\Constraints as Assert;
-use FSi\Bundle\DoctrineExtensionsBundle\Validator\Constraints as FSiAssert;
 
 /**
- * @ORM\Table(name="article")
  * @ORM\Entity()
  */
 class Article
@@ -77,62 +77,50 @@ class Article
      * @ORM\Column(type="integer")
      * @ORM\Id
      */
-    protected $id = 1;
+    private $id;
 
     /**
-     * @ORM\Column(length=255, nullable=true, name="photo_key")
+     * It is important that this column is nullable, because the value is set
+     * after the entity is persisted.
+     *
+     * @ORM\Column(nullable=true)
      * @FSi\Uploadable(targetField="photo")
      */
-    protected $photoKey;
+    private $photoKey;
 
     /**
+     * Currently there is no common interface for uploaded files.
+     *
+     * @var mixed
+     *
      * @FSiAssert\Image(
      *     maxWidth = 1000,
      *     maxHeight = 460
      * )
      */
-    protected $photo;
+    private $photo;
 
-    /**
-     * @return int
-     */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @param mixed $photo
-     * @return Article
-     */
-    public function setPhoto($photo)
+    public function setPhoto($photo): void
     {
         $this->photo = $photo;
-        return $this;
     }
 
-    /**
-     * @return mixed
-     */
     public function getPhoto()
     {
         return $this->photo;
     }
 
-    /**
-     * @param mixed $photoKey
-     * @return Article
-     */
-    public function setPhotoKey($photoKey)
+    public function setPhotoKey(?string $photoKey): void
     {
         $this->photoKey = $photoKey;
-        return $this;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getPhotoKey()
+    public function getPhotoKey(): ?string
     {
         return $this->photoKey;
     }
@@ -140,137 +128,108 @@ class Article
 
 ```
 
-## Example entity with translatable fields and translation entity
+## Example of an entity with translatable fields and a translation entity
 
 ```php
 namespace Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use FSi\DoctrineExtensions\Translatable\Mapping\Annotation as Translatable;
 
 /**
- * @ORM\Entity(repositoryClass="\FSi\DoctrineExtensions\Translatable\Entity\Repository\TranslatableRepository")
+ * The entity's repository needs to implement the 
+ * \FSi\DoctrineExtensions\Translatable\Model\TranslatableRepositoryInterface
+ *
+ * @ORM\Entity(repositoryClass="FSi\DoctrineExtensions\Translatable\Entity\Repository\TranslatableRepository")
  */
 class Article
 {
     /**
-     * @ORM\Column(name="id", type="bigint")
+     * @var integer
+     *
+     * @ORM\Column(type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     * @var integer $id
      */
     private $id;
 
     /**
-     * @ORM\Column(type="datetime")
      * @var string
-     */
-    private $date;
-
-    /**
+     *
      * @Translatable\Locale
-     * @var string
      */
     private $locale;
 
     /**
-     * @Translatable\Translatable(mappedBy="translations")
      * @var string
+     *
+     * @Translatable\Translatable(mappedBy="translations")
      */
     private $title;
 
     /**
-     * @Translatable\Translatable(mappedBy="translations")
      * @var string
+     *
+     * @Translatable\Translatable(mappedBy="translations")
      */
     private $contents;
 
     /**
+     * @var Collection|ArticleTranslation[]
+     *
      * @ORM\OneToMany(targetEntity="ArticleTranslation", mappedBy="article", indexBy="locale")
-     * @var Doctrine\Common\Collections\ArrayCollection
      */
     private $translations;
 
     public function __construct()
     {
-        $this->translations = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->translations = new ArrayCollection();
     }
 
-    /**
-     * Get id
-     * @return integer
-     */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function setDate(\DateTime $date)
+    public function setTitle(?string $title): void
     {
-        $this->date = $date;
-        return $this;
+        $this->title = $title;
     }
 
-    public function getDate()
-    {
-        return $this->date;
-    }
-
-    public function setTitle($title)
-    {
-        $this->title = (string)$title;
-        return $this;
-    }
-
-    public function getTitle()
+    public function getTitle(): ?string
     {
         return $this->title;
     }
 
-    public function setContents($contents)
+    public function setContents(?string $contents): void
     {
-        $this->contents = (string)$contents;
-        return $this;
+        $this->contents = $contents;
     }
 
-    public function getContents()
+    public function getContents(): ?string
     {
         return $this->contents;
     }
 
-    public function setLocale($locale)
+    public function setLocale(?string $locale): void
     {
-        $this->locale = (string)$locale;
-        return $this;
+        $this->locale = $locale;
     }
 
-    public function getLocale()
+    public function getLocale(): ?string
     {
         return $this->locale;
     }
 
-    public function getTranslations()
+    public function getTranslations(): Collection
     {
         return $this->translations;
-    }
-
-    public function hasTranslation($locale)
-    {
-        return isset($this->translations[$locale]);
-    }
-
-    public function getTranslation($locale)
-    {
-        if ($this->hasTranslation($locale)) {
-            return $this->translations[$locale];
-        } else {
-            return null;
-        }
     }
 }
 ```
 
-```
+```php
 namespace Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -282,17 +241,19 @@ use FSi\DoctrineExtensions\Translatable\Mapping\Annotation as Translatable;
 class ArticleTranslation
 {
     /**
-     * @ORM\Column(name="id", type="bigint")
+     * @var integer
+     *
+     * @ORM\Column(type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     * @var integer $id
      */
     private $id;
 
     /**
-     * @Translatable\Locale
-     * @ORM\Column(type="string", length=2)
      * @var string
+     *
+     * @Translatable\Locale
+     *
+     * @ORM\Column(length=2)
      */
     private $locale;
 
@@ -303,51 +264,58 @@ class ArticleTranslation
     private $title;
 
     /**
-     * @ORM\Column
      * @var string
+     *
+     * @ORM\Column
      */
     private $contents;
 
     /**
+     * @var Article
+     *
      * @ORM\ManyToOne(targetEntity="Article", inversedBy="translations")
-     * @ORM\JoinColumn(name="article", referencedColumnName="id")
-     * @var Doctrine\Common\Collections\ArrayCollection
      */
     private $article;
 
-    public function setTitle($title)
+    public function setTitle(?string $title): void
     {
-        $this->title = (string)$title;
-        return $this;
+        $this->title = $title;
     }
 
-    public function getTitle()
+    public function getTitle(): ?string
     {
         return $this->title;
     }
 
-    public function setContents($contents)
+    public function setContents(?string $contents): void
     {
-        $this->contents = (string)$contents;
-        return $this;
+        $this->contents = $contents;
     }
 
-    public function getContents()
+    public function getContents(): ?string
     {
         return $this->contents;
     }
 
-    public function setLocale($locale)
+    public function setLocale(?string $locale): void
     {
-        $this->locale = (string)$locale;
-        return $this;
+        $this->locale = $locale;
     }
 
-    public function getLocale()
+    public function getLocale(): ?string
     {
         return $this->locale;
     }
 
+    public function setArticle(?Article $article): void
+    {
+        $this->article = $article;
+    }
+
+    public function getArticle(): ?Article
+    {
+        return $this->article;
+    }
 }
 ```
 
@@ -361,10 +329,10 @@ class ArticleTranslation
 
 There are two validators that can be used with FSi uploadable file. 
 
-``@FSiAssert\Image`` - extends symfony2 Image validator  
-``@FSiAssert\File`` - extends symfony2 File validator  
+``@FSiAssert\Image`` - extends Symfony's Image validator  
+``@FSiAssert\File`` - extends Symfony's File validator  
 
-Both of them have exactly same options as parents. 
+Both of these have exactly the same options as their parent classes.
 
 ## Detailed documentation of FSi doctrine extensions
 
