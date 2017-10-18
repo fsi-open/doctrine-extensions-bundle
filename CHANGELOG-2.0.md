@@ -25,7 +25,7 @@ this change:
         <tr>
             <td>parameter</td>
             <td>%fsi_doctrine_extensions.default.filesystem.adapter.prefix%</td>
-            <td>-</td>
+            <td>%fsi_doctrine_extensions.default.filesystem.base_url%</td>
         </tr>
         <tr>
             <td>Twig function</td>
