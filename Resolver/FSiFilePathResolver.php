@@ -7,53 +7,21 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace FSi\Bundle\DoctrineExtensionsBundle\Resolver;
 
 use FSi\Bundle\DoctrineExtensionsBundle\Exception\Uploadable\InvalidFilesystemException;
 use FSi\Bundle\DoctrineExtensionsBundle\Listener\Uploadable\Filesystem;
 use FSi\DoctrineExtensions\Uploadable\File;
-use Gaufrette\Adapter\Cache;
-use Gaufrette\Adapter\Local;
 
 class FSiFilePathResolver
 {
-    private $adapterPath;
-    private $filePrefix;
-
     /**
-     * @param string $adapterPath path for local adapter created when File adapter is different than local or cache.
-     * @param string $filePrefix
-     */
-    public function __construct($adapterPath, $filePrefix)
-    {
-        $this->adapterPath = $adapterPath;
-        $this->filePrefix = $filePrefix;
-    }
-
-    /**
-     * @param \FSi\DoctrineExtensions\Uploadable\File $file
-     * @param null|string $prefix
-     * @throws \RuntimeException
+     * @param File $file
      * @return string
      */
-    public function filePath(File $file, $prefix = null)
-    {
-        if ($file->getFilesystem()->getAdapter() instanceof Local
-            || $file->getFilesystem()->getAdapter() instanceof Cache
-        ) {
-            return '/' . $this->generatePath($file, $prefix);
-        }
-
-        $this->writeFileToLocalAdapter($file);
-
-        return '/' . $this->generatePath($file, $prefix);
-    }
-
-    /**
-     * @param \FSi\DoctrineExtensions\Uploadable\File $file
-     * @return string
-     */
-    public function fileBasename(File $file)
+    public function fileBasename(File $file): string
     {
         return basename($file->getName());
     }
@@ -62,61 +30,17 @@ class FSiFilePathResolver
      * @param File $file
      * @return string
      */
-    public function fileUrl(File $file)
+    public function fileUrl(File $file): string
     {
         $filesystem = $file->getFilesystem();
         if (!($filesystem instanceof Filesystem)) {
             throw new InvalidFilesystemException(sprintf(
-                'Expected instance of \FSi\Bundle\DoctrineExtensionsBundle\Listener\Uploadable\Filesystem got %s',
+                'Expected instance of "%s", got "%s" instead',
+                Filesystem::class,
                 is_object($filesystem) ? get_class($filesystem) : gettype($filesystem)
             ));
         }
 
-        return $filesystem->getBaseUrl() . $file->getKey();
-    }
-
-    /**
-     * @param \FSi\DoctrineExtensions\Uploadable\File $file
-     * @throws \RuntimeException
-     * @throws \OutOfBoundsException
-     * @throws \Gaufrette\Exception\FileNotFound
-     */
-    protected function writeFileToLocalAdapter(File $file)
-    {
-        if (!$this->getLocalAdapter()->exists($file->getKey())) {
-            $this->getLocalAdapter()->write($file->getKey(), $file->getContent());
-        }
-    }
-
-    /**
-     * @return \Gaufrette\Adapter\Local
-     */
-    protected function getLocalAdapter()
-    {
-        if (!isset($this->adapter)) {
-            $this->adapter = new Local($this->adapterPath, true);
-        }
-
-        return $this->adapter;
-    }
-
-    /**
-     * @param \FSi\DoctrineExtensions\Uploadable\File $file
-     * @param null $prefix
-     * @return string
-     */
-    protected function generatePath(File $file, $prefix = null)
-    {
-        if (!isset($prefix) && isset($this->filePrefix)) {
-            $prefix = $this->filePrefix;
-        }
-
-        if (isset($prefix)) {
-            $prefix = trim($prefix, '/');
-
-            return $prefix . '/' . ltrim($file->getKey(), '/');
-        }
-
-        return $file->getKey();
+        return sprintf('%s%s', $filesystem->getBaseUrl(), $file->getKey());
     }
 }

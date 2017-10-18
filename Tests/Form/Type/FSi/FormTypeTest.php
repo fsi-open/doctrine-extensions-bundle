@@ -11,7 +11,6 @@ namespace FSi\Bundle\DoctrineExtensionsBundle\Tests\Form\Type\FSi;
 
 use FSi\Bundle\DoctrineExtensionsBundle\Resolver\FSiFilePathResolver;
 use FSi\Bundle\DoctrineExtensionsBundle\Twig\Extension\Assets;
-use FSi\Bundle\DoctrineExtensionsBundle\Twig\Extension\FSi\File as FileTwigExtension;
 use Symfony\Bridge\Twig\Extension\AssetExtension;
 use Symfony\Bridge\Twig\Extension\FormExtension;
 use Symfony\Bridge\Twig\Extension\TranslationExtension;
@@ -51,8 +50,7 @@ abstract class FormTypeTest extends FormIntegrationTestCase
         $twig = new \Twig_Environment($loader, ['strict_variables' => true]);
         $twig->addGlobal('global', '');
         $twig->addExtension(new TranslationExtension(new StubTranslator()));
-        $twig->addExtension(new FileTwigExtension());
-        $twig->addExtension(new Assets(new FSiFilePathResolver('/adapter/path', 'uploaded')));
+        $twig->addExtension(new Assets(new FSiFilePathResolver()));
         $rendererEngine = new TwigRendererEngine([
             'form_div_layout.html.twig',
             'Form/form_div_layout.html.twig'

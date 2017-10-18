@@ -13,22 +13,11 @@ use FSi\Bundle\DoctrineExtensionsBundle\Resolver\FSiFilePathResolver;
 use FSi\DoctrineExtensions\Uploadable\File;
 use PhpSpec\ObjectBehavior;
 
-class AssetsExtension
-{
-    public function getAssetUrl($path)
-    {
-    }
-}
-
 class AssetsSpec extends ObjectBehavior
 {
-    function let(\Twig_Environment $environment, AssetsExtension $assets, FSiFilePathResolver $filePathResolver)
+    function let(FSiFilePathResolver $filePathResolver)
     {
         $this->beConstructedWith($filePathResolver);
-        $environment->hasExtension('assets')->shouldBeCalled()->willReturn(true);
-        $environment->getExtension('assets')->shouldBeCalled()->willReturn($assets);
-        $environment->getGlobals()->shouldBeCalled()->willReturn([]);
-        $this->initRuntime($environment);
     }
 
     function it_is_twig_extension()
@@ -36,34 +25,27 @@ class AssetsSpec extends ObjectBehavior
         $this->shouldBeAnInstanceOf('Twig_Extension');
     }
 
-    function it_have_extension_name()
+    function it_has_extension_name()
     {
         $this->getName()->shouldReturn('fsi_assets');
     }
 
-    function it_have_fsi_file_asset_function()
+    function it_has_fsi_functions()
     {
-        $this->getFunctions()->shouldHaveFunction('fsi_file_asset');
+        $this->getFunctions()->shouldHaveFunction('is_fsi_file');
+        $this->getFunctions()->shouldHaveFunction('fsi_file_url');
     }
 
-    function it_compute_file_asset_path(
-        File $file, AssetsExtension $assets, FSiFilePathResolver $filePathResolver
-    ) {
-        $file->getKey()->willReturn('file-name.txt');
-        $filePathResolver->filePath($file, 'uploaded')->willReturn('/uploaded/file%20name.txt');
-        $assets->getAssetUrl('/uploaded/file%20name.txt')->willReturn('/uploaded/file%20name.txt');
-
-        $this->fileAsset($file, 'uploaded')->shouldReturn('/uploaded/file%20name.txt');
-    }
-
-    function it_have_fsi_file_path_function()
-    {
-        $this->getFunctions()->shouldHaveFunction('fsi_file_path');
-    }
-
-    function it_have_fsi_file_basename_filter()
+    function it_has_fsi_file_basename_filter()
     {
         $this->getFilters()->shouldHaveFilter('fsi_file_basename');
+    }
+
+    function it_recognizes_fsi_file(File $file)
+    {
+        $this->isFSiFile('thisisnotfile')->shouldReturn(false);
+        $this->isFSiFile(new \DateTime())->shouldReturn(false);
+        $this->isFSiFile($file)->shouldReturn(true);
     }
 
     /**

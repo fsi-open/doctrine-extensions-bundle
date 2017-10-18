@@ -10,14 +10,11 @@
 namespace FSi\Bundle\DoctrineExtensionsBundle\DataGrid\ColumnType;
 
 use FSi\Component\DataGrid\Column\ColumnAbstractType;
-use FSi\DoctrineExtensions\Uploadable\File;
 
 class FSiFile extends ColumnAbstractType
 {
     /**
-     * Get column type identity.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getId()
     {
@@ -25,9 +22,7 @@ class FSiFile extends ColumnAbstractType
     }
 
     /**
-     * Filter value before passing it to view.
-     *
-     * @param mixed $value
+     * {@inheritdoc}
      */
     public function filterValue($value)
     {
