@@ -38,7 +38,7 @@ class FSIDoctrineExtensionsExtension extends Extension
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      * @param array $config
      */
-    protected function setListenersConfiguration(ContainerBuilder $container, $config = [])
+    protected function setListenersConfiguration(ContainerBuilder $container, array $config = [])
     {
         foreach ($config['orm'] as $connection => $subscribers) {
             foreach ($subscribers as $name => $enabled) {
@@ -70,7 +70,7 @@ class FSIDoctrineExtensionsExtension extends Extension
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      * @param array $config
      */
-    protected function setUploadableConfiguration(ContainerBuilder $container, $config = [])
+    protected function setUploadableConfiguration(ContainerBuilder $container, array $config = [])
     {
         $container->getDefinition('fsi_doctrine_extensions.listener.uploadable')->addMethodCall(
             'setDefaultKeymaker',
@@ -83,11 +83,6 @@ class FSIDoctrineExtensionsExtension extends Extension
         );
 
         $container->setParameter(
-            'fsi_doctrine_extensions.default.filesystem.adapter.prefix',
-            $config['default_filesystem_prefix']
-        );
-
-        $container->setParameter(
             'fsi_doctrine_extensions.default.filesystem.base_url',
             $config['default_filesystem_base_url']
         );
@@ -97,7 +92,7 @@ class FSIDoctrineExtensionsExtension extends Extension
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      * @param array $config
      */
-    protected function setUploadabbleConfigurationParameter(ContainerBuilder $container, $config = [])
+    protected function setUploadabbleConfigurationParameter(ContainerBuilder $container, array $config = [])
     {
         $configuration = [];
 
@@ -112,7 +107,7 @@ class FSIDoctrineExtensionsExtension extends Extension
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      * @param array $config
      */
-    protected function setTranslatableConfiguration(ContainerBuilder $container, $config = [])
+    protected function setTranslatableConfiguration(ContainerBuilder $container, array $config = [])
     {
         $container->getDefinition('fsi_doctrine_extensions.listener.translatable')
             ->addMethodCall('setDefaultLocale', [$config['default_locale']]);

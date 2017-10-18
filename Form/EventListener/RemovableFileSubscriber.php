@@ -9,23 +9,21 @@
 
 namespace FSi\Bundle\DoctrineExtensionsBundle\Form\EventListener;
 
-use FSi\DoctrineExtensions\Uploadable\Mapping\Annotation\Uploadable;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
+use Symfony\Component\PropertyAccess\PropertyPathInterface;
 
 class RemovableFileSubscriber implements EventSubscriberInterface
 {
     /**
-     * @var \Symfony\Component\PropertyAccess\PropertyAccessor
+     * @var PropertyAccessor
      */
     private $propertyAccessor;
 
     /**
-     * @param \Symfony\Component\PropertyAccess\PropertyAccessor $accessor
+     * @param PropertyAccessor $accessor
      */
     public function __construct(PropertyAccessor $accessor)
     {
@@ -59,7 +57,7 @@ class RemovableFileSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @param \Symfony\Component\Form\FormEvent $event
+     * @param FormEvent $event
      * @return bool
      */
     private function isEventFormDataEmpty(FormEvent $event)
@@ -68,7 +66,7 @@ class RemovableFileSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @param \Symfony\Component\Form\FormEvent $event
+     * @param FormEvent $event
      * @return bool
      */
     private function shouldFileBeRemoved(FormEvent $event)
@@ -80,7 +78,7 @@ class RemovableFileSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @param \Symfony\Component\Form\FormEvent $event
+     * @param FormEvent $event
      */
     private function removeFile(FormEvent $event)
     {
@@ -90,7 +88,7 @@ class RemovableFileSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @param \Symfony\Component\Form\FormEvent $event
+     * @param FormEvent $event
      * @return bool
      */
     private function isNewFileSubmitted(FormEvent $event)
@@ -102,7 +100,7 @@ class RemovableFileSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @param \Symfony\Component\Form\FormEvent $event
+     * @param FormEvent $event
      */
     private function copyFileFromFormDataToEventData(FormEvent $event)
     {
@@ -115,8 +113,8 @@ class RemovableFileSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @param \Symfony\Component\Form\FormEvent $event
-     * @return \Symfony\Component\PropertyAccess\PropertyPathInterface
+     * @param FormEvent $event
+     * @return PropertyPathInterface
      */
     private function getEventFormPropertyPath(FormEvent $event)
     {

@@ -17,12 +17,12 @@ use Symfony\Component\HttpKernel\KernelEvents;
 class TranslatableLocaleListener implements EventSubscriberInterface
 {
     /**
-     * @var \FSi\DoctrineExtensions\Translatable\TranslatableListener
+     * @var TranslatableListener
      */
     private $translatableListener;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public static function getSubscribedEvents()
     {
@@ -31,17 +31,11 @@ class TranslatableLocaleListener implements EventSubscriberInterface
         ];
     }
 
-    /**
-     * @param \FSi\DoctrineExtensions\Translatable\TranslatableListener $translatableListener
-     */
     public function __construct(TranslatableListener $translatableListener)
     {
         $this->translatableListener = $translatableListener;
     }
 
-    /**
-     * @param \Symfony\Component\HttpKernel\Event\GetResponseEvent $event
-     */
     public function onKernelRequest(GetResponseEvent $event)
     {
         $this->translatableListener->setLocale($event->getRequest()->getLocale());

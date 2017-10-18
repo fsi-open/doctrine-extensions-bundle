@@ -54,8 +54,6 @@ class FSIDoctrineExtensionsExtensionSpec extends ObjectBehavior
         $builder->setParameter('fsi_doctrine_extensions.default.filesystem.adapter.path', '%kernel.root_dir%/../web/uploaded')
             ->shouldBeCalled();
         $builder->setParameter('fsi_doctrine_extensions.listener.uploadable.configuration', [])->shouldBeCalled();
-        $builder->setParameter('fsi_doctrine_extensions.default.filesystem.adapter.prefix', 'uploaded')
-            ->shouldBeCalled();
         $builder->setParameter('fsi_doctrine_extensions.default.filesystem.base_url', '/uploaded')
             ->shouldBeCalled();
 
@@ -107,8 +105,6 @@ class FSIDoctrineExtensionsExtensionSpec extends ObjectBehavior
         $builder->setParameter('fsi_doctrine_extensions.listener.uploadable.configuration', [])
             ->shouldBeCalled();
 
-        $builder->setParameter('fsi_doctrine_extensions.default.filesystem.adapter.prefix', 'uploaded')
-            ->shouldBeCalled();
         $builder->setParameter('fsi_doctrine_extensions.default.filesystem.base_url', '/uploaded')
             ->shouldBeCalled();
 
@@ -168,8 +164,6 @@ class FSIDoctrineExtensionsExtensionSpec extends ObjectBehavior
             ]
         ])->shouldBeCalled();
 
-        $builder->setParameter('fsi_doctrine_extensions.default.filesystem.adapter.prefix', 'uploaded')
-            ->shouldBeCalled();
         $builder->setParameter('fsi_doctrine_extensions.default.filesystem.base_url', '/uploaded')
             ->shouldBeCalled();
 
