@@ -50,7 +50,38 @@ this change:
     </tbody>
 </table>
 
-## Moved is_fsi_file to Assets Twig Extension
+## Moved is_fsi_file to FilesExtension (Assets previously) Twig Extension
 
 Since it was the only function it provided, the `FSi\Bundle\DoctrineExtensionsBundle\Twig\FSi\File`
 class was removed.
+
+## Renamed Twig extension Assets to FilesExtension
+
+Differences after the change:
+
+<table>
+    <thead>
+        <tr>
+            <th>Type</th>
+            <th>Old value</th>
+            <th>New value</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Class name</td>
+            <td>FSi\Bundle\DoctrineExtensionsBundle\Twig\Extension\Assets</td>
+            <td>FSi\Bundle\DoctrineExtensionsBundle\Twig\FilesExtension</td>
+        </tr>
+        <tr>
+            <td>Service ID</td>
+            <td>fsi_doctrine_extensions.twig.extension.assets</td>
+            <td>fsi_doctrine_extensions.twig.extension.files</td>
+        </tr>
+        <tr>
+            <td>Parameter</td>
+            <td>%fsi_doctrine_extensions.twig.extension.assets.class%</td>
+            <td>%fsi_doctrine_extensions.twig.extension.files.class%</td>
+        </tr>
+    </tbody>
+</table>

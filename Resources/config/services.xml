@@ -19,7 +19,7 @@
         <parameter key="fsi_doctrine_extensions.default.filesystem.class">FSi\Bundle\DoctrineExtensionsBundle\Listener\Uploadable\Filesystem</parameter>
         <parameter key="fsi_doctrine_extensions.default.filesystem.adapter.class">Gaufrette\Adapter\Local</parameter>
         <parameter key="fsi_doctrine_extensions.request.translatable_param_converter.class">FSi\Bundle\DoctrineExtensionsBundle\Request\TranslatableParamConverter</parameter>
-        <parameter key="fsi_doctrine_extensions.twig.extension.assets.class">FSi\Bundle\DoctrineExtensionsBundle\Twig\Extension\Assets</parameter>
+        <parameter key="fsi_doctrine_extensions.twig.extension.files.class">FSi\Bundle\DoctrineExtensionsBundle\Twig\FilesExtension</parameter>
         <parameter key="fsi_doctrine_extensions.form.type.fsi.file.class">FSi\Bundle\DoctrineExtensionsBundle\Form\Type\FSi\FileType</parameter>
         <parameter key="fsi_doctrine_extensions.form.type.fsi.image.class">FSi\Bundle\DoctrineExtensionsBundle\Form\Type\FSi\ImageType</parameter>
         <parameter key="fsi_doctrine_extensions.form.type.fsi.removable_file.class">FSi\Bundle\DoctrineExtensionsBundle\Form\Type\FSi\RemovableFileType</parameter>
@@ -94,7 +94,7 @@
         </service>
 
         <!-- Twig Extension -->
-        <service id="fsi_doctrine_extensions.twig.extension.assets" class="%fsi_doctrine_extensions.twig.extension.assets.class%">
+        <service id="fsi_doctrine_extensions.twig.extension.files" class="%fsi_doctrine_extensions.twig.extension.files.class%">
             <tag name="twig.extension" />
             <argument type="service" id="fsi_doctrine_extensions.resolver.fsi.file_path" />
         </service>

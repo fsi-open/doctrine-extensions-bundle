@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-namespace FSi\Bundle\DoctrineExtensionsBundle\Twig\Extension;
+namespace FSi\Bundle\DoctrineExtensionsBundle\Twig;
 
 use FSi\Bundle\DoctrineExtensionsBundle\Resolver\FSiFilePathResolver;
 use FSi\DoctrineExtensions\Uploadable\File as FSiFile;
@@ -15,7 +15,7 @@ use Twig_Extension;
 use Twig_SimpleFilter;
 use Twig_SimpleFunction;
 
-class Assets extends Twig_Extension
+class FilesExtension extends Twig_Extension
 {
     /**
      * @var FSiFilePathResolver
@@ -32,7 +32,7 @@ class Assets extends Twig_Extension
      */
     public function getName()
     {
-        return 'fsi_assets';
+        return 'fsi_files';
     }
 
     /**

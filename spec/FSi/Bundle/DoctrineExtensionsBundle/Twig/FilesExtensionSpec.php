@@ -7,13 +7,13 @@
  * file that was distributed with this source code.
  */
 
-namespace spec\FSi\Bundle\DoctrineExtensionsBundle\Twig\Extension;
+namespace spec\FSi\Bundle\DoctrineExtensionsBundle\Twig;
 
 use FSi\Bundle\DoctrineExtensionsBundle\Resolver\FSiFilePathResolver;
 use FSi\DoctrineExtensions\Uploadable\File;
 use PhpSpec\ObjectBehavior;
 
-class AssetsSpec extends ObjectBehavior
+class FilesExtensionSpec extends ObjectBehavior
 {
     function let(FSiFilePathResolver $filePathResolver)
     {
@@ -27,7 +27,7 @@ class AssetsSpec extends ObjectBehavior
 
     function it_has_extension_name()
     {
-        $this->getName()->shouldReturn('fsi_assets');
+        $this->getName()->shouldReturn('fsi_files');
     }
 
     function it_has_fsi_functions()
