@@ -29,7 +29,6 @@ class FSiDoctrineExtensionsBundle extends Bundle
         parent::build($container);
 
         $container->addCompilerPass(new TwigFormPass());
-        $container->addCompilerPass(new TwigGlobalsPass());
         $container->addCompilerPass(new Symfony3ValidatorPass());
         $container->addCompilerPass(new GaufretteFilesystemsPass(), PassConfig::TYPE_AFTER_REMOVING);
 
