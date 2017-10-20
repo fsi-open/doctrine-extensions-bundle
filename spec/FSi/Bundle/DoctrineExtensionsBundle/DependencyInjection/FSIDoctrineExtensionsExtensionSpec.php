@@ -53,7 +53,11 @@ class FSIDoctrineExtensionsExtensionSpec extends ObjectBehavior
         $uploadable->addMethodCall('setDefaultKeymaker', Argument::type('array'))->shouldBeCalled();
         $builder->setParameter('fsi_doctrine_extensions.default.filesystem.adapter.path', '%kernel.root_dir%/../web/uploaded')
             ->shouldBeCalled();
-        $builder->setParameter('fsi_doctrine_extensions.listener.uploadable.configuration', [])->shouldBeCalled();
+
+        $uploadable->addMethodCall('setDefaultKeymaker', Argument::type('array'))->shouldBeCalled();
+
+        $uploadable->replaceArgument(2, [])->shouldBeCalled();
+
         $builder->setParameter('fsi_doctrine_extensions.default.filesystem.base_url', '/uploaded')
             ->shouldBeCalled();
 
@@ -102,8 +106,11 @@ class FSIDoctrineExtensionsExtensionSpec extends ObjectBehavior
         $builder->setParameter('fsi_doctrine_extensions.default.filesystem.adapter.path',
             '%kernel.root_dir%/../web/uploaded')->shouldBeCalled();
 
-        $builder->setParameter('fsi_doctrine_extensions.listener.uploadable.configuration', [])
-            ->shouldBeCalled();
+        $uploadable->addMethodCall('setDefaultFilesystem', Argument::type('array'))->shouldBeCalled();
+
+        $uploadable->addMethodCall('setDefaultKeymaker', Argument::type('array'))->shouldBeCalled();
+
+        $uploadable->replaceArgument(2, [])->shouldBeCalled();
 
         $builder->setParameter('fsi_doctrine_extensions.default.filesystem.base_url', '/uploaded')
             ->shouldBeCalled();
@@ -155,7 +162,14 @@ class FSIDoctrineExtensionsExtensionSpec extends ObjectBehavior
         $builder->setParameter('fsi_doctrine_extensions.default.filesystem.adapter.path',
             '%kernel.root_dir%/../web/uploaded')->shouldBeCalled();
 
-        $builder->setParameter('fsi_doctrine_extensions.listener.uploadable.configuration', [
+        $builder->setParameter('fsi_doctrine_extensions.default.filesystem.base_url', '/uploaded')
+            ->shouldBeCalled();
+
+        $uploadable->addMethodCall('setDefaultFilesystem', Argument::type('array'))->shouldBeCalled();
+
+        $uploadable->addMethodCall('setDefaultKeymaker', Argument::type('array'))->shouldBeCalled();
+
+        $uploadable->replaceArgument(2, [
             'FSi\Bundle\DemoBundle\Entity\Article' => [
                 'image' => [
                     'filesystem' => 'some_filesystem',
@@ -163,9 +177,6 @@ class FSIDoctrineExtensionsExtensionSpec extends ObjectBehavior
                 ]
             ]
         ])->shouldBeCalled();
-
-        $builder->setParameter('fsi_doctrine_extensions.default.filesystem.base_url', '/uploaded')
-            ->shouldBeCalled();
 
         $this->load([
             0 => [

@@ -69,7 +69,7 @@ class UploadableListener extends BaseListener
         if (array_key_exists($class, $this->configuration)) {
             $properties = $metadata->getUploadableProperties();
 
-            foreach ($this->configuration as $property => $configuration) {
+            foreach ($this->configuration[$class] as $property => $configuration) {
                 if (array_key_exists($property, $properties)) {
                     if (isset($configuration['filesystem'])) {
                         $properties[$property]['filesystem'] = $configuration['filesystem'];
