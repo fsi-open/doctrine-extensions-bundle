@@ -74,7 +74,7 @@
         <service id="fsi_doctrine_extensions.listener.uploadable" class="%fsi_doctrine_extensions.listener.uploadable.class%">
             <argument type="service" id="fsi_doctrine_extensions.gaufrette.filesystem_map" />
             <argument type="service" id="fsi_doctrine_extensions.filehandler.chain" />
-            <argument type="collection">{%fsi_doctrine_extensions.listener.uploadable.configuration%}</argument>
+            <argument type="collection" />
             <tag name="fsi_doctrine_extensions.listener.uploadable" priority="100" />
         </service>
 

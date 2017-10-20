@@ -100,7 +100,8 @@ class FSIDoctrineExtensionsExtension extends Extension
             $configuration[$entity] = $entityConfig['configuration'];
         }
 
-        $container->setParameter('fsi_doctrine_extensions.listener.uploadable.configuration', $configuration);
+        $uploadableListenerDefinition = $container->getDefinition('fsi_doctrine_extensions.listener.uploadable');
+        $uploadableListenerDefinition->replaceArgument(2, $configuration);
     }
 
     /**
