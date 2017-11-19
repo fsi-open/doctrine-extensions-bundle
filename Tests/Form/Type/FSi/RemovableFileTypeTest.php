@@ -11,6 +11,8 @@ namespace FSi\Bundle\DoctrineExtensionsBundle\Tests\Form\Type\FSi;
 
 use FSi\Bundle\DoctrineExtensionsBundle\Tests\Fixtures\Entity\Article;
 use FSi\Bundle\DoctrineExtensionsBundle\Tests\Fixtures\Form\Extension\FSiFileExtension;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 class RemovableFileTypeTest extends FormTypeTest
 {
@@ -22,6 +24,37 @@ class RemovableFileTypeTest extends FormTypeTest
     }
 
     public function testFormRendering()
+    {
+        $file = $this->getFileMock();
+
+        $article = new Article();
+        $article->setFile($file);
+
+        $form = $this->createTestForm($article);
+
+        $html = $this->twig->render('form_with_fsi_file.html.twig', ['form' => $form->createView()]);
+        $this->assertSame($this->getExpectedHtml('form_with_fsi_removable_file.html'), $html);
+    }
+
+    public function testFormSubmission()
+    {
+        $file = $this->getFileMock();
+
+        $article = new Article();
+        $article->setFile($file);
+
+        $form = $this->createTestForm($article);
+
+        $request = new Request([], ['form' => ['file' => ['file' => null]]]);
+        $request->setMethod('POST');
+        $form->handleRequest($request);
+
+        $this->assertTrue($form->isSubmitted());
+        $this->assertTrue($form->isValid());
+        $this->assertSame($article->getFile(), $file);
+    }
+
+    private function getFileMock()
     {
         $file = $this->getMockBuilder('FSi\DoctrineExtensions\Uploadable\File')
             ->disableOriginalConstructor()
@@ -57,9 +90,11 @@ class RemovableFileTypeTest extends FormTypeTest
             ->method('getName')
             ->will($this->returnValue('Article/file/1/image name.jpg'));
 
-        $article = new Article();
-        $article->setFile($file);
+        return $file;
+    }
 
+    private function createTestForm(Article $article): FormInterface
+    {
         $form = $this->factory->create(
             $this->isSymfony3() ? 'Symfony\Component\Form\Extension\Core\Type\FormType' : 'form',
             $article
@@ -67,9 +102,6 @@ class RemovableFileTypeTest extends FormTypeTest
 
         $form->add('file', $this->isSymfony3() ? 'FSi\Bundle\DoctrineExtensionsBundle\Form\Type\FSi\RemovableFileType' : 'fsi_removable_file');
 
-        $html = $this->twig->render('form_with_fsi_file.html.twig', [
-            'form' => $form->createView()
-        ]);
-        $this->assertSame($this->getExpectedHtml('form_with_fsi_removable_file.html'), $html);
+        return $form;
     }
 }
