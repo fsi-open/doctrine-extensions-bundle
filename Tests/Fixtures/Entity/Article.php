@@ -23,7 +23,7 @@ class Article
         return $this->file;
     }
 
-    public function setFile(File $file)
+    public function setFile(?File $file)
     {
         $this->file = $file;
     }

@@ -23,6 +23,8 @@
         <parameter key="fsi_doctrine_extensions.form.type.fsi.file.class">FSi\Bundle\DoctrineExtensionsBundle\Form\Type\FSi\FileType</parameter>
         <parameter key="fsi_doctrine_extensions.form.type.fsi.image.class">FSi\Bundle\DoctrineExtensionsBundle\Form\Type\FSi\ImageType</parameter>
         <parameter key="fsi_doctrine_extensions.form.type.fsi.removable_file.class">FSi\Bundle\DoctrineExtensionsBundle\Form\Type\FSi\RemovableFileType</parameter>
+        <parameter key="fsi_doctrine_extensions.form.request_handler.class">FSi\Bundle\DoctrineExtensionsBundle\Form\FSiUploadableRequestHandler</parameter>
+        <parameter key="fsi_doctrine_extensions.form.type_extension.fsi_upload.class">FSi\Bundle\DoctrineExtensionsBundle\Form\TypeExtension\FileUploadFormExtension</parameter>
         <parameter key="fsi_doctrine_extensions.resolver.fsi.file_path.class">FSi\Bundle\DoctrineExtensionsBundle\Resolver\FSiFilePathResolver</parameter>
         <parameter key="fsi_doctrine_extensions.validator.file.class">FSi\Bundle\DoctrineExtensionsBundle\Validator\Constraints\FileValidator</parameter>
         <parameter key="fsi_doctrine_extensions.validator.image.class">FSi\Bundle\DoctrineExtensionsBundle\Validator\Constraints\ImageValidator</parameter>
@@ -111,6 +113,15 @@
         <service id="fsi_doctrine_extensions.form.type.fsi.removable_file" class="%fsi_doctrine_extensions.form.type.fsi.removable_file.class%">
             <argument type="service" id="fsi_doctrine_extensions.form.subscriber.removable_file"/>
             <tag name="form.type" alias="fsi_removable_file" />
+        </service>
+
+        <service id="fsi_doctrine_extensions.form.request_handler" class="%fsi_doctrine_extensions.form.request_handler.class%">
+            <argument type="service" id="form.server_params" />
+        </service>
+
+        <service id="fsi_doctrine_extensions.form.type_extension.fsi_upload" class="%fsi_doctrine_extensions.form.type_extension.fsi_upload.class%">
+            <argument type="service" id="fsi_doctrine_extensions.form.request_handler" />
+            <tag name="form.type_extension" alias="fsi_removable_file" />
         </service>
 
         <!-- Validators -->
