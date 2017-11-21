@@ -121,7 +121,7 @@
 
         <service id="fsi_doctrine_extensions.form.type_extension.fsi_upload" class="%fsi_doctrine_extensions.form.type_extension.fsi_upload.class%">
             <argument type="service" id="fsi_doctrine_extensions.form.request_handler" />
-            <tag name="form.type_extension" alias="fsi_removable_file" />
+            <tag name="form.type_extension" alias="fsi_removable_file" extended-type="Symfony\Component\Form\Extension\Core\Type\FormType" />
         </service>
 
         <!-- Validators -->
