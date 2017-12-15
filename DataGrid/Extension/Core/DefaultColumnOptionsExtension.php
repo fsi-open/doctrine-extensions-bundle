@@ -13,7 +13,7 @@ use FSi\Component\DataGrid\Extension\Core\ColumnTypeExtension\DefaultColumnOptio
 
 class DefaultColumnOptionsExtension extends BaseExtension
 {
-    public function getExtendedColumnTypes()
+    public function getExtendedColumnTypes(): array
     {
         return ['fsi_file', 'fsi_image'];
     }
