@@ -22,7 +22,9 @@ use Symfony\Bundle\TwigBundle\Extension\AssetsExtension;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\Asset\UrlPackage;
 use Symfony\Component\Asset\VersionStrategy\EmptyVersionStrategy;
+use Symfony\Component\Form\FormRenderer;
 // prior to 2.7 asset component was part of FrameworkBundle
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Templating\Asset\UrlPackage as LegacyUrlPackage;
 use Symfony\Component\Form\Test\FormIntegrationTestCase;
 
@@ -55,15 +57,20 @@ abstract class FormTypeTest extends FormIntegrationTestCase
             'form_div_layout.html.twig',
             'Form/form_div_layout.html.twig'
         ], $twig);
-        $renderer = new TwigRenderer(
-            $rendererEngine,
-            $this->getMockBuilder('Symfony\Component\Security\Csrf\CsrfTokenManagerInterface')->getMock()
-        );
+        if (class_exists(FormRenderer::class)) {
+            $renderer = new FormRenderer($rendererEngine);
+        } else {
+            $renderer = new TwigRenderer(
+                $rendererEngine,
+                $this->getMockBuilder(CsrfTokenManagerInterface::class)->getMock()
+            );
+        }
 
         if (class_exists('Symfony\Bridge\Twig\Extension\AssetExtension')) {
             $runtimeLoader = $this->getMockBuilder('Twig_RuntimeLoaderInterface')->getMock();
             $runtimeLoader->expects($this->any())->method('load')->will($this->returnValueMap([
-                ['Symfony\Bridge\Twig\Form\TwigRenderer', $renderer],
+                [TwigRenderer::class, $renderer],
+                [FormRenderer::class, $renderer],
             ]));
             $twig->addRuntimeLoader($runtimeLoader);
 
