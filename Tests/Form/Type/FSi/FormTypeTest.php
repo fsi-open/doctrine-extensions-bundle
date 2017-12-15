@@ -11,6 +11,7 @@ namespace FSi\Bundle\DoctrineExtensionsBundle\Tests\Form\Type\FSi;
 
 use FSi\Bundle\DoctrineExtensionsBundle\Resolver\FSiFilePathResolver;
 use FSi\Bundle\DoctrineExtensionsBundle\Twig\FilesExtension;
+use Symfony\Bridge\Twig\Command\DebugCommand;
 use Symfony\Bridge\Twig\Extension\AssetExtension;
 use Symfony\Bridge\Twig\Extension\FormExtension;
 use Symfony\Bridge\Twig\Extension\TranslationExtension;
@@ -57,7 +58,7 @@ abstract class FormTypeTest extends FormIntegrationTestCase
             'form_div_layout.html.twig',
             'Form/form_div_layout.html.twig'
         ], $twig);
-        if (class_exists(FormRenderer::class)) {
+        if (method_exists(DebugCommand::class, 'getLoaderPaths')) {
             $renderer = new FormRenderer($rendererEngine);
         } else {
             $renderer = new TwigRenderer(
