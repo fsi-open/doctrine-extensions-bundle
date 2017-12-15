@@ -17,7 +17,7 @@ class FSiImage extends ColumnAbstractType
     /**
      * {@inheritdoc}
      */
-    public function getId()
+    public function getId(): string
     {
         return 'fsi_image';
     }
@@ -33,7 +33,7 @@ class FSiImage extends ColumnAbstractType
     /**
      * {@inheritdoc}
      */
-    public function buildCellView(CellViewInterface $view)
+    public function buildCellView(CellViewInterface $view): void
     {
         $view->setAttribute('width', $this->getOption('width'));
     }
@@ -41,7 +41,7 @@ class FSiImage extends ColumnAbstractType
     /**
      * {@inheritdoc}
      */
-    public function initOptions()
+    public function initOptions(): void
     {
         $this->getOptionsResolver()
             ->setRequired(['width'])

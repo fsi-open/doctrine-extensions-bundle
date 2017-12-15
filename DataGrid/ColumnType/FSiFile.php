@@ -16,7 +16,7 @@ class FSiFile extends ColumnAbstractType
     /**
      * {@inheritdoc}
      */
-    public function getId()
+    public function getId(): string
     {
         return 'fsi_file';
     }
