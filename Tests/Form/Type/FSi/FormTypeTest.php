@@ -107,7 +107,7 @@ abstract class FormTypeTest extends FormIntegrationTestCase
             throw new \RuntimeException(sprintf('Invalid expected html file path "%s"', $path));
         }
 
-        return file_get_contents($path);
+        return trim(file_get_contents($path));
     }
 
     protected function isSymfony3()

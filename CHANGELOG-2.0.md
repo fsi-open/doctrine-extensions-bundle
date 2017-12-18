@@ -85,3 +85,9 @@ Differences after the change:
         </tr>
     </tbody>
 </table>
+
+## FileType form type has a new option
+
+The new `'file_url'` option can be useful when there's a need to generate
+custom URLs to uploaded files. It accepts a callable which should return
+the file's URL using the passed `UrlGeneratorInterface` and `FormInterface` arguments.

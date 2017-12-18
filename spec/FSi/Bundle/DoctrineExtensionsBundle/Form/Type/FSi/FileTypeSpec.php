@@ -9,13 +9,20 @@
 
 namespace spec\FSi\Bundle\DoctrineExtensionsBundle\Form\Type\FSi;
 
+use FSi\Bundle\DoctrineExtensionsBundle\Resolver\FSiFilePathResolver;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class FileTypeSpec extends ObjectBehavior
 {
+    function let(UrlGeneratorInterface $urlGenerator, FSiFilePathResolver $filePathResolver)
+    {
+        $this->beConstructedWith($urlGenerator, $filePathResolver);
+    }
+
     function it_is_initializable()
     {
         $this->shouldHaveType('FSi\Bundle\DoctrineExtensionsBundle\Form\Type\FSi\FileType');
@@ -43,6 +50,8 @@ class FileTypeSpec extends ObjectBehavior
                 Argument::withEntry(0, Argument::type('\FSi\Bundle\DoctrineExtensionsBundle\Validator\Constraints\File'))
             )
         ))->shouldBeCalled();
+        $resolver->setDefined('file_url')->shouldBeCalled();
+        $resolver->setAllowedTypes('file_url', ['null', 'callable'])->shouldBeCalled();
 
         if ($this->isSymfony27()) {
             $this->configureOptions($resolver);

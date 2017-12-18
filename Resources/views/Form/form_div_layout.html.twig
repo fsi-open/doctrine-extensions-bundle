@@ -6,7 +6,7 @@
         {% if form.vars.data is not null %}
             {% if is_fsi_file(form.vars.data) %}
                 <div>
-                    <a href="{{ fsi_file_url(form.vars.data) }}" data-for="{{ form.vars.id }}" target="_blank">{{ form.vars.data|fsi_file_basename }}</a>
+                    <a href="{{ form.vars.file_url }}" data-for="{{ form.vars.id }}" target="_blank">{{ form.vars.data|fsi_file_basename }}</a>
                 </div>
             {% elseif form.vars.valid %}
                 <div>{{ 'fsi_file.refresh'|trans({}, 'FSiDoctrineExtensionsBundle') }}</div>

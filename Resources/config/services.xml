@@ -103,6 +103,8 @@
 
         <!-- Symfony Form Types -->
         <service id="fsi_doctrine_extensions.form.type.fsi.file" class="%fsi_doctrine_extensions.form.type.fsi.file.class%">
+            <argument type="service" id="router" />
+            <argument type="service" id="fsi_doctrine_extensions.resolver.fsi.file_path" />
             <tag name="form.type" alias="fsi_file" />
         </service>
 

@@ -48,10 +48,7 @@ class FilesExtensionSpec extends ObjectBehavior
         $this->isFSiFile($file)->shouldReturn(true);
     }
 
-    /**
-     * @return array|bool
-     */
-    public function getMatchers()
+    public function getMatchers(): array
     {
         return [
             'haveFunction' => function($subject, $key) {

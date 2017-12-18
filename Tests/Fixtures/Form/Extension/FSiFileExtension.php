@@ -14,15 +14,33 @@ use FSi\Bundle\DoctrineExtensionsBundle\Form\FSiUploadableRequestHandler;
 use FSi\Bundle\DoctrineExtensionsBundle\Form\Type\FSi\FileType;
 use FSi\Bundle\DoctrineExtensionsBundle\Form\Type\FSi\RemovableFileType;
 use FSi\Bundle\DoctrineExtensionsBundle\Form\TypeExtension\FileUploadFormExtension;
+use FSi\Bundle\DoctrineExtensionsBundle\Resolver\FSiFilePathResolver;
 use Symfony\Component\Form\AbstractExtension;
 use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class FSiFileExtension extends AbstractExtension
 {
+    /**
+     * @var UrlGeneratorInterface
+     */
+    private $urlGenerator;
+
+    /**
+     * @var FSiFilePathResolver
+     */
+    private $filePathResolver;
+
+    public function __construct(UrlGeneratorInterface $urlGenerator, FSiFilePathResolver $filePathResolver)
+    {
+        $this->urlGenerator = $urlGenerator;
+        $this->filePathResolver = $filePathResolver;
+    }
+
     protected function loadTypes()
     {
         return [
-            new FileType(),
+            new FileType($this->urlGenerator, $this->filePathResolver),
             new RemovableFileType(new RemovableFileSubscriber(PropertyAccess::createPropertyAccessor()))
         ];
     }
