@@ -11,6 +11,11 @@ removed.
 
 ## Make use of `'file_url'` form variable in file form's view
 
-Instead of calling `fsi_file_url(form.vars.data)` you can use prepared
-`form.vars.file_url` variable. This change is not necessary however required
-if you want to use new `'file_url'` file form's option.
+Instead of calling `fsi_file_url(form.vars.data)` you can use the prepared
+`form.vars.file_url` variable. This change is not necessary, however it is
+required if you want to use the new `'file_url'` file form's option.
+
+## FileType has the new constructor with two arguments
+
+You should probably update any class that inherits from the original
+`FSi\Bundle\DoctrineExtensionsBundle\Form\Type\FSi\FileType`.

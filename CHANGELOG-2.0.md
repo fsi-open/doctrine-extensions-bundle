@@ -86,8 +86,8 @@ Differences after the change:
     </tbody>
 </table>
 
-## FSiFile form type has new option
+## FileType form type has a new option
 
 The new `'file_url'` option can be useful when there's a need to generate
-custom URLs to uploaded files. It accepts callable which should return file's
-URL using passed `UrlGeneratorInterface` and `FormInterface` arguments.
+custom URLs to uploaded files. It accepts a callable which should return
+the file's URL using the passed `UrlGeneratorInterface` and `FormInterface` arguments.

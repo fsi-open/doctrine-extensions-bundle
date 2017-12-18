@@ -1,11 +1,11 @@
 # Form types
 
-Additional form types associated with uploadable files. All of these form types require a field that holds 
+Additional form types associated with uploadable files. All of these form types require a field that holds
 ``FSi\DoctrineExtensions\Uploadable\File`` or ``null`` in their form data.
 
 ## fsi_file form type
 
-This type can display URL to the uploaded file below file input 
+This type can display URL to the uploaded file below file input
 
 Usage:
 ```php
@@ -13,7 +13,7 @@ $form = $formFactory->create('form', $entity);
 $form->add('file', 'fsi_file');
 ```
 
-There is only one option `'file_url'` which can be any callable with following signature:
+It has only a single option - `'file_url'` - which can be any callable with the following signature:
 
 ```php
 function (UrlGeneratorInterface $urlGenerator, FormInterface $form): string;
