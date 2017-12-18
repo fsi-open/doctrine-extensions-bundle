@@ -10,14 +10,35 @@
 namespace FSi\Bundle\DoctrineExtensionsBundle\Form\Type\FSi;
 
 use FSi\Bundle\DoctrineExtensionsBundle\Form\EventListener\FileSubscriber;
+use FSi\Bundle\DoctrineExtensionsBundle\Resolver\FSiFilePathResolver;
 use FSi\Bundle\DoctrineExtensionsBundle\Validator\Constraints\File;
+use FSi\DoctrineExtensions\Uploadable\File as FSiFile;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class FileType extends AbstractType
 {
+    /**
+     * @var UrlGeneratorInterface
+     */
+    private $urlGenerator;
+
+    /**
+     * @var FSiFilePathResolver
+     */
+    private $filePathResolver;
+
+    public function __construct(UrlGeneratorInterface $urlGenerator, FSiFilePathResolver $filePathResolver)
+    {
+        $this->urlGenerator = $urlGenerator;
+        $this->filePathResolver = $filePathResolver;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -55,6 +76,23 @@ class FileType extends AbstractType
     /**
      * {@inheritdoc}
      */
+    public function buildView(FormView $view, FormInterface $form, array $options)
+    {
+        if (!$form->getData() instanceof FSiFile) {
+            return;
+        }
+
+        if (isset($options['file_url'])) {
+            $fileUrlCallable = $options['file_url'];
+            $view->vars['file_url'] = $fileUrlCallable($this->urlGenerator, $form);
+        } else {
+            $view->vars['file_url'] = $this->filePathResolver->fileUrl($form->getData());
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $this->configureOptions($resolver);
@@ -71,6 +109,8 @@ class FileType extends AbstractType
                 new File(),
             ]
         ]);
+        $resolver->setDefined('file_url');
+        $resolver->setAllowedTypes('file_url', ['null', 'callable']);
     }
 
     /**

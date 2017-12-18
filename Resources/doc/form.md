@@ -13,6 +13,15 @@ $form = $formFactory->create('form', $entity);
 $form->add('file', 'fsi_file');
 ```
 
+There is only one option `'file_url'` which can be any callable with following signature:
+
+```php
+function (UrlGeneratorInterface $urlGenerator, FormInterface $form): string;
+```
+
+This function should return the URL to the previously uploaded file. Returned URL will be passed to the
+form's view as `'file_url'` form variable and rendered in an `href` attribute of an `a` tag.
+
 ## fsi_image form type
 
 It extends image form type from symfony and displays uploaded image preview instead of its URL

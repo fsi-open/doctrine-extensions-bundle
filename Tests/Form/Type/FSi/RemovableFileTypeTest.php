@@ -9,17 +9,22 @@
 
 namespace FSi\Bundle\DoctrineExtensionsBundle\Tests\Form\Type\FSi;
 
+use FSi\Bundle\DoctrineExtensionsBundle\Resolver\FSiFilePathResolver;
 use FSi\Bundle\DoctrineExtensionsBundle\Tests\Fixtures\Entity\Article;
 use FSi\Bundle\DoctrineExtensionsBundle\Tests\Fixtures\Form\Extension\FSiFileExtension;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class RemovableFileTypeTest extends FormTypeTest
 {
     public function getExtensions()
     {
         return [
-            new FSiFileExtension()
+            new FSiFileExtension(
+                $this->getMockBuilder(UrlGeneratorInterface::class)->disableOriginalConstructor()->getMock(),
+                new FSiFilePathResolver()
+            ),
         ];
     }
 

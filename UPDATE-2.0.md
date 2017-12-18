@@ -8,3 +8,9 @@ In order to use this bundle, you will need PHP 7.1 or higher.
 
 Refer to to the [CHANGELOG](CHANGELOG-2.0.md) on information on what has been
 removed.
+
+## Make use of `'file_url'` form variable in file form's view
+
+Instead of calling `fsi_file_url(form.vars.data)` you can use prepared
+`form.vars.file_url` variable. This change is not necessary however required
+if you want to use new `'file_url'` file form's option.
