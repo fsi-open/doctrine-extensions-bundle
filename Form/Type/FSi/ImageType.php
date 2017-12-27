@@ -7,8 +7,11 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace FSi\Bundle\DoctrineExtensionsBundle\Form\Type\FSi;
 
+use FSi\Bundle\DoctrineExtensionsBundle\Form\Type\FSi\FileType;
 use FSi\Bundle\DoctrineExtensionsBundle\Validator\Constraints\Image;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -21,9 +24,7 @@ class ImageType extends AbstractType
      */
     public function getParent()
     {
-        return $this->isSymfony3()
-            ? 'FSi\Bundle\DoctrineExtensionsBundle\Form\Type\FSi\FileType'
-            : 'fsi_file';
+        return $this->isSymfony3() ? FileType::class : 'fsi_file';
     }
 
     /**
@@ -56,17 +57,15 @@ class ImageType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'constraints' => [
-                new Image(),
-            ],
+            'constraints' => [new Image()],
         ]);
     }
 
     /**
      * @return bool
      */
-    private function isSymfony3()
+    private function isSymfony3(): bool
     {
-        return method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix');
+        return method_exists(AbstractType::class, 'getBlockPrefix');
     }
 }

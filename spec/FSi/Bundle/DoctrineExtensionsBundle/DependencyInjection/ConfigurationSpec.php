@@ -7,20 +7,23 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace spec\FSi\Bundle\DoctrineExtensionsBundle\DependencyInjection;
 
+use FSi\Bundle\DoctrineExtensionsBundle\DependencyInjection\Configuration;
 use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
+use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
 class ConfigurationSpec extends ObjectBehavior
 {
     function it_is_initializable()
     {
-        $this->shouldHaveType('\FSi\Bundle\DoctrineExtensionsBundle\DependencyInjection\Configuration');
+        $this->shouldHaveType(Configuration::class);
     }
 
     function it_should_return_tree()
     {
-        $this->getConfigTreeBuilder()->shouldReturnAnInstanceOf('\Symfony\Component\Config\Definition\Builder\TreeBuilder');
+        $this->getConfigTreeBuilder()->shouldReturnAnInstanceOf(TreeBuilder::class);
     }
 }

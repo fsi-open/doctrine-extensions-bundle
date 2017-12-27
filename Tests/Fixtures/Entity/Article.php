@@ -7,6 +7,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace FSi\Bundle\DoctrineExtensionsBundle\Tests\Fixtures\Entity;
 
 use FSi\DoctrineExtensions\Uploadable\File;
@@ -14,9 +16,9 @@ use FSi\DoctrineExtensions\Uploadable\File;
 class Article
 {
     /**
-     * @var \FSi\DoctrineExtensions\Uploadable\File
+     * @var File
      */
-    protected $file;
+    private $file;
 
     public function getFile()
     {

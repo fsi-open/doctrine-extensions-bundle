@@ -7,6 +7,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace FSi\Bundle\DoctrineExtensionsBundle\Exception\Uploadable;
 
 use FSi\DoctrineExtensions\Uploadable\Exception\RuntimeException;

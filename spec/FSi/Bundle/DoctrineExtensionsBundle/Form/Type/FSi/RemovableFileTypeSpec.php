@@ -7,12 +7,18 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace spec\FSi\Bundle\DoctrineExtensionsBundle\Form\Type\FSi;
 
 use FSi\Bundle\DoctrineExtensionsBundle\Form\EventListener\FileSubscriber;
 use FSi\Bundle\DoctrineExtensionsBundle\Form\EventListener\RemovableFileSubscriber;
+use FSi\Bundle\DoctrineExtensionsBundle\Form\Type\FSi\FileType;
 use PhpSpec\ObjectBehavior;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
@@ -28,7 +34,7 @@ class RemovableFileTypeSpec extends ObjectBehavior
 
     function it_is_form_type()
     {
-        $this->shouldBeAnInstanceOf('Symfony\Component\Form\AbstractType');
+        $this->shouldBeAnInstanceOf(AbstractType::class);
     }
 
     function it_should_have_valid_name()
@@ -38,10 +44,7 @@ class RemovableFileTypeSpec extends ObjectBehavior
 
     function it_should_be_child_of_form_type()
     {
-        $this->getParent()->shouldReturn($this->isSymfony28()
-            ? 'Symfony\Component\Form\Extension\Core\Type\FormType'
-            : 'form'
-        );
+        $this->getParent()->shouldReturn($this->isSymfony28() ? FormType::class : 'form');
     }
 
     function it_should_set_default_options(OptionsResolver $resolver)
@@ -52,13 +55,9 @@ class RemovableFileTypeSpec extends ObjectBehavior
             'inherit_data' => true,
             'required' => false,
             'remove_name' => 'remove',
-            'remove_type' => $this->isSymfony28()
-                ? 'Symfony\Component\Form\Extension\Core\Type\CheckboxType'
-                : 'checkbox',
+            'remove_type' => $this->isSymfony28() ? CheckboxType::class : 'checkbox',
             'remove_options' => [],
-            'file_type' => $this->isSymfony28()
-                ? 'FSi\Bundle\DoctrineExtensionsBundle\Form\Type\FSi\FileType'
-                : 'fsi_file',
+            'file_type' => $this->isSymfony28() ? FileType::class : 'fsi_file',
             'file_options' => [],
         ])->shouldBeCalled();
 
@@ -80,8 +79,8 @@ class RemovableFileTypeSpec extends ObjectBehavior
         FormBuilderInterface $fileBuilder,
         EventDispatcherInterface $fileEventDispatcher,
         FileSubscriber $fileSubscriber,
-        RemovableFileSubscriber $removableFileSubscriber)
-    {
+        RemovableFileSubscriber $removableFileSubscriber
+    ) {
         $builder->getName()->willReturn('file_field_name');
 
         $builder->add('file_field_name', 'file_field_type', [
@@ -106,8 +105,7 @@ class RemovableFileTypeSpec extends ObjectBehavior
         ]);
         $fileEventDispatcher->removeSubscriber($fileSubscriber)->shouldBeCalled();
 
-        $builder->addEventSubscriber($removableFileSubscriber)
-            ->shouldBeCalled();
+        $builder->addEventSubscriber($removableFileSubscriber)->shouldBeCalled();
 
         $this->buildForm($builder, [
             'file_type' => 'file_field_type',
@@ -127,27 +125,19 @@ class RemovableFileTypeSpec extends ObjectBehavior
 
         $view->offsetGet('file')->willReturn($fileView);
         $view->vars = ['label_attr' => []];
-
         $fileView->vars = ['id' => 'form_file_file'];
-
         $this->finishView($view, $form, []);
 
         expect($view->vars['label_attr']['for'])->toBe('form_file_file');
     }
 
-    /**
-     * @return bool
-     */
-    private function isSymfony27()
+    private function isSymfony27(): bool
     {
-        return method_exists('Symfony\Component\Form\AbstractType', 'configureOptions');
+        return method_exists(AbstractType::class, 'configureOptions');
     }
 
-    /**
-     * @return bool
-     */
-    private function isSymfony28()
+    private function isSymfony28(): bool
     {
-        return method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix');
+        return method_exists(AbstractType::class, 'getBlockPrefix');
     }
 }

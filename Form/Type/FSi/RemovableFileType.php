@@ -7,18 +7,23 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace FSi\Bundle\DoctrineExtensionsBundle\Form\Type\FSi;
 
 use FSi\Bundle\DoctrineExtensionsBundle\Form\EventListener\FileSubscriber;
 use FSi\Bundle\DoctrineExtensionsBundle\Form\EventListener\RemovableFileSubscriber;
+use FSi\Bundle\DoctrineExtensionsBundle\Form\Type\FSi\FileType;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 class RemovableFileType extends AbstractType
 {
@@ -27,9 +32,6 @@ class RemovableFileType extends AbstractType
      */
     private $fileSubscriber;
 
-    /**
-     * @param RemovableFileSubscriber $fileSubscriber
-     */
     public function __construct(RemovableFileSubscriber $fileSubscriber)
     {
         $this->fileSubscriber = $fileSubscriber;
@@ -40,9 +42,7 @@ class RemovableFileType extends AbstractType
      */
     public function getParent()
     {
-        return $this->isSymfony3()
-            ? 'Symfony\Component\Form\Extension\Core\Type\FormType'
-            : 'form';
+        return $this->isSymfony3() ? FormType::class : 'form';
     }
 
     /**
@@ -103,13 +103,9 @@ class RemovableFileType extends AbstractType
             'inherit_data' => true,
             'required' => false,
             'remove_name' => 'remove',
-            'remove_type' => $this->isSymfony3()
-                ? 'Symfony\Component\Form\Extension\Core\Type\CheckboxType'
-                : 'checkbox',
+            'remove_type' => $this->isSymfony3() ? CheckboxType::class : 'checkbox',
             'remove_options' => [],
-            'file_type' => $this->isSymfony3()
-                ? 'FSi\Bundle\DoctrineExtensionsBundle\Form\Type\FSi\FileType'
-                : 'fsi_file',
+            'file_type' => $this->isSymfony3() ? FileType::class : 'fsi_file',
             'file_options' => [],
         ]);
 
@@ -120,10 +116,7 @@ class RemovableFileType extends AbstractType
         $resolver->setAllowedTypes('file_options', 'array');
     }
 
-    /**
-     * @param \Symfony\Component\Form\FormBuilderInterface $builder
-     */
-    private function removeFSiFileEventSubscriber(FormBuilderInterface $builder)
+    private function removeFSiFileEventSubscriber(FormBuilderInterface $builder): void
     {
         foreach ($this->getFilePreSubmitListeners($builder) as $preSubmitListener) {
             if ($this->isFileSubscriber($preSubmitListener)) {
@@ -132,41 +125,25 @@ class RemovableFileType extends AbstractType
         }
     }
 
-    /**
-     * @param \Symfony\Component\Form\FormBuilderInterface $builder
-     * @return array|callable[]
-     */
-    private function getFilePreSubmitListeners(FormBuilderInterface $builder)
+    private function getFilePreSubmitListeners(FormBuilderInterface $builder): array
     {
-        return $this->getFileEventDispatcher($builder)
-            ->getListeners(FormEvents::PRE_SUBMIT);
+        return $this->getFileEventDispatcher($builder)->getListeners(FormEvents::PRE_SUBMIT);
     }
 
-    /**
-     * @param \Symfony\Component\Form\FormBuilderInterface $builder
-     * @return \Symfony\Component\EventDispatcher\EventDispatcherInterface
-     */
-    private function getFileEventDispatcher(FormBuilderInterface $builder)
+    private function getFileEventDispatcher(FormBuilderInterface $builder): EventDispatcherInterface
     {
-        return $builder->get($builder->getName())
-            ->getEventDispatcher();
+        return $builder->get($builder->getName())->getEventDispatcher();
     }
 
-    /**
-     * @param callable $listener
-     * @return boolean
-     */
-    private function isFileSubscriber($listener)
+    private function isFileSubscriber($listener): bool
     {
-        return is_array($listener) &&
-            isset($listener[0]) &&
-            ($listener[0] instanceof FileSubscriber);
+        return is_array($listener)
+            && isset($listener[0])
+            && $listener[0] instanceof FileSubscriber
+        ;
     }
 
-    /**
-     * @return array
-     */
-    private function getDefaultFileOptions()
+    private function getDefaultFileOptions(): array
     {
         return [
             'label' => false,
@@ -174,10 +151,7 @@ class RemovableFileType extends AbstractType
         ];
     }
 
-    /**
-     * @return array
-     */
-    private function getDefaultRemoveOptions()
+    private function getDefaultRemoveOptions(): array
     {
         return [
             'required' => false,
@@ -187,11 +161,8 @@ class RemovableFileType extends AbstractType
         ];
     }
 
-    /**
-     * @return bool
-     */
-    private function isSymfony3()
+    private function isSymfony3(): bool
     {
-        return method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix');
+        return method_exists(AbstractType::class, 'getBlockPrefix');
     }
 }

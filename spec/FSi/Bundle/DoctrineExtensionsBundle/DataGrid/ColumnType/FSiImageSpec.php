@@ -7,10 +7,14 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace spec\FSi\Bundle\DoctrineExtensionsBundle\DataGrid\ColumnType;
 
 use FSi\Component\DataGrid\Column\CellViewInterface;
 use PhpSpec\ObjectBehavior;
+use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
+use Symfony\Component\OptionsResolver\Exception\MissingOptionsException;
 
 class FSiImageSpec extends ObjectBehavior
 {
@@ -25,15 +29,13 @@ class FSiImageSpec extends ObjectBehavior
     function it_accepts_only_integer_width()
     {
         $this->initOptions();
-        $this->shouldThrow('Symfony\Component\OptionsResolver\Exception\InvalidOptionsException')
-            ->duringSetOptions(['width' => 'a']);
+        $this->shouldThrow(InvalidOptionsException::class)->duringSetOptions(['width' => 'a']);
     }
 
     function it_requires_width_option()
     {
         $this->initOptions();
-        $this->shouldThrow('Symfony\Component\OptionsResolver\Exception\MissingOptionsException')
-            ->duringSetOptions([]);
+        $this->shouldThrow(MissingOptionsException::class)->duringSetOptions([]);
     }
 
     function it_passes_width_as_view_attribute(CellViewInterface $cellView)

@@ -7,21 +7,21 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace FSi\Bundle\DoctrineExtensionsBundle\Listener\Uploadable;
 
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
+use FSi\Bundle\DoctrineExtensionsBundle\Listener\Uploadable\UploadableListener;
 
 class UploadablePostLoadListener implements EventSubscriber
 {
     /**
-     * @var \FSi\Bundle\DoctrineExtensionsBundle\Listener\Uploadable\UploadableListener
+     * @var UploadableListener
      */
     private $uploadableListener;
 
-    /**
-     * @param \FSi\Bundle\DoctrineExtensionsBundle\Listener\Uploadable\UploadableListener $uploadableListener
-     */
     public function __construct(UploadableListener $uploadableListener)
     {
         $this->uploadableListener = $uploadableListener;
@@ -37,11 +37,6 @@ class UploadablePostLoadListener implements EventSubscriber
         ];
     }
 
-    /**
-     * After loading the entity load file if any.
-     *
-     * @param \Doctrine\ORM\Event\LifecycleEventArgs $eventArgs
-     */
     public function postLoad(LifecycleEventArgs $eventArgs)
     {
         $this->uploadableListener->postLoad($eventArgs);

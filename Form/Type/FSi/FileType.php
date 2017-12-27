@@ -7,6 +7,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace FSi\Bundle\DoctrineExtensionsBundle\Form\Type\FSi;
 
 use FSi\Bundle\DoctrineExtensionsBundle\Form\EventListener\FileSubscriber;
@@ -14,6 +16,7 @@ use FSi\Bundle\DoctrineExtensionsBundle\Resolver\FSiFilePathResolver;
 use FSi\Bundle\DoctrineExtensionsBundle\Validator\Constraints\File;
 use FSi\DoctrineExtensions\Uploadable\File as FSiFile;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType as SymfonyFileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -44,9 +47,7 @@ class FileType extends AbstractType
      */
     public function getParent()
     {
-        return $this->isSymfony3()
-            ? 'Symfony\Component\Form\Extension\Core\Type\FileType'
-            : 'file';
+        return $this->isSymfony3() ? SymfonyFileType::class : 'file';
     }
 
     /**
@@ -104,20 +105,15 @@ class FileType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'FSi\DoctrineExtensions\Uploadable\File',
-            'constraints' => [
-                new File(),
-            ]
+            'data_class' => FSiFile::class,
+            'constraints' => [new File()]
         ]);
         $resolver->setDefined('file_url');
         $resolver->setAllowedTypes('file_url', ['null', 'callable']);
     }
 
-    /**
-     * @return bool
-     */
-    private function isSymfony3()
+    private function isSymfony3(): bool
     {
-        return method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix');
+        return method_exists(AbstractType::class, 'getBlockPrefix');
     }
 }

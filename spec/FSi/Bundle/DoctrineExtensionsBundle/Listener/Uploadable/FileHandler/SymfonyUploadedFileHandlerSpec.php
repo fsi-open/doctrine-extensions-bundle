@@ -7,8 +7,12 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace spec\FSi\Bundle\DoctrineExtensionsBundle\Listener\Uploadable\FileHandler;
 
+use FSi\Bundle\DoctrineExtensionsBundle\Listener\Uploadable\FileHandler\SymfonyUploadedFileHandler;
+use FSi\DoctrineExtensions\Uploadable\FileHandler\AbstractHandler;
 use PhpSpec\ObjectBehavior;
 use Symfony\Component\HttpFoundation\File\UploadedFile as SymfonyUploadedFile;
 
@@ -16,12 +20,12 @@ class SymfonyUploadedFileHandlerSpec extends ObjectBehavior
 {
     function it_is_initializable()
     {
-        $this->shouldHaveType('FSi\Bundle\DoctrineExtensionsBundle\Listener\Uploadable\FileHandler\SymfonyUploadedFileHandler');
+        $this->shouldHaveType(SymfonyUploadedFileHandler::class);
     }
 
     function it_should_be_file_handler()
     {
-        $this->shouldBeAnInstanceOf('FSi\DoctrineExtensions\Uploadable\FileHandler\AbstractHandler');
+        $this->shouldBeAnInstanceOf(AbstractHandler::class);
     }
 
     function it_should_supports_symfony_uploaded_file(UploadedFile $file)

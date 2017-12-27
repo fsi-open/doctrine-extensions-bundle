@@ -7,6 +7,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace FSi\Bundle\DoctrineExtensionsBundle\DependencyInjection\Compiler;
 
 use FSi\Bundle\DoctrineExtensionsBundle\DependencyInjection\Configuration;

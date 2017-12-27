@@ -7,15 +7,19 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace spec\FSi\Bundle\DoctrineExtensionsBundle;
 
+use FSi\Bundle\DoctrineExtensionsBundle\FilesystemMap;
 use Gaufrette\Filesystem;
-use Knp\Bundle\GaufretteBundle\FilesystemMap;
+use Gaufrette\FilesystemMap as GaufretteMap;
+use Knp\Bundle\GaufretteBundle\FilesystemMap as KnpFilesystemMap;
 use PhpSpec\ObjectBehavior;
 
 class FilesystemMapSpec extends ObjectBehavior
 {
-    function let(FilesystemMap $filesystemMap, Filesystem $filesystem)
+    function let(KnpFilesystemMap $filesystemMap, Filesystem $filesystem)
     {
         $filesystemMap->getIterator()->shouldBeCalled()->willReturn([
             'filesystem' => $filesystem
@@ -26,12 +30,12 @@ class FilesystemMapSpec extends ObjectBehavior
 
     function it_is_initializable()
     {
-        $this->shouldHaveType('FSi\Bundle\DoctrineExtensionsBundle\FilesystemMap');
+        $this->shouldHaveType(FilesystemMap::class);
     }
 
     function it_should_be_form_extension()
     {
-        $this->shouldHaveType('Gaufrette\FilesystemMap');
+        $this->shouldHaveType(GaufretteMap::class);
     }
 
     function it_have_all_filesystems_from_bundle_filesystem_map()

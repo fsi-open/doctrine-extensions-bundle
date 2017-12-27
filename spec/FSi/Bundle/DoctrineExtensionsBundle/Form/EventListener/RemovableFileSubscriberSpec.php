@@ -7,26 +7,32 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace spec\FSi\Bundle\DoctrineExtensionsBundle\Form\EventListener;
 
 use FSi\DoctrineExtensions\Uploadable\File;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
+use stdClass;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\FormConfigInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\Test\FormInterface;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
+use Symfony\Component\PropertyAccess\PropertyPathInterface;
 
 class RemovableFileSubscriberSpec extends ObjectBehavior
 {
-    function let(PropertyAccessor $propertyAccessor)
+    function let(PropertyAccessor $propertyAccessor, PropertyPathInterface $propertyPath)
     {
+        $propertyPath->__toString()->willReturn('file_field_name');
         $this->beConstructedWith($propertyAccessor);
     }
 
     function it_is_event_subscriber()
     {
-        $this->shouldBeAnInstanceOf('Symfony\Component\EventDispatcher\EventSubscriberInterface');
+        $this->shouldBeAnInstanceOf(EventSubscriberInterface::class);
     }
 
     function it_passes_form_data_as_submitted_data_when_there_is_no_submitted_data(
@@ -34,14 +40,15 @@ class RemovableFileSubscriberSpec extends ObjectBehavior
         FormInterface $form,
         FormConfigInterface $formConfig,
         File $file,
-        PropertyAccessor $propertyAccessor
+        PropertyAccessor $propertyAccessor,
+        PropertyPathInterface $propertyPath
     ) {
-        $formData = new \stdClass();
+        $formData = new stdClass();
         $event->getData()->willReturn(['file_field_name' => null]);
         $event->getForm()->willReturn($form);
         $form->getName()->willReturn('file_field_name');
         $form->getData()->willReturn($formData);
-        $form->getPropertyPath()->willReturn('file_field_name');
+        $form->getPropertyPath()->willReturn($propertyPath);
         $form->getConfig()->willReturn($formConfig);
         $formConfig->getOption('remove_name')->willReturn('remove_field_name');
         $propertyAccessor->getValue($formData, 'file_field_name')->willReturn($file);
@@ -55,14 +62,15 @@ class RemovableFileSubscriberSpec extends ObjectBehavior
         FormEvent $event,
         FormInterface $form,
         FormConfigInterface $formConfig,
-        PropertyAccessor $propertyAccessor
+        PropertyAccessor $propertyAccessor,
+        PropertyPathInterface $propertyPath
     ) {
-        $formData = new \stdClass();
+        $formData = new stdClass();
         $event->getData()->willReturn(['remove_field_name' => true]);
         $event->getForm()->willReturn($form);
         $form->getName()->willReturn('file_field_name');
         $form->getData()->willReturn($formData);
-        $form->getPropertyPath()->willReturn('file_field_name');
+        $form->getPropertyPath()->willReturn($propertyPath);
         $form->getConfig()->willReturn($formConfig);
         $formConfig->getOption('remove_name')->willReturn('remove_field_name');
 

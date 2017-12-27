@@ -7,6 +7,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace FSi\Bundle\DoctrineExtensionsBundle;
 
 use Gaufrette\FilesystemMap as GaufretteFilesystemMap;
@@ -14,9 +16,6 @@ use Knp\Bundle\GaufretteBundle\FilesystemMap as GaufretteBundleFilesystemMap;
 
 class FilesystemMap extends GaufretteFilesystemMap
 {
-    /**
-     * @param \Gaufrette\FilesystemMap $filesystemMap
-     */
     public function __construct(GaufretteBundleFilesystemMap $filesystemMap)
     {
         $map = $filesystemMap->getIterator();

@@ -7,6 +7,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace FSi\Bundle\DoctrineExtensionsBundle\Validator\Constraints\Symfony3;
 
 use Symfony\Component\Validator\Constraint;
@@ -18,7 +20,7 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 class FileValidator extends ConstraintValidator
 {
     /**
-     * @var \Symfony\Component\Validator\Constraints\FileValidator
+     * @var BaseValidator
      */
     private $symfonyValidator;
 
@@ -27,9 +29,6 @@ class FileValidator extends ConstraintValidator
         $this->symfonyValidator = $symfonyValidator;
     }
 
-    /**
-     * @param ExecutionContextInterface $context
-     */
     public function initialize(ExecutionContextInterface $context)
     {
         parent::initialize($context);

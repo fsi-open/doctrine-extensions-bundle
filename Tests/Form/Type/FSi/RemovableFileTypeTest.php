@@ -7,11 +7,18 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace FSi\Bundle\DoctrineExtensionsBundle\Tests\Form\Type\FSi;
 
+use FSi\Bundle\DoctrineExtensionsBundle\Form\Type\FSi\RemovableFileType;
+use FSi\Bundle\DoctrineExtensionsBundle\Listener\Uploadable\Filesystem;
 use FSi\Bundle\DoctrineExtensionsBundle\Resolver\FSiFilePathResolver;
 use FSi\Bundle\DoctrineExtensionsBundle\Tests\Fixtures\Entity\Article;
 use FSi\Bundle\DoctrineExtensionsBundle\Tests\Fixtures\Form\Extension\FSiFileExtension;
+use FSi\DoctrineExtensions\Uploadable\File;
+use Gaufrette\Adapter\Local;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -61,25 +68,28 @@ class RemovableFileTypeTest extends FormTypeTest
 
     private function getFileMock()
     {
-        $file = $this->getMockBuilder('FSi\DoctrineExtensions\Uploadable\File')
+        $file = $this->getMockBuilder(File::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMock()
+        ;
 
         $file->expects($this->any())
             ->method('getFilesystem')
             ->will($this->returnCallback(function() {
-                $fileSystem = $this->getMockBuilder('FSi\Bundle\DoctrineExtensionsBundle\Listener\Uploadable\Filesystem')
+                $fileSystem = $this->getMockBuilder(Filesystem::class)
                     ->disableOriginalConstructor()
-                    ->getMock();
+                    ->getMock()
+                ;
 
                 $fileSystem->expects($this->any())
                     ->method('getBaseUrl')
-                    ->will($this->returnValue('/uploaded/'));
+                    ->will($this->returnValue('/uploaded/'))
+                ;
 
                 $fileSystem->expects($this->any())
                     ->method('getAdapter')
                     ->will($this->returnCallback(function() {
-                        return $this->getMockBuilder('Gaufrette\Adapter\Local')
+                        return $this->getMockBuilder(Local::class)
                             ->disableOriginalConstructor()
                             ->getMock();
                     }));
@@ -89,11 +99,13 @@ class RemovableFileTypeTest extends FormTypeTest
 
         $file->expects($this->any())
             ->method('getKey')
-            ->will($this->returnValue('Article/file/1/image name.jpg'));
+            ->will($this->returnValue('Article/file/1/image name.jpg'))
+        ;
 
         $file->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue('Article/file/1/image name.jpg'));
+            ->will($this->returnValue('Article/file/1/image name.jpg'))
+        ;
 
         return $file;
     }
@@ -101,11 +113,11 @@ class RemovableFileTypeTest extends FormTypeTest
     private function createTestForm(Article $article): FormInterface
     {
         $form = $this->factory->create(
-            $this->isSymfony3() ? 'Symfony\Component\Form\Extension\Core\Type\FormType' : 'form',
+            $this->isSymfony3() ? FormType::class : 'form',
             $article
         );
 
-        $form->add('file', $this->isSymfony3() ? 'FSi\Bundle\DoctrineExtensionsBundle\Form\Type\FSi\RemovableFileType' : 'fsi_removable_file');
+        $form->add('file', $this->isSymfony3() ? RemovableFileType::class : 'fsi_removable_file');
 
         return $form;
     }

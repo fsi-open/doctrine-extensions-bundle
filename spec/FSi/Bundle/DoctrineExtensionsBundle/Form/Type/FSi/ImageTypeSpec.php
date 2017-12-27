@@ -7,10 +7,15 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace spec\FSi\Bundle\DoctrineExtensionsBundle\Form\Type\FSi;
 
+use FSi\Bundle\DoctrineExtensionsBundle\Form\Type\FSi\FileType;
+use FSi\Bundle\DoctrineExtensionsBundle\Validator\Constraints\Image;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ImageTypeSpec extends ObjectBehavior
@@ -22,10 +27,7 @@ class ImageTypeSpec extends ObjectBehavior
 
     function it_should_be_child_of_fsi_file_type()
     {
-        $this->getParent()->shouldReturn($this->isSymfony28()
-            ? 'FSi\Bundle\DoctrineExtensionsBundle\Form\Type\FSi\FileType'
-            : 'fsi_file'
-        );
+        $this->getParent()->shouldReturn($this->isSymfony28() ? FileType::class : 'fsi_file');
     }
 
     function it_should_set_default_options(OptionsResolver $resolver)
@@ -33,7 +35,7 @@ class ImageTypeSpec extends ObjectBehavior
         $resolver->setDefaults(Argument::allOf(
             Argument::withEntry(
                 'constraints',
-                Argument::withEntry(0, Argument::type('\FSi\Bundle\DoctrineExtensionsBundle\Validator\Constraints\Image'))
+                Argument::withEntry(0, Argument::type(Image::class))
             )
         ))->shouldBeCalled();
 
@@ -44,19 +46,13 @@ class ImageTypeSpec extends ObjectBehavior
         }
     }
 
-    /**
-     * @return bool
-     */
-    private function isSymfony27()
+    private function isSymfony27(): bool
     {
-        return method_exists('Symfony\Component\Form\AbstractType', 'configureOptions');
+        return method_exists(AbstractType::class, 'configureOptions');
     }
 
-    /**
-     * @return bool
-     */
-    private function isSymfony28()
+    private function isSymfony28(): bool
     {
-        return method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix');
+        return method_exists(AbstractType::class, 'getBlockPrefix');
     }
 }

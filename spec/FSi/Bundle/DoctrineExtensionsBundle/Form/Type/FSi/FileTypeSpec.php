@@ -7,12 +7,20 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace spec\FSi\Bundle\DoctrineExtensionsBundle\Form\Type\FSi;
 
+use FSi\Bundle\DoctrineExtensionsBundle\Form\EventListener\FileSubscriber;
+use FSi\Bundle\DoctrineExtensionsBundle\Form\Type\FSi\FileType as FSiFileType;
 use FSi\Bundle\DoctrineExtensionsBundle\Resolver\FSiFilePathResolver;
+use FSi\Bundle\DoctrineExtensionsBundle\Validator\Constraints\File as FileConstraint;
+use FSi\DoctrineExtensions\Uploadable\File;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -25,7 +33,7 @@ class FileTypeSpec extends ObjectBehavior
 
     function it_is_initializable()
     {
-        $this->shouldHaveType('FSi\Bundle\DoctrineExtensionsBundle\Form\Type\FSi\FileType');
+        $this->shouldHaveType(FSiFileType::class);
     }
 
     function it_should_have_valid_name()
@@ -35,19 +43,16 @@ class FileTypeSpec extends ObjectBehavior
 
     function it_should_be_child_of_form_type()
     {
-        $this->getParent()->shouldReturn($this->isSymfony28()
-            ? 'Symfony\Component\Form\Extension\Core\Type\FileType'
-            : 'file'
-        );
+        $this->getParent()->shouldReturn($this->isSymfony28() ? FileType::class : 'file');
     }
 
     function it_should_set_default_options(OptionsResolver $resolver)
     {
         $resolver->setDefaults(Argument::allOf(
-            Argument::withEntry('data_class', 'FSi\DoctrineExtensions\Uploadable\File'),
+            Argument::withEntry('data_class', File::class),
             Argument::withEntry(
                 'constraints',
-                Argument::withEntry(0, Argument::type('\FSi\Bundle\DoctrineExtensionsBundle\Validator\Constraints\File'))
+                Argument::withEntry(0, Argument::type(FileConstraint::class))
             )
         ))->shouldBeCalled();
         $resolver->setDefined('file_url')->shouldBeCalled();
@@ -62,25 +67,18 @@ class FileTypeSpec extends ObjectBehavior
 
     function it_should_register_listener(FormBuilderInterface $builder)
     {
-        $builder->addEventSubscriber(Argument::type('FSi\Bundle\DoctrineExtensionsBundle\Form\EventListener\FileSubscriber'))
-            ->shouldBeCalled();
+        $builder->addEventSubscriber(Argument::type(FileSubscriber::class))->shouldBeCalled();
 
         $this->buildForm($builder, []);
     }
 
-    /**
-     * @return bool
-     */
-    private function isSymfony27()
+    private function isSymfony27(): bool
     {
-        return method_exists('Symfony\Component\Form\AbstractType', 'configureOptions');
+        return method_exists(AbstractType::class, 'configureOptions');
     }
 
-    /**
-     * @return bool
-     */
-    private function isSymfony28()
+    private function isSymfony28(): bool
     {
-        return method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix');
+        return method_exists(AbstractType::class, 'getBlockPrefix');
     }
 }

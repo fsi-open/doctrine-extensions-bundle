@@ -7,6 +7,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace spec\FSi\Bundle\DoctrineExtensionsBundle\Request;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -14,6 +16,7 @@ use Doctrine\Common\Persistence\Mapping\ClassMetadataFactory;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Doctrine\ORM\NoResultException;
 use FSi\DoctrineExtensions\Translatable\Entity\Repository\TranslatableRepository;
 use FSi\DoctrineExtensions\Translatable\Mapping\ClassMetadata as TranslatableMetadata;
 use FSi\DoctrineExtensions\Translatable\TranslatableListener;
@@ -87,9 +90,7 @@ class TranslatableParamConverterSpec extends ObjectBehavior
         $request->attributes = $attributes;
         $attributes->keys()->willReturn(['parameter']);
         $translatableMetadata->getTranslatableProperties()->willReturn([
-            'translations' => [
-                'translatableProperty' => 'translationField'
-            ]
+            'translations' => ['translatableProperty' => 'translationField']
         ]);
 
         $this->apply($request, $paramConverter)->shouldReturn(false);
@@ -110,18 +111,17 @@ class TranslatableParamConverterSpec extends ObjectBehavior
         $attributes->keys()->willReturn(['translatableProperty']);
         $attributes->get('translatableProperty')->willReturn('translationValue');
         $translatableMetadata->getTranslatableProperties()->willReturn([
-            'translations' => [
-                'translatableProperty' => 'translationField'
-            ]
+            'translations' => ['translatableProperty' => 'translationField']
         ]);
         $translatableRepository->findTranslatableOneBy(
             ['translatableProperty' => 'translationValue'],
             null,
             'some_locale'
-        )->willThrow('\Doctrine\ORM\NoResultException');
+        )->willThrow(NoResultException::class);
 
-        $this->shouldThrow(new NotFoundHttpException('Object of class "TranslatableEntity" has not been found.'))
-            ->during('apply', [$request, $paramConverter]);
+        $this->shouldThrow(
+            new NotFoundHttpException('Object of class "TranslatableEntity" has not been found.')
+        )->during('apply', [$request, $paramConverter]);
     }
 
     public function it_sets_found_object_as_request_parameter(
@@ -141,9 +141,7 @@ class TranslatableParamConverterSpec extends ObjectBehavior
         $attributes->keys()->willReturn(['translatableProperty']);
         $attributes->get('translatableProperty')->willReturn('translationValue');
         $translatableMetadata->getTranslatableProperties()->willReturn([
-            'translations' => [
-                'translatableProperty' => 'translationField'
-            ]
+            'translations' => ['translatableProperty' => 'translationField']
         ]);
         $translatableRepository->findTranslatableOneBy(
             ['translatableProperty' => 'translationValue'],

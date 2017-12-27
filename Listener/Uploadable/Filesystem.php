@@ -7,6 +7,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace FSi\Bundle\DoctrineExtensionsBundle\Listener\Uploadable;
 
 class Filesystem extends \Gaufrette\Filesystem
@@ -16,18 +18,12 @@ class Filesystem extends \Gaufrette\Filesystem
      */
     protected $baseUrl;
 
-    /**
-     * @param string $baseUrl
-     */
-    public function setBaseUrl($baseUrl)
+    public function setBaseUrl(?string $baseUrl): void
     {
         $this->baseUrl = $baseUrl;
     }
 
-    /**
-     * @return string
-     */
-    public function getBaseUrl()
+    public function getBaseUrl(): ?string
     {
         return $this->baseUrl;
     }

@@ -7,10 +7,16 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace spec\FSi\Bundle\DoctrineExtensionsBundle\DependencyInjection;
 
+use FSi\Bundle\DemoBundle\Entity\Article;
+use FSi\Bundle\DemoBundle\KeyMaker\SpecificKeyMaker;
+use FSi\Bundle\DoctrineExtensionsBundle\DependencyInjection\FSIDoctrineExtensionsExtension;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
+use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -19,7 +25,7 @@ class FSIDoctrineExtensionsExtensionSpec extends ObjectBehavior
 {
     function it_is_initializable()
     {
-        $this->shouldHaveType('FSi\Bundle\DoctrineExtensionsBundle\DependencyInjection\FSIDoctrineExtensionsExtension');
+        $this->shouldHaveType(FSIDoctrineExtensionsExtension::class);
     }
 
     function it_should_have_a_valid_alias()
@@ -34,12 +40,12 @@ class FSIDoctrineExtensionsExtensionSpec extends ObjectBehavior
         Definition $uploadable
     ) {
         $builder->hasExtension(Argument::type('string'))->willReturn(false);
-        if (method_exists('Symfony\Component\DependencyInjection\ContainerBuilder', 'fileExists')) {
+        if (method_exists(ContainerBuilder::class, 'fileExists')) {
             $builder->fileExists(Argument::type('string'))->willReturn(true);
         } else {
-            $builder->addResource(Argument::type('\Symfony\Component\Config\Resource\FileResource'))->shouldBeCalled();
+            $builder->addResource(Argument::type(FileResource::class))->shouldBeCalled();
         }
-        $builder->setDefinition(Argument::type('string'), Argument::type('Symfony\Component\DependencyInjection\Definition'))->shouldBeCalled();
+        $builder->setDefinition(Argument::type('string'), Argument::type(Definition::class))->shouldBeCalled();
         $builder->getParameterBag()->willReturn($parameterBag);
         /* Above code is added only because builder is used in services loader. */
 
@@ -51,34 +57,29 @@ class FSIDoctrineExtensionsExtensionSpec extends ObjectBehavior
         $builder->getDefinition('fsi_doctrine_extensions.listener.uploadable')->willReturn($uploadable);
 
         $uploadable->addMethodCall('setDefaultKeymaker', Argument::type('array'))->shouldBeCalled();
-        $builder->setParameter('fsi_doctrine_extensions.default.filesystem.adapter.path', '%kernel.root_dir%/../web/uploaded')
-            ->shouldBeCalled();
+        $builder->setParameter(
+            'fsi_doctrine_extensions.default.filesystem.adapter.path',
+            '%kernel.root_dir%/../web/uploaded'
+        )->shouldBeCalled();
 
         $uploadable->addMethodCall('setDefaultKeymaker', Argument::type('array'))->shouldBeCalled();
 
         $uploadable->replaceArgument(2, [])->shouldBeCalled();
 
         $builder->setParameter('fsi_doctrine_extensions.default.filesystem.base_url', '/uploaded')
-            ->shouldBeCalled();
+            ->shouldBeCalled()
+        ;
 
-        $tag = [['priority' => 0]];
-        $uploadable->getTag("fsi_doctrine_extensions.listener.uploadable")->willReturn($tag);
+        $uploadable->getTag("fsi_doctrine_extensions.listener.uploadable")->willReturn([['priority' => 0]]);
         $uploadable->addMethodCall('setDefaultFilesystem', Argument::type('array'))->shouldBeCalled();
         $uploadable->addTag(
             'doctrine.event_subscriber',
             ['connection' => 'default', 'priority' => 0]
         )->shouldBeCalled();
 
-        $this->load([
-            0 => [
-                'default_locale' => 'pl',
-                'orm' => [
-                    'default' => [
-                        'uploadable' => true,
-                    ]
-                ]
-            ]
-        ], $builder);
+        $this->load([[
+            'default_locale' => 'pl', 'orm' => ['default' => ['uploadable' => true]]
+        ]], $builder);
     }
 
     function it_should_add_tag_to_translatable_listener_service(
@@ -88,12 +89,12 @@ class FSIDoctrineExtensionsExtensionSpec extends ObjectBehavior
         Definition $uploadable
     ) {
         $builder->hasExtension(Argument::type('string'))->willReturn(false);
-        if (method_exists('Symfony\Component\DependencyInjection\ContainerBuilder', 'fileExists')) {
+        if (method_exists(ContainerBuilder::class, 'fileExists')) {
             $builder->fileExists(Argument::type('string'))->willReturn(true);
         } else {
-            $builder->addResource(Argument::type('\Symfony\Component\Config\Resource\FileResource'))->shouldBeCalled();
+            $builder->addResource(Argument::type(FileResource::class))->shouldBeCalled();
         }
-        $builder->setDefinition(Argument::type('string'), Argument::type('Symfony\Component\DependencyInjection\Definition'))->shouldBeCalled();
+        $builder->setDefinition(Argument::type('string'), Argument::type(Definition::class))->shouldBeCalled();
         $builder->getParameterBag()->willReturn($parameterBag);
         /* Above code is added only because builder is used in services loader. */
 
@@ -115,8 +116,7 @@ class FSIDoctrineExtensionsExtensionSpec extends ObjectBehavior
         $builder->setParameter('fsi_doctrine_extensions.default.filesystem.base_url', '/uploaded')
             ->shouldBeCalled();
 
-        $tag = [['priority' => 1]];
-        $translatable->getTag("fsi_doctrine_extensions.listener.translatable")->willReturn($tag);
+        $translatable->getTag("fsi_doctrine_extensions.listener.translatable")->willReturn([['priority' => 1]]);
         $builder->getDefinition('fsi_doctrine_extensions.listener.translatable')->willReturn($translatable);
         $translatable->addTag(
             'doctrine.event_subscriber',
@@ -124,16 +124,10 @@ class FSIDoctrineExtensionsExtensionSpec extends ObjectBehavior
         )->shouldBeCalled();
         $translatable->addMethodCall('setDefaultLocale', ['pl'])->shouldBeCalled();
 
-        $this->load([
-            0 => [
-                'default_locale' => 'pl',
-                'orm' => [
-                    'default' => [
-                        'translatable' => true,
-                    ]
-                ]
-            ]
-        ], $builder);
+        $this->load([[
+            'default_locale' => 'pl',
+            'orm' => ['default' => ['translatable' => true]]
+        ]], $builder);
     }
 
     function it_should_add_uploadable_configuration_parameter_to_container(
@@ -143,13 +137,13 @@ class FSIDoctrineExtensionsExtensionSpec extends ObjectBehavior
         Definition $uploadable
     ) {
         $builder->hasExtension(Argument::type('string'))->willReturn(false);
-        if (method_exists('Symfony\Component\DependencyInjection\ContainerBuilder', 'fileExists')) {
+        if (method_exists(ContainerBuilder::class, 'fileExists')) {
             $builder->fileExists(Argument::type('string'))->willReturn(true);
         } else {
-            $builder->addResource(Argument::type('\Symfony\Component\Config\Resource\FileResource'))->shouldBeCalled();
+            $builder->addResource(Argument::type(FileResource::class))->shouldBeCalled();
         }
 
-        $builder->setDefinition(Argument::type('string'), Argument::type('Symfony\Component\DependencyInjection\Definition'))->shouldBeCalled();
+        $builder->setDefinition(Argument::type('string'), Argument::type(Definition::class))->shouldBeCalled();
         $builder->getParameterBag()->shouldBeCalled()->willReturn($parameterBag);
         /* Above code is added only because builder is used in services loader. */
 
@@ -170,28 +164,26 @@ class FSIDoctrineExtensionsExtensionSpec extends ObjectBehavior
         $uploadable->addMethodCall('setDefaultKeymaker', Argument::type('array'))->shouldBeCalled();
 
         $uploadable->replaceArgument(2, [
-            'FSi\Bundle\DemoBundle\Entity\Article' => [
+            Article::class => [
                 'image' => [
                     'filesystem' => 'some_filesystem',
-                    'keymaker' => 'FSi\Bundle\DemoBundle\KeyMaker\SpecificKeyMaker'
+                    'keymaker' => SpecificKeyMaker::class
                 ]
             ]
         ])->shouldBeCalled();
 
-        $this->load([
-            0 => [
-                'default_locale' => 'pl',
-                'uploadable_configuration' => [
-                    'FSi\Bundle\DemoBundle\Entity\Article' => [
-                        'configuration' => [
-                            'image' => [
-                                'filesystem' => 'some_filesystem',
-                                'keymaker' => 'FSi\Bundle\DemoBundle\KeyMaker\SpecificKeyMaker'
-                            ]
+        $this->load([[
+            'default_locale' => 'pl',
+            'uploadable_configuration' => [
+                Article::class => [
+                    'configuration' => [
+                        'image' => [
+                            'filesystem' => 'some_filesystem',
+                            'keymaker' => SpecificKeyMaker::class
                         ]
                     ]
-                ],
-            ]
-        ], $builder);
+                ]
+            ],
+        ]], $builder);
     }
 }
