@@ -18,7 +18,6 @@ use Symfony\Component\Config\Definition\Processor;
 
 class ConfigurationTest extends TestCase
 {
-
     public function testDefaultOptions()
     {
         $config = $this->getProcessor()->processConfiguration(new Configuration(), []);

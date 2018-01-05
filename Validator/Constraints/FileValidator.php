@@ -36,9 +36,6 @@ class FileValidator extends ConstraintValidator
         $this->symfonyValidator->initialize($context);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function validate($value, Constraint $constraint)
     {
         if ($value instanceof FSiFile) {

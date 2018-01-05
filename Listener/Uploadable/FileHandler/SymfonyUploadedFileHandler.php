@@ -18,26 +18,17 @@ use FSi\Bundle\DoctrineExtensionsBundle\Exception\Uploadable\InvalidFileExceptio
 
 class SymfonyUploadedFileHandler extends AbstractHandler
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function supports($file)
+    public function supports($file): bool
     {
         return $file instanceof UploadedFile;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getName($file)
+    public function getName($file): string
     {
         return $file->getClientOriginalName();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getContent($file)
+    public function getContent($file): string
     {
         if (!$this->supports($file)) {
             throw $this->generateNotSupportedException($file);

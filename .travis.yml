@@ -17,7 +17,7 @@ matrix:
 
 before_install:
     - phpenv config-rm xdebug.ini
-    - travis_wait 30 composer update $COMPOSER_FLAGS
+    - composer update $COMPOSER_FLAGS
 
 script:
     - ./bin/phpunit -v

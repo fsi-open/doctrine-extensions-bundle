@@ -29,17 +29,11 @@ class FilesExtension extends AbstractExtension
         $this->filePathResolver = $filePathResolver;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName()
     {
         return 'fsi_files';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getFunctions()
     {
         return [

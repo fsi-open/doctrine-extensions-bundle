@@ -27,9 +27,6 @@ class UploadablePostLoadListener implements EventSubscriber
         $this->uploadableListener = $uploadableListener;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getSubscribedEvents()
     {
         return [

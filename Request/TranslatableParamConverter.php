@@ -43,11 +43,12 @@ class TranslatableParamConverter implements ParamConverterInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
+     * @param Request $request
+     * @param ParamConverter $configuration
+     * @return boolean
      * @throws NotFoundHttpException
      */
-    public function apply(Request $request, ParamConverter $configuration)
+    public function apply(Request $request, ParamConverter $configuration): bool
     {
         $criteria = $this->buildSearchCriteria($configuration, $request);
         if (empty($criteria)) {
@@ -72,10 +73,7 @@ class TranslatableParamConverter implements ParamConverterInterface
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function supports(ParamConverter $configuration)
+    public function supports(ParamConverter $configuration): bool
     {
         return $this->validateClass($configuration)
             && $this->validateManager($configuration)

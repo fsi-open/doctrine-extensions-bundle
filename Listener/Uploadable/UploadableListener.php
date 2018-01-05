@@ -12,8 +12,8 @@ declare(strict_types=1);
 namespace FSi\Bundle\DoctrineExtensionsBundle\Listener\Uploadable;
 
 use Doctrine\ORM\EntityManagerInterface;
+use FSi\DoctrineExtensions\Metadata\ClassMetadataInterface;
 use FSi\DoctrineExtensions\Uploadable\FileHandler\FileHandlerInterface;
-use FSi\DoctrineExtensions\Uploadable\Mapping\ClassMetadata;
 use FSi\DoctrineExtensions\Uploadable\UploadableListener as BaseListener;
 
 class UploadableListener extends BaseListener
@@ -38,9 +38,6 @@ class UploadableListener extends BaseListener
         $this->setConfiguration($configuration);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getSubscribedEvents()
     {
         return [
@@ -51,7 +48,7 @@ class UploadableListener extends BaseListener
         ];
     }
 
-    public function getExtendedMetadata(EntityManagerInterface $objectManager, $class): ClassMetadata
+    public function getExtendedMetadata(EntityManagerInterface $objectManager, string $class): ClassMetadataInterface
     {
         /* @var $metadata \FSi\DoctrineExtensions\Uploadable\Mapping\ClassMetadata */
         $metadata = parent::getExtendedMetadata($objectManager, $class);
