@@ -7,6 +7,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace FSi\Bundle\DoctrineExtensionsBundle\Form\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -56,20 +58,12 @@ class RemovableFileSubscriber implements EventSubscriberInterface
         }
     }
 
-    /**
-     * @param FormEvent $event
-     * @return bool
-     */
-    private function isEventFormDataEmpty(FormEvent $event)
+    private function isEventFormDataEmpty(FormEvent $event): bool
     {
         return null === $event->getForm()->getData();
     }
 
-    /**
-     * @param FormEvent $event
-     * @return bool
-     */
-    private function shouldFileBeRemoved(FormEvent $event)
+    private function shouldFileBeRemoved(FormEvent $event): bool
     {
         $submittedData = $event->getData();
         $removeName = $event->getForm()->getConfig()->getOption('remove_name');
@@ -77,21 +71,14 @@ class RemovableFileSubscriber implements EventSubscriberInterface
         return !empty($submittedData[$removeName]);
     }
 
-    /**
-     * @param FormEvent $event
-     */
-    private function removeFile(FormEvent $event)
+    private function removeFile(FormEvent $event): void
     {
         $formData = $event->getForm()->getData();
         $propertyPath = $this->getEventFormPropertyPath($event);
         $this->propertyAccessor->setValue($formData, $propertyPath, null);
     }
 
-    /**
-     * @param FormEvent $event
-     * @return bool
-     */
-    private function isNewFileSubmitted(FormEvent $event)
+    private function isNewFileSubmitted(FormEvent $event): bool
     {
         $submittedData = $event->getData();
         $formName = $event->getForm()->getName();
@@ -99,10 +86,7 @@ class RemovableFileSubscriber implements EventSubscriberInterface
         return !empty($submittedData[$formName]);
     }
 
-    /**
-     * @param FormEvent $event
-     */
-    private function copyFileFromFormDataToEventData(FormEvent $event)
+    private function copyFileFromFormDataToEventData(FormEvent $event): void
     {
         $formData = $event->getForm()->getData();
         $formName = $event->getForm()->getName();
@@ -112,11 +96,7 @@ class RemovableFileSubscriber implements EventSubscriberInterface
         $event->setData($submittedData);
     }
 
-    /**
-     * @param FormEvent $event
-     * @return PropertyPathInterface
-     */
-    private function getEventFormPropertyPath(FormEvent $event)
+    private function getEventFormPropertyPath(FormEvent $event): ?PropertyPathInterface
     {
         return $event->getForm()->getPropertyPath();
     }

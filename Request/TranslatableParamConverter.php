@@ -7,10 +7,14 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace FSi\Bundle\DoctrineExtensionsBundle\Request;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
+use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NoResultException;
 use FSi\DoctrineExtensions\Translatable\Mapping\ClassMetadata as TranslatableClassMetadata;
 use FSi\DoctrineExtensions\Translatable\Model\TranslatableRepositoryInterface;
@@ -23,19 +27,15 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class TranslatableParamConverter implements ParamConverterInterface
 {
     /**
-     * @var \Doctrine\Common\Persistence\ManagerRegistry
+     * @var ManagerRegistry
      */
-    protected $registry;
+    private $registry;
 
     /**
-     * @var \FSi\DoctrineExtensions\Translatable\TranslatableListener
+     * @var TranslatableListener
      */
-    protected $translatableListener;
+    private $translatableListener;
 
-    /**
-     * @param \Doctrine\Common\Persistence\ManagerRegistry $registry
-     * @param \FSi\DoctrineExtensions\Translatable\TranslatableListener $translatableListener
-     */
     public function __construct(ManagerRegistry $registry, TranslatableListener $translatableListener)
     {
         $this->registry = $registry;
@@ -43,11 +43,12 @@ class TranslatableParamConverter implements ParamConverterInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @throws NotFoundHttpException When object not found
+     * @param Request $request
+     * @param ParamConverter $configuration
+     * @return boolean
+     * @throws NotFoundHttpException
      */
-    public function apply(Request $request, ParamConverter $configuration)
+    public function apply(Request $request, ParamConverter $configuration): bool
     {
         $criteria = $this->buildSearchCriteria($configuration, $request);
         if (empty($criteria)) {
@@ -55,12 +56,11 @@ class TranslatableParamConverter implements ParamConverterInterface
         }
 
         try {
-            $object = $this->getRepository($configuration)
-                ->findTranslatableOneBy(
-                    $criteria,
-                    null,
-                    $request->getLocale()
-                );
+            $object = $this->getRepository($configuration)->findTranslatableOneBy(
+                $criteria,
+                null,
+                $request->getLocale()
+            );
         } catch (NoResultException $e) {
             throw new NotFoundHttpException(sprintf(
                 'Object of class "%s" has not been found.',
@@ -72,23 +72,17 @@ class TranslatableParamConverter implements ParamConverterInterface
 
         return true;
     }
-    /**
-     * {@inheritdoc}
-     */
-    public function supports(ParamConverter $configuration)
+
+    public function supports(ParamConverter $configuration): bool
     {
-        return $this->validateClass($configuration) &&
-            $this->validateManager($configuration) &&
-            $this->validateRepository($configuration) &&
-            $this->hasTranslatableProperties($configuration);
+        return $this->validateClass($configuration)
+            && $this->validateManager($configuration)
+            && $this->validateRepository($configuration)
+            && $this->hasTranslatableProperties($configuration)
+        ;
     }
 
-    /**
-     * @param \Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter $configuration
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @return array
-     */
-    private function getMapping(ParamConverter $configuration, Request $request)
+    private function getMapping(ParamConverter $configuration, Request $request): array
     {
         $mapping = $this->getMappingOption($configuration);
         if (empty($mapping)) {
@@ -104,11 +98,7 @@ class TranslatableParamConverter implements ParamConverterInterface
         return $mapping;
     }
 
-    /**
-     * @param \Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter $configuration
-     * @return array
-     */
-    private function getMappingOption(ParamConverter $configuration)
+    private function getMappingOption(ParamConverter $configuration): array
     {
         $options = $configuration->getOptions();
 
@@ -119,11 +109,7 @@ class TranslatableParamConverter implements ParamConverterInterface
         return [];
     }
 
-    /**
-     * @param \Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter $configuration
-     * @return array
-     */
-    private function getExcludeOption(ParamConverter $configuration)
+    private function getExcludeOption(ParamConverter $configuration): array
     {
         $options = $configuration->getOptions();
 
@@ -134,11 +120,7 @@ class TranslatableParamConverter implements ParamConverterInterface
         return [];
     }
 
-    /**
-     * @param \Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter $configuration
-     * @return \Doctrine\Common\Persistence\ObjectManager|null
-     */
-    private function getManager(ParamConverter $configuration)
+    private function getManager(ParamConverter $configuration): ?ObjectManager
     {
         $options = $configuration->getOptions();
 
@@ -149,12 +131,7 @@ class TranslatableParamConverter implements ParamConverterInterface
         return $this->registry->getManagerForClass($configuration->getClass());
     }
 
-    /**
-     * @param \Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter $configuration
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @return array
-     */
-    private function buildSearchCriteria(ParamConverter $configuration, Request $request)
+    private function buildSearchCriteria(ParamConverter $configuration, Request $request): array
     {
         $mapping = $this->getMapping($configuration, $request);
         $metadata = $this->getDoctrineMetadata($configuration);
@@ -162,7 +139,9 @@ class TranslatableParamConverter implements ParamConverterInterface
 
         $criteria = [];
         foreach ($mapping as $attribute => $field) {
-            if ($this->isFieldSearchable($metadata, $field) || $this->isFieldTranslatable($translatableMetadata, $field)) {
+            if ($this->isFieldSearchable($metadata, $field)
+                || $this->isFieldTranslatable($translatableMetadata, $field)
+            ) {
                 $criteria[$field] = $request->attributes->get($attribute);
             }
         }
@@ -170,12 +149,7 @@ class TranslatableParamConverter implements ParamConverterInterface
         return $this->filterNullCriteria($criteria, $configuration);
     }
 
-    /**
-     * @param array $criteria
-     * @param \Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter $configuration
-     * @return array
-     */
-    private function filterNullCriteria(array $criteria, ParamConverter $configuration)
+    private function filterNullCriteria(array $criteria, ParamConverter $configuration): array
     {
         if ($this->getStripNullOption($configuration)) {
             return array_filter($criteria, function ($value) { return !is_null($value); });
@@ -184,11 +158,7 @@ class TranslatableParamConverter implements ParamConverterInterface
         return $criteria;
     }
 
-    /**
-     * @param \Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter $configuration
-     * @return bool
-     */
-    private function getStripNullOption(ParamConverter $configuration)
+    private function getStripNullOption(ParamConverter $configuration): bool
     {
         $options = $configuration->getOptions();
 
@@ -199,25 +169,16 @@ class TranslatableParamConverter implements ParamConverterInterface
         return false;
     }
 
-    /**
-     * @param \Doctrine\Common\Persistence\Mapping\ClassMetadata $classMetadata
-     * @param string $field
-     * @return bool
-     */
-    private function isFieldSearchable(ClassMetadata $classMetadata, $field)
+    private function isFieldSearchable(ClassMetadata $classMetadata, string $field): bool
     {
-        return $classMetadata->hasField($field) ||
-            ($classMetadata->hasAssociation($field) && $classMetadata->isSingleValuedAssociation($field));
+        return $classMetadata->hasField($field)
+            || ($classMetadata->hasAssociation($field) && $classMetadata->isSingleValuedAssociation($field))
+        ;
     }
 
-    /**
-     * @param \FSi\DoctrineExtensions\Translatable\Mapping\ClassMetadata $translatableMetadata
-     * @param string $field
-     * @return bool
-     */
-    private function isFieldTranslatable(TranslatableClassMetadata $translatableMetadata, $field)
+    private function isFieldTranslatable(TranslatableClassMetadata $translatableMetadata, string $field): bool
     {
-        foreach ($translatableMetadata->getTranslatableProperties() as $translationAssociation => $properties) {
+        foreach ($translatableMetadata->getTranslatableProperties() as $properties) {
             if (isset($properties[$field])) {
                 return true;
             }
@@ -226,30 +187,17 @@ class TranslatableParamConverter implements ParamConverterInterface
         return false;
     }
 
-    /**
-     * @param \Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter $configuration
-     * @return \FSi\DoctrineExtensions\Translatable\Entity\Repository\TranslatableRepository
-     */
-    private function getRepository(ParamConverter $configuration)
+    private function getRepository(ParamConverter $configuration): EntityRepository
     {
-        return $this->getManager($configuration)
-            ->getRepository($configuration->getClass());
+        return $this->getManager($configuration)->getRepository($configuration->getClass());
     }
 
-    /**
-     * @param \Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter $configuration
-     * @return bool
-     */
-    private function validateClass(ParamConverter $configuration)
+    private function validateClass(ParamConverter $configuration): bool
     {
         return null !== $configuration->getClass();
     }
 
-    /**
-     * @param \Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter $configuration
-     * @return bool
-     */
-    private function validateManager(ParamConverter $configuration)
+    private function validateManager(ParamConverter $configuration): bool
     {
         $manager = $this->getManager($configuration);
 
@@ -260,29 +208,17 @@ class TranslatableParamConverter implements ParamConverterInterface
         return !$manager->getMetadataFactory()->isTransient($configuration->getClass());
     }
 
-    /**
-     * @param \Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter $configuration
-     * @return bool
-     */
-    private function validateRepository(ParamConverter $configuration)
+    private function validateRepository(ParamConverter $configuration): bool
     {
         return $this->getRepository($configuration) instanceof TranslatableRepositoryInterface;
     }
 
-    /**
-     * @param \Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter $configuration
-     * @return \Doctrine\Common\Persistence\Mapping\ClassMetadata
-     */
-    private function getDoctrineMetadata(ParamConverter $configuration)
+    private function getDoctrineMetadata(ParamConverter $configuration): ClassMetadata
     {
         return $this->getManager($configuration)->getClassMetadata($configuration->getClass());
     }
 
-    /**
-     * @param \Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter $configuration
-     * @return \FSi\DoctrineExtensions\Translatable\Mapping\ClassMetadata $translatableMetadata
-     */
-    private function getTranslatableMetadata(ParamConverter $configuration)
+    private function getTranslatableMetadata(ParamConverter $configuration): TranslatableClassMetadata
     {
         return $this->translatableListener->getExtendedMetadata(
             $this->getManager($configuration),
@@ -290,11 +226,7 @@ class TranslatableParamConverter implements ParamConverterInterface
         );
     }
 
-    /**
-     * @param \Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter $configuration
-     * @return bool
-     */
-    private function hasTranslatableProperties(ParamConverter $configuration)
+    private function hasTranslatableProperties(ParamConverter $configuration): bool
     {
         return $this->getTranslatableMetadata($configuration)->hasTranslatableProperties();
     }

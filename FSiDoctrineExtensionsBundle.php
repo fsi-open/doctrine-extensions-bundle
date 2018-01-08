@@ -7,6 +7,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace FSi\Bundle\DoctrineExtensionsBundle;
 
 use FSi\Bundle\DoctrineExtensionsBundle\DependencyInjection\Compiler\GaufretteFilesystemsPass;
@@ -36,9 +38,6 @@ class FSiDoctrineExtensionsBundle extends Bundle
         }
     }
 
-    /**
-     * @return \FSi\Bundle\DoctrineExtensionsBundle\DependencyInjection\FSIDoctrineExtensionsExtension|\Symfony\Component\DependencyInjection\Extension\ExtensionInterface
-     */
     public function getContainerExtension()
     {
         if (null === $this->extension) {

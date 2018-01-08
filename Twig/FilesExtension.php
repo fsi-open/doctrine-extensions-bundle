@@ -7,15 +7,17 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace FSi\Bundle\DoctrineExtensionsBundle\Twig;
 
 use FSi\Bundle\DoctrineExtensionsBundle\Resolver\FSiFilePathResolver;
 use FSi\DoctrineExtensions\Uploadable\File as FSiFile;
-use Twig_Extension;
-use Twig_SimpleFilter;
-use Twig_SimpleFunction;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
+use Twig\TwigFunction;
 
-class FilesExtension extends Twig_Extension
+class FilesExtension extends AbstractExtension
 {
     /**
      * @var FSiFilePathResolver
@@ -27,29 +29,23 @@ class FilesExtension extends Twig_Extension
         $this->filePathResolver = $filePathResolver;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName()
     {
         return 'fsi_files';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getFunctions()
     {
         return [
-            new Twig_SimpleFunction('is_fsi_file', [$this, 'isFSiFile']),
-            new Twig_SimpleFunction('fsi_file_url', [$this->filePathResolver, 'fileUrl'])
+            new TwigFunction('is_fsi_file', [$this, 'isFSiFile']),
+            new TwigFunction('fsi_file_url', [$this->filePathResolver, 'fileUrl'])
         ];
     }
 
     public function getFilters()
     {
         return [
-            new Twig_SimpleFilter('fsi_file_basename', [$this->filePathResolver, 'fileBasename'])
+            new TwigFilter('fsi_file_basename', [$this->filePathResolver, 'fileBasename'])
         ];
     }
 
@@ -57,7 +53,7 @@ class FilesExtension extends Twig_Extension
      * @param mixed $value
      * @return bool
      */
-    public function isFSiFile($value)
+    public function isFSiFile($value): bool
     {
         if (!is_object($value)) {
             return false;

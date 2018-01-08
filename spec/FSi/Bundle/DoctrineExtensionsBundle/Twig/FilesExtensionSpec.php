@@ -7,11 +7,17 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace spec\FSi\Bundle\DoctrineExtensionsBundle\Twig;
 
+use DateTime;
 use FSi\Bundle\DoctrineExtensionsBundle\Resolver\FSiFilePathResolver;
 use FSi\DoctrineExtensions\Uploadable\File;
 use PhpSpec\ObjectBehavior;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
+use Twig\TwigFunction;
 
 class FilesExtensionSpec extends ObjectBehavior
 {
@@ -22,7 +28,7 @@ class FilesExtensionSpec extends ObjectBehavior
 
     function it_is_twig_extension()
     {
-        $this->shouldBeAnInstanceOf('Twig_Extension');
+        $this->shouldBeAnInstanceOf(AbstractExtension::class);
     }
 
     function it_has_extension_name()
@@ -44,7 +50,7 @@ class FilesExtensionSpec extends ObjectBehavior
     function it_recognizes_fsi_file(File $file)
     {
         $this->isFSiFile('thisisnotfile')->shouldReturn(false);
-        $this->isFSiFile(new \DateTime())->shouldReturn(false);
+        $this->isFSiFile(new DateTime())->shouldReturn(false);
         $this->isFSiFile($file)->shouldReturn(true);
     }
 
@@ -53,10 +59,8 @@ class FilesExtensionSpec extends ObjectBehavior
         return [
             'haveFunction' => function($subject, $key) {
                 foreach ($subject as $function) {
-                    if ($function instanceof \Twig_SimpleFunction) {
-                        if ($function->getName() == $key) {
-                            return true;
-                        }
+                    if ($function instanceof TwigFunction && $function->getName() === $key) {
+                        return true;
                     }
                 }
 
@@ -64,10 +68,8 @@ class FilesExtensionSpec extends ObjectBehavior
             },
             'haveFilter' => function($subject, $key) {
                 foreach ($subject as $filter) {
-                    if ($filter instanceof \Twig_SimpleFilter) {
-                        if ($filter->getName() == $key) {
-                            return true;
-                        }
+                    if ($filter instanceof TwigFilter && $filter->getName() === $key) {
+                        return true;
                     }
                 }
 

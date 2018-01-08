@@ -7,14 +7,17 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace spec\FSi\Bundle\DoctrineExtensionsBundle;
 
 use PhpSpec\ObjectBehavior;
+use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 
 class FSiDoctrineExtensionsBundleSpec extends ObjectBehavior
 {
     function it_should_be_instance_of_bundle()
     {
-        $this->shouldImplement('Symfony\Component\HttpKernel\Bundle\BundleInterface');
+        $this->shouldImplement(BundleInterface::class);
     }
 }

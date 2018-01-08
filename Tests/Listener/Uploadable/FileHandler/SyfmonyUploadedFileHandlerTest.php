@@ -7,12 +7,16 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace FSi\Bundle\DoctrineExtensionsBundle\Tests\Listener\Uploadable\FileHandler;
 
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+use FSi\Bundle\DoctrineExtensionsBundle\Exception\Uploadable\InvalidFileException;
 use FSi\Bundle\DoctrineExtensionsBundle\Listener\Uploadable\FileHandler\SymfonyUploadedFileHandler;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-class SymfonyUploadedFileHandlerTest extends \PHPUnit_Framework_TestCase
+class SymfonyUploadedFileHandlerTest extends TestCase
 {
     public function testWronglyUploadedFile()
     {
@@ -21,7 +25,7 @@ class SymfonyUploadedFileHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($handler->supports($file));
 
-        $this->setExpectedException('FSi\Bundle\DoctrineExtensionsBundle\Exception\Uploadable\InvalidFileException');
+        $this->expectException(InvalidFileException::class);
         $handler->getContent($file);
     }
 }

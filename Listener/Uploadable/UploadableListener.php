@@ -7,12 +7,14 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace FSi\Bundle\DoctrineExtensionsBundle\Listener\Uploadable;
 
 use Doctrine\ORM\EntityManagerInterface;
+use FSi\DoctrineExtensions\Metadata\ClassMetadataInterface;
 use FSi\DoctrineExtensions\Uploadable\FileHandler\FileHandlerInterface;
 use FSi\DoctrineExtensions\Uploadable\UploadableListener as BaseListener;
-use Gaufrette\FilesystemMap;
 
 class UploadableListener extends BaseListener
 {
@@ -30,20 +32,12 @@ class UploadableListener extends BaseListener
      */
     protected $configuration;
 
-    /**
-     * @param array|FilesystemMap $filesystems
-     * @param \FSi\DoctrineExtensions\Uploadable\FileHandler\FileHandlerInterface $fileHandler
-     * @param array $configuration
-     */
-    public function __construct($filesystems, FileHandlerInterface $fileHandler, $configuration = [])
+    public function __construct($filesystems, FileHandlerInterface $fileHandler, array $configuration = [])
     {
         parent::__construct($filesystems, $fileHandler);
         $this->setConfiguration($configuration);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getSubscribedEvents()
     {
         return [
@@ -54,12 +48,7 @@ class UploadableListener extends BaseListener
         ];
     }
 
-    /**
-     * @param EntityManagerInterface $objectManager
-     * @param string $class
-     * @return \FSi\DoctrineExtensions\Uploadable\Mapping\ClassMetadata
-     */
-    public function getExtendedMetadata(EntityManagerInterface $objectManager, $class)
+    public function getExtendedMetadata(EntityManagerInterface $objectManager, string $class): ClassMetadataInterface
     {
         /* @var $metadata \FSi\DoctrineExtensions\Uploadable\Mapping\ClassMetadata */
         $metadata = parent::getExtendedMetadata($objectManager, $class);
@@ -101,10 +90,7 @@ class UploadableListener extends BaseListener
         return $metadata;
     }
 
-    /**
-     * @param array $configuration
-     */
-    protected function setConfiguration($configuration)
+    protected function setConfiguration(array $configuration): void
     {
         $this->configuration = [];
 

@@ -7,12 +7,16 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace FSi\Bundle\DoctrineExtensionsBundle\Tests\DependencyInjection;
 
+use FSi\Bundle\DemoBundle\Article;
 use FSi\Bundle\DoctrineExtensionsBundle\DependencyInjection\Configuration;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Definition\Processor;
 
-class ConfigurationTest extends \PHPUnit_Framework_TestCase
+class ConfigurationTest extends TestCase
 {
     public function testDefaultOptions()
     {
@@ -26,75 +30,51 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
 
     public function testUploadableEnabledOption()
     {
-        $input = [
-            0 => [
-                'orm' => [
-                    'default' => [
-                        'uploadable' => true
-                    ]
-                ]
-            ]
-        ];
-        $config = $this->getProcessor()->processConfiguration(new Configuration(), $input);
+        $config = $this->getProcessor()->processConfiguration(
+            new Configuration(),
+            [0 => ['orm' => ['default' => ['uploadable' => true]]]]
+        );
 
         $this->assertSame(
             $config,
             array_merge(
                 $this->getBundleDefaultOptions(),
-                [
-                    'orm' => [
-                        'default' => [
-                            'uploadable' => true,
-                            'translatable' => false
-                        ]
-                    ],
-                ]
+                ['orm' => ['default' => ['uploadable' => true, 'translatable' => false]]]
             )
         );
     }
 
     public function testUploadableConfigurationOptions()
     {
-        $input = [
-            0 => [
-                'orm' => [
-                    'default' => [
-                        'uploadable' => true,
+        $input = [[
+            'orm' => ['default' => ['uploadable' => true]],
+            'uploadable_configuration' => [
+                [
+                    'class' => 'FSi\Bundle\DemoBundle\Article',
+                    'configuration' => [
+                        [
+                            'property' => 'file',
+                            'filesystem' => 'default_filesystem',
+                            'keymaker' => 'default_keymaker',
+                        ],
+                        [
+                            'property' => 'image_file',
+                            'filesystem' => 'default_filesystem',
+                            'keymaker' => 'default_keymaker',
+                        ]
                     ]
                 ],
-                'uploadable_configuration' => [
-                    [
-                        'class' => 'FSi\Bundle\DemoBundle\Article',
-                        'configuration' => [
-                            [
-                                'property' => 'file',
-                                'filesystem' => 'default_filesystem',
-                                'keymaker' => 'default_keymaker',
-                            ],
-                            [
-                                'property' => 'image_file',
-                                'filesystem' => 'default_filesystem',
-                                'keymaker' => 'default_keymaker',
-                            ]
-                        ]
-                    ],
-                ]
             ]
-        ];
+        ]];
         $config = $this->getProcessor()->processConfiguration(new Configuration(), $input);
 
         $this->assertSame(
             $config,
             array_merge(
                 [
-                    'orm' => [
-                        'default' => [
-                            'uploadable' => true,
-                            'translatable' => false
-                        ]
-                    ],
+                    'orm' => ['default' => ['uploadable' => true, 'translatable' => false]],
                     'uploadable_configuration' => [
-                        'FSi\Bundle\DemoBundle\Article' => [
+                        Article::class => [
                             'configuration' => [
                                 'file' => [
                                     'filesystem' => 'default_filesystem',
@@ -121,29 +101,14 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
 
     public function testTranslatableEnabledOption()
     {
-        $input = [
-            0 => [
-                'orm' => [
-                    'default' => [
-                        'translatable' => true
-                    ]
-                ]
-            ]
-        ];
+        $input = [['orm' => ['default' => ['translatable' => true]]]];
         $config = $this->getProcessor()->processConfiguration(new Configuration(), $input);
 
         $this->assertSame(
             $config,
             array_merge(
                 $this->getBundleDefaultOptions(),
-                [
-                    'orm' => [
-                        'default' => [
-                            'translatable' => true,
-                            'uploadable' => false
-                        ]
-                    ],
-                ]
+                ['orm' => ['default' => ['translatable' => true, 'uploadable' => false]]]
             )
         );
     }
@@ -179,10 +144,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    /**
-     * @return \Symfony\Component\Config\Definition\Processor
-     */
-    protected function getProcessor()
+    protected function getProcessor(): Processor
     {
         return new Processor();
     }

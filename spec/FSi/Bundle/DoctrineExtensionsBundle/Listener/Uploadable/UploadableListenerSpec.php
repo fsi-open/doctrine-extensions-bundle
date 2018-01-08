@@ -7,10 +7,14 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace spec\FSi\Bundle\DoctrineExtensionsBundle\Listener\Uploadable;
 
 use FSi\Bundle\DoctrineExtensionsBundle\FilesystemMap;
+use FSi\Bundle\DoctrineExtensionsBundle\Listener\Uploadable\UploadableListener;
 use FSi\DoctrineExtensions\Uploadable\FileHandler\GaufretteHandler;
+use FSi\DoctrineExtensions\Uploadable\UploadableListener as BaseUploadableLister;
 use PhpSpec\ObjectBehavior;
 
 class UploadableListenerSpec extends ObjectBehavior
@@ -23,11 +27,11 @@ class UploadableListenerSpec extends ObjectBehavior
 
     function it_is_initializable()
     {
-        $this->shouldHaveType('FSi\Bundle\DoctrineExtensionsBundle\Listener\Uploadable\UploadableListener');
+        $this->shouldHaveType(UploadableListener::class);
     }
 
     function it_extends_uploadable()
     {
-        $this->shouldBeAnInstanceOf('FSi\DoctrineExtensions\Uploadable\UploadableListener');
+        $this->shouldBeAnInstanceOf(BaseUploadableLister::class);
     }
 }
