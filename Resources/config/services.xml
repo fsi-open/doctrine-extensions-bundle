@@ -122,6 +122,10 @@
             <tag name="form.type" alias="fsi_removable_file" />
         </service>
 
+        <service id="form.type_extension.form.request_handler" class="FSi\Bundle\DoctrineExtensionsBundle\Form\FSiUploadableRequestHandler">
+            <argument type="service" id="form.server_params" />
+        </service>
+
         <!-- Validators -->
         <service id="fsi_doctrine_extensions.validator.symfony_file" class="Symfony\Component\Validator\Constraints\FileValidator" />
         <service id="fsi_doctrine_extensions.validator.symfony_image" class="Symfony\Component\Validator\Constraints\ImageValidator" />
