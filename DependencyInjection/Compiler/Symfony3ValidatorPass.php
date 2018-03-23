@@ -9,8 +9,8 @@ final class Symfony3ValidatorPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
-        // This class is removed in symfony/validator 3.0
-        if (!class_exists('Symfony\Component\Validator\ExecutionContextInterface')) {
+        // This interface is removed in symfony/validator 3.0
+        if (!interface_exists('Symfony\Component\Validator\ExecutionContextInterface')) {
             $container->findDefinition('fsi_doctrine_extensions.validator.file')
                 ->setClass('FSi\Bundle\DoctrineExtensionsBundle\Validator\Constraints\Symfony3\FileValidator');
 
