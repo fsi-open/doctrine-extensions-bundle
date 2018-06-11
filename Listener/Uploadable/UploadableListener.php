@@ -16,7 +16,6 @@ use FSi\DoctrineExtensions\Metadata\ClassMetadataInterface;
 use FSi\DoctrineExtensions\Uploadable\FileHandler\FileHandlerInterface;
 use FSi\DoctrineExtensions\Uploadable\Mapping\ClassMetadata;
 use FSi\DoctrineExtensions\Uploadable\UploadableListener as BaseListener;
-use FSi\DoctrineExtensions\Uploadable\Exception\RuntimeException;
 
 class UploadableListener extends BaseListener
 {
@@ -63,23 +62,24 @@ class UploadableListener extends BaseListener
 
             foreach ($this->configuration[$class] as $property => $configuration) {
                 if (!array_key_exists($property, $properties)) {
-                    throw new RuntimeException(sprintf(
-                        'Provided property "%s" is not valid uploadable property for class "%s". Available properties "%s"',
-                        $property,
-                        $class,
-                        implode(', ', array_keys($properties))
-                    ));
+                    $properties[$property] = [
+                        'targetField' => '',
+                        'filesystem' => '',
+                        'keymaker' => null,
+                        'keyLength' => null,
+                        'keyPattern' => '',
+                    ];
                 }
 
-                if (isset($configuration['filesystem'])) {
+                if (array_key_exists('filesystem', $configuration)) {
                     $properties[$property]['filesystem'] = $configuration['filesystem'];
                 }
 
-                if (isset($configuration['keymaker'])) {
+                if (array_key_exists('keymaker', $configuration)) {
                     $properties[$property]['keymaker'] = $configuration['keymaker'];
                 }
 
-                if (isset($configuration['keyPattern'])) {
+                if (array_key_exists('keyPattern', $configuration)) {
                     $properties[$property]['keyPattern'] = $configuration['keyPattern'];
                 }
             }
