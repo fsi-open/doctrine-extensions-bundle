@@ -14,6 +14,7 @@ namespace FSi\Bundle\DoctrineExtensionsBundle\Listener\Uploadable;
 use Doctrine\ORM\EntityManagerInterface;
 use FSi\DoctrineExtensions\Metadata\ClassMetadataInterface;
 use FSi\DoctrineExtensions\Uploadable\FileHandler\FileHandlerInterface;
+use FSi\DoctrineExtensions\Uploadable\Mapping\ClassMetadata;
 use FSi\DoctrineExtensions\Uploadable\UploadableListener as BaseListener;
 
 class UploadableListener extends BaseListener
@@ -50,33 +51,41 @@ class UploadableListener extends BaseListener
 
     public function getExtendedMetadata(EntityManagerInterface $objectManager, string $class): ClassMetadataInterface
     {
-        /* @var $metadata \FSi\DoctrineExtensions\Uploadable\Mapping\ClassMetadata */
-        $metadata = parent::getExtendedMetadata($objectManager, $class);
+        $class = $this->normalizeClass($class);
 
-        $class = ltrim($class, '\\');
+        $factory = $this->getExtendedMetadataFactory($objectManager);
+        /** @var ClassMetadata $extendedMetadata */
+        $extendedMetadata = $factory->getClassMetadata($class);
 
         if (array_key_exists($class, $this->configuration)) {
-            $properties = $metadata->getUploadableProperties();
+            $properties = $extendedMetadata->getUploadableProperties();
 
             foreach ($this->configuration[$class] as $property => $configuration) {
-                if (array_key_exists($property, $properties)) {
-                    if (isset($configuration['filesystem'])) {
-                        $properties[$property]['filesystem'] = $configuration['filesystem'];
-                    }
+                if (!array_key_exists($property, $properties)) {
+                    $properties[$property] = [
+                        'targetField' => '',
+                        'filesystem' => '',
+                        'keymaker' => null,
+                        'keyLength' => null,
+                        'keyPattern' => '',
+                    ];
+                }
 
-                    if (isset($configuration['keymaker'])) {
-                        $properties[$property]['keymaker'] = $configuration['keymaker'];
-                    }
+                if (array_key_exists('filesystem', $configuration)) {
+                    $properties[$property]['filesystem'] = $configuration['filesystem'];
+                }
 
-                    if (isset($configuration['keyPattern'])) {
-                        $properties[$property]['keyPattern'] = $configuration['keyPattern'];
-                    }
+                if (array_key_exists('keymaker', $configuration)) {
+                    $properties[$property]['keymaker'] = $configuration['keymaker'];
+                }
 
+                if (array_key_exists('keyPattern', $configuration)) {
+                    $properties[$property]['keyPattern'] = $configuration['keyPattern'];
                 }
             }
 
             foreach ($properties as $property => $configuration) {
-                $metadata->addUploadableProperty(
+                $extendedMetadata->addUploadableProperty(
                     $property,
                     $properties[$property]['targetField'],
                     $properties[$property]['filesystem'],
@@ -87,7 +96,9 @@ class UploadableListener extends BaseListener
             }
         }
 
-        return $metadata;
+        $this->validateExtendedMetadata($objectManager->getClassMetadata($class), $extendedMetadata);
+
+        return $extendedMetadata;
     }
 
     protected function setConfiguration(array $configuration): void
@@ -95,8 +106,13 @@ class UploadableListener extends BaseListener
         $this->configuration = [];
 
         foreach ($configuration as $class => $config) {
-            $className = ltrim($class, '\\');
+            $className = $this->normalizeClass($class);
             $this->configuration[$className] = $config;
         }
+    }
+
+    private function normalizeClass($class): string
+    {
+        return ltrim($class, '\\');
     }
 }
