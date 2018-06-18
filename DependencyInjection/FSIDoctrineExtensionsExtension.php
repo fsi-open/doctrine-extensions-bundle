@@ -16,7 +16,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
-use FSi\Bundle\DataGridBundle\DataGridBundle;
 
 class FSIDoctrineExtensionsExtension extends Extension
 {
@@ -30,7 +29,7 @@ class FSIDoctrineExtensionsExtension extends Extension
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
 
-        if (class_exists(DataGridBundle::class)) {
+        if (class_exists('\FSi\Bundle\DataGridBundle\DataGridBundle')) {
             $loader->load('services/datagrid.xml');
         }
         $this->setListenersConfiguration($container, $config);
@@ -81,14 +80,6 @@ class FSIDoctrineExtensionsExtension extends Extension
             'fsi_doctrine_extensions.default.filesystem.base_url',
             $config['default_filesystem_base_url']
         );
-
-        $filesystemMap = [];
-        foreach ($config['uploadable_filesystems'] as $filesystem => $fileSystemConfig) {
-            $filesystemMap[$filesystem] = $fileSystemConfig;
-        }
-
-        $container->getDefinition('fsi_doctrine_extensions.gaufrette.filesystem_map')
-            ->replaceArgument(2, $filesystemMap);
     }
 
     protected function setUploadabbleConfigurationParameter(ContainerBuilder $container, array $config): void

@@ -46,7 +46,6 @@
 
         <service id="fsi_doctrine_extensions.gaufrette.filesystem_map" class="%fsi_doctrine_extensions.gaufrette.filesystem_map.class%">
             <argument type="service" id="knp_gaufrette.filesystem_map"/>
-            <argument type="collection"/>
         </service>
 
         <service id="fsi_doctrine_extensions.default.key_maker" class="%fsi_doctrine_extensions.default.key_maker.class%"/>

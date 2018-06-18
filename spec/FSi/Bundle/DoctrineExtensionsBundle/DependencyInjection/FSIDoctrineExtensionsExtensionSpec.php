@@ -134,8 +134,7 @@ class FSIDoctrineExtensionsExtensionSpec extends ObjectBehavior
         ContainerBuilder $builder,
         ParameterBagInterface $parameterBag,
         Definition $translatable,
-        Definition $uploadable,
-        Definition $fileSystemMap
+        Definition $uploadable
     ) {
         $builder->hasExtension(Argument::type('string'))->willReturn(false);
         if (method_exists(ContainerBuilder::class, 'fileExists')) {
@@ -159,13 +158,6 @@ class FSIDoctrineExtensionsExtensionSpec extends ObjectBehavior
 
         $builder->setParameter('fsi_doctrine_extensions.default.filesystem.base_url', '/uploaded')
             ->shouldBeCalled();
-
-        $builder->getDefinition('fsi_doctrine_extensions.gaufrette.filesystem_map')
-            ->willReturn($fileSystemMap);
-
-        $fileSystemMap->replaceArgument(2, [])->shouldBeCalled();
-
-        $uploadable->addMethodCall('setDefaultKeymaker', Argument::type('array'))->shouldBeCalled();
 
         $uploadable->addMethodCall('setDefaultFilesystem', Argument::type('array'))->shouldBeCalled();
 
