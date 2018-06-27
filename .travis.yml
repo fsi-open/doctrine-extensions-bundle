@@ -13,10 +13,11 @@ matrix:
         - php: 7.1
           env:
             - COMPOSER_FLAGS='--prefer-lowest'
-        - php: 7.1
+        - php: 7.2
 
 before_install:
     - phpenv config-rm xdebug.ini
+    - composer validate
     - composer update $COMPOSER_FLAGS
 
 script:
