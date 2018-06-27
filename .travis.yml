@@ -3,7 +3,6 @@ language: php
 cache:
     directories:
         - $HOME/.composer/cache
-        - bin
         - vendor
 
 sudo: false
@@ -21,5 +20,5 @@ before_install:
     - composer update $COMPOSER_FLAGS
 
 script:
-    - ./bin/phpunit -v
-    - ./bin/phpspec run -f pretty
+    - ./vendor/bin/phpunit -v
+    - ./vendor/bin/phpspec run -f pretty
