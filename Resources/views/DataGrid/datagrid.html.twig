@@ -4,7 +4,7 @@
     <div>
         {% endspaceless %}
         {% for val in cell.value %}
-            {% if val is not empty %}
+            {% if is_fsi_file(val) %}
                 <a href="{{ fsi_file_url(val) }}" target="_blank">{{ val|fsi_file_basename }}</a>
             {% endif %}
         {% endfor %}
@@ -20,7 +20,7 @@
     <div>
         {% endspaceless %}
         {% for val in cell.value %}
-            {% if val is not empty %}
+            {% if is_fsi_file(val) %}
                 <img src="{{ fsi_file_url(val) }}" style="width: {{ cell.attributes.width }}px" />
             {% endif %}
         {% endfor %}
