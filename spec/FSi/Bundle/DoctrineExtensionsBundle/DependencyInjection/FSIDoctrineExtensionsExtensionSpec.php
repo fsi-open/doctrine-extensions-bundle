@@ -39,6 +39,10 @@ class FSIDoctrineExtensionsExtensionSpec extends ObjectBehavior
         Definition $translatable,
         Definition $uploadable
     ) {
+        if (true === method_exists(ContainerBuilder::class, 'removeBindings')) {
+            $builder->removeBindings(Argument::type('string'))->shouldBeCalled();
+        }
+
         $builder->hasExtension(Argument::type('string'))->willReturn(false);
         if (method_exists(ContainerBuilder::class, 'fileExists')) {
             $builder->fileExists(Argument::type('string'))->willReturn(true);
@@ -88,6 +92,10 @@ class FSIDoctrineExtensionsExtensionSpec extends ObjectBehavior
         Definition $translatable,
         Definition $uploadable
     ) {
+        if (true === method_exists(ContainerBuilder::class, 'removeBindings')) {
+            $builder->removeBindings(Argument::type('string'))->shouldBeCalled();
+        }
+
         $builder->hasExtension(Argument::type('string'))->willReturn(false);
         if (method_exists(ContainerBuilder::class, 'fileExists')) {
             $builder->fileExists(Argument::type('string'))->willReturn(true);
@@ -136,6 +144,10 @@ class FSIDoctrineExtensionsExtensionSpec extends ObjectBehavior
         Definition $translatable,
         Definition $uploadable
     ) {
+        if (true === method_exists(ContainerBuilder::class, 'removeBindings')) {
+            $builder->removeBindings(Argument::type('string'))->shouldBeCalled();
+        }
+
         $builder->hasExtension(Argument::type('string'))->willReturn(false);
         if (method_exists(ContainerBuilder::class, 'fileExists')) {
             $builder->fileExists(Argument::type('string'))->willReturn(true);

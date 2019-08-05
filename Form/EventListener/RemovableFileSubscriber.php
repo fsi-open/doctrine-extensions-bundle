@@ -24,17 +24,11 @@ class RemovableFileSubscriber implements EventSubscriberInterface
      */
     private $propertyAccessor;
 
-    /**
-     * @param PropertyAccessor $accessor
-     */
     public function __construct(PropertyAccessor $accessor)
     {
         $this->propertyAccessor = $accessor;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public static function getSubscribedEvents()
     {
         return [
@@ -42,9 +36,6 @@ class RemovableFileSubscriber implements EventSubscriberInterface
         ];
     }
 
-    /**
-     * @param \Symfony\Component\Form\FormEvent $event
-     */
     public function preSubmit(FormEvent $event)
     {
         if ($this->isEventFormDataEmpty($event)) {

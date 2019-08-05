@@ -19,41 +19,26 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class ImageType extends AbstractType
 {
-    /**
-     * {@inheritdoc}
-     */
     public function getParent()
     {
         return $this->isSymfony3() ? FileType::class : 'fsi_file';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName()
     {
         return 'fsi_image';
     }
 
-    /**
-     * @return string
-     */
     public function getBlockPrefix()
     {
         return $this->getName();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $this->configureOptions($resolver);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
@@ -61,9 +46,6 @@ class ImageType extends AbstractType
         ]);
     }
 
-    /**
-     * @return bool
-     */
     private function isSymfony3(): bool
     {
         return method_exists(AbstractType::class, 'getBlockPrefix');

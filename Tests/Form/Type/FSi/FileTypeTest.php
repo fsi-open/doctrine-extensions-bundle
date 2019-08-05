@@ -47,7 +47,10 @@ class FileTypeTest extends FormTypeTest
         $html = $this->twig->render('form_with_fsi_file.html.twig', [
             'form' => $form->createView()
         ]);
-        $this->assertSame($html, $this->getExpectedHtml('form_with_fsi_file.html'));
+        $this->assertSame(
+            $this->getExpectedHtml('form_with_fsi_file.html'),
+            str_replace('<div >', '<div>', $html)
+        );
     }
 
     public function testFormRenderingWithCustomFileUrl()
@@ -71,7 +74,10 @@ class FileTypeTest extends FormTypeTest
         $html = $this->twig->render('form_with_fsi_file.html.twig', [
             'form' => $form->createView()
         ]);
-        $this->assertSame($html, $this->getExpectedHtml('form_with_fsi_file_and_constant_url.html'));
+        $this->assertSame(
+            $this->getExpectedHtml('form_with_fsi_file_and_constant_url.html'),
+            str_replace('<div >', '<div>', $html)
+        );
     }
 
     private function getFileMock()

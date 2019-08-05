@@ -11,17 +11,15 @@ declare(strict_types=1);
 
 namespace FSi\Bundle\DoctrineExtensionsBundle\DependencyInjection;
 
+use FSi\Bundle\DataGridBundle\DataGridBundle;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\DependencyInjection\Loader;
+use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 class FSIDoctrineExtensionsExtension extends Extension
 {
-    /**
-     * {@inheritdoc}
-     */
     public function load(array $configs, ContainerBuilder $container)
     {
         $configuration = new Configuration();
@@ -29,18 +27,18 @@ class FSIDoctrineExtensionsExtension extends Extension
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
 
-        if (class_exists('\FSi\Bundle\DataGridBundle\DataGridBundle')) {
+        if (class_exists(DataGridBundle::class)) {
             $loader->load('services/datagrid.xml');
         }
         $this->setListenersConfiguration($container, $config);
-        $this->setUploadabbleConfigurationParameter($container, $config['uploadable_configuration']);
+        $this->setUploadableConfigurationParameter($container, $config['uploadable_configuration']);
     }
 
     protected function setListenersConfiguration(ContainerBuilder $container, array $config): void
     {
         foreach ($config['orm'] as $connection => $subscribers) {
             foreach ($subscribers as $name => $enabled) {
-                $tag = sprintf('fsi_doctrine_extensions.listener.%s', $name);
+                $tag = "fsi_doctrine_extensions.listener.{$name}";
 
                 if ($enabled) {
                     $listenersIds = $container->findTaggedServiceIds($tag);
@@ -82,7 +80,7 @@ class FSIDoctrineExtensionsExtension extends Extension
         );
     }
 
-    protected function setUploadabbleConfigurationParameter(ContainerBuilder $container, array $config): void
+    private function setUploadableConfigurationParameter(ContainerBuilder $container, array $config): void
     {
         $configuration = [];
 
@@ -94,7 +92,7 @@ class FSIDoctrineExtensionsExtension extends Extension
         $uploadableListenerDefinition->replaceArgument(2, $configuration);
     }
 
-    protected function setTranslatableConfiguration(ContainerBuilder $container, array $config): void
+    private function setTranslatableConfiguration(ContainerBuilder $container, array $config): void
     {
         $container->getDefinition('fsi_doctrine_extensions.listener.translatable')
             ->addMethodCall('setDefaultLocale', [$config['default_locale']]);
