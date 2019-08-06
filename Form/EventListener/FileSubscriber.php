@@ -17,9 +17,6 @@ use Symfony\Component\Form\FormEvents;
 
 class FileSubscriber implements EventSubscriberInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public static function getSubscribedEvents()
     {
         return [

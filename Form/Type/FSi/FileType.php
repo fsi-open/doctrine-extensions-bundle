@@ -42,41 +42,26 @@ class FileType extends AbstractType
         $this->filePathResolver = $filePathResolver;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getParent()
     {
         return $this->isSymfony3() ? SymfonyFileType::class : 'file';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName()
     {
         return 'fsi_file';
     }
 
-    /**
-     * @return string
-     */
     public function getBlockPrefix()
     {
         return $this->getName();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->addEventSubscriber(new FileSubscriber());
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
         if (!$form->getData() instanceof FSiFile) {
@@ -91,17 +76,11 @@ class FileType extends AbstractType
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $this->configureOptions($resolver);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([

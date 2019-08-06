@@ -37,33 +37,21 @@ class RemovableFileType extends AbstractType
         $this->fileSubscriber = $fileSubscriber;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getParent()
     {
         return $this->isSymfony3() ? FormType::class : 'form';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName()
     {
         return 'fsi_removable_file';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getBlockPrefix()
     {
         return $this->getName();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $fileOptions = array_merge($this->getDefaultFileOptions(), $options['file_options']);
@@ -76,25 +64,16 @@ class RemovableFileType extends AbstractType
         $builder->addEventSubscriber($this->fileSubscriber);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
         $view->vars['label_attr']['for'] = $view[$form->getName()]->vars['id'];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $this->configureOptions($resolver);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([

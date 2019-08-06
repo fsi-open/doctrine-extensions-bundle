@@ -45,7 +45,10 @@ class RemovableFileTypeTest extends FormTypeTest
         $form = $this->createTestForm($article);
 
         $html = $this->twig->render('form_with_fsi_file.html.twig', ['form' => $form->createView()]);
-        $this->assertSame($this->getExpectedHtml('form_with_fsi_removable_file.html'), $html);
+        $this->assertSame(
+            $this->getExpectedHtml('form_with_fsi_removable_file.html'),
+            str_replace('<div >', '<div>', $html)
+        );
     }
 
     public function testFormSubmission()

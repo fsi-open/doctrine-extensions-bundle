@@ -11,22 +11,25 @@ declare(strict_types=1);
 
 namespace FSi\Bundle\DoctrineExtensionsBundle\DependencyInjection;
 
+use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 class Configuration implements ConfigurationInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('fsi_doctrine_extensions');
+        if (true === method_exists(TreeBuilder::class, 'getRootNode')) {
+            $treeBuilder = new TreeBuilder('fsi_doctrine_extensions');
+            $rootNode = $treeBuilder->getRootNode();
+        } else {
+            $treeBuilder = new TreeBuilder();
+            $rootNode = $treeBuilder->root('fsi_doctrine_extensions');
+        }
 
         $rootNode
             ->children()
-                ->append($this->getVendorNode('orm'))
+                ->append($this->getVendorNode())
                 ->append($this->getFilesystemsNode())
                 ->scalarNode('default_locale')->defaultValue('%locale%')->end()
                 ->scalarNode('default_key_maker_service')->defaultValue('fsi_doctrine_extensions.default.key_maker')->end()
@@ -55,10 +58,16 @@ class Configuration implements ConfigurationInterface
         return $treeBuilder;
     }
 
-    private function getFilesystemsNode()
+    private function getFilesystemsNode(): NodeDefinition
     {
-        $treeBuilder = new TreeBuilder();
-        $node = $treeBuilder->root('uploadable_filesystems');
+        if (true === method_exists(TreeBuilder::class, 'getRootNode')) {
+            $treeBuilder = new TreeBuilder('uploadable_filesystems');
+            $node = $treeBuilder->getRootNode();
+        } else {
+            $treeBuilder = new TreeBuilder();
+            $node = $treeBuilder->root('uploadable_filesystems');
+        }
+
         $node
             ->useAttributeAsKey('filesystem')
             ->prototype('array')
@@ -70,13 +79,16 @@ class Configuration implements ConfigurationInterface
         return $node;
     }
 
-    /**
-     * @param string $name
-     */
-    private function getVendorNode($name)
+    private function getVendorNode(): NodeDefinition
     {
-        $treeBuilder = new TreeBuilder();
-        $node = $treeBuilder->root($name);
+
+        if (true === method_exists(TreeBuilder::class, 'getRootNode')) {
+            $treeBuilder = new TreeBuilder('orm');
+            $node = $treeBuilder->getRootNode();
+        } else {
+            $treeBuilder = new TreeBuilder();
+            $node = $treeBuilder->root('orm');
+        }
 
         $node
             ->useAttributeAsKey('id')
