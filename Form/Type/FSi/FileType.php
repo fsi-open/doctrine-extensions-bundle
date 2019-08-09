@@ -21,7 +21,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class FileType extends AbstractType
@@ -44,17 +43,12 @@ class FileType extends AbstractType
 
     public function getParent()
     {
-        return $this->isSymfony3() ? SymfonyFileType::class : 'file';
-    }
-
-    public function getName()
-    {
-        return 'fsi_file';
+        return SymfonyFileType::class;
     }
 
     public function getBlockPrefix()
     {
-        return $this->getName();
+        return 'fsi_file';
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -64,7 +58,7 @@ class FileType extends AbstractType
 
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
-        if (!$form->getData() instanceof FSiFile) {
+        if (false === $form->getData() instanceof FSiFile) {
             return;
         }
 
@@ -76,11 +70,6 @@ class FileType extends AbstractType
         }
     }
 
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
-    {
-        $this->configureOptions($resolver);
-    }
-
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
@@ -89,10 +78,5 @@ class FileType extends AbstractType
         ]);
         $resolver->setDefined('file_url');
         $resolver->setAllowedTypes('file_url', ['null', 'callable']);
-    }
-
-    private function isSymfony3(): bool
-    {
-        return method_exists(AbstractType::class, 'getBlockPrefix');
     }
 }

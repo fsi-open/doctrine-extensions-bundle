@@ -22,7 +22,7 @@ class ImageTypeSpec extends ObjectBehavior
 {
     function it_should_have_valid_name()
     {
-        $this->getName()->shouldReturn('fsi_image');
+        $this->getBlockPrefix()->shouldReturn('fsi_image');
     }
 
     function it_should_be_child_of_fsi_file_type()

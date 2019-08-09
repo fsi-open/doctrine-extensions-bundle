@@ -1,31 +1,31 @@
 {% block datagrid_column_type_fsi_file_cell %}
-{% spaceless %}
+{% apply spaceless %}
 <td>
     <div>
-        {% endspaceless %}
+        {% endapply %}
         {% for val in cell.value %}
             {% if is_fsi_file(val) %}
                 <a href="{{ fsi_file_url(val) }}" target="_blank">{{ val|fsi_file_basename }}</a>
             {% endif %}
         {% endfor %}
-        {% spaceless %}
+        {% apply spaceless %}
     </div>
 </td>
-{% endspaceless %}
+{% endapply %}
 {% endblock %}
 
 {% block datagrid_column_type_fsi_image_cell %}
-{% spaceless %}
+{% apply spaceless %}
 <td>
     <div>
-        {% endspaceless %}
+        {% endapply %}
         {% for val in cell.value %}
             {% if is_fsi_file(val) %}
                 <img src="{{ fsi_file_url(val) }}" style="width: {{ cell.attributes.width }}px" />
             {% endif %}
         {% endfor %}
-        {% spaceless %}
+        {% apply spaceless %}
     </div>
 </td>
-{% endspaceless %}
+{% endapply %}
 {% endblock %}

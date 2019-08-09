@@ -12,28 +12,28 @@
     ],
     "require": {
         "php": ">=7.1",
-        "twig/twig": "^1.34|^2.0",
-        "symfony/framework-bundle": "^2.4|^3.0|^4.0",
-        "symfony/twig-bundle": "^2.4|^3.0|^4.0",
-        "symfony/http-foundation": "^2.4|^3.0|^4.0",
-        "symfony/options-resolver": "^2.6|^3.0|^4.0",
-        "symfony/form" : "^2.7.39|^3.0|^4.0",
-        "symfony/validator": "^2.4|^3.0|^4.0",
+        "twig/twig": "^2.11",
+        "symfony/framework-bundle": "^3.4|^4.0",
+        "symfony/twig-bundle": "^3.4|^4.0",
+        "symfony/http-foundation": "^3.4|^4.0",
+        "symfony/options-resolver": "^3.4|^4.0",
+        "symfony/form" : "^3.4|^4.0",
+        "symfony/validator": "^3.4|^4.0",
         "doctrine/doctrine-bundle": "^1.2",
         "fsi/doctrine-extensions": "^2.0",
-        "sensio/framework-extra-bundle": "^3.0|^4.0|^5.0",
-        "knplabs/knp-gaufrette-bundle": "~0.1"
+        "sensio/framework-extra-bundle": "^5.0",
+        "knplabs/knp-gaufrette-bundle": "~0.6"
     },
     "require-dev": {
-        "bossa/phpspec2-expect": "^2.3|^3.0",
+        "bossa/phpspec2-expect": "^3.0",
         "doctrine/orm": "^2.5",
-        "fsi/datagrid-bundle": "^1.1|^2.0",
-        "phpunit/phpunit": "^6.5",
-        "phpspec/phpspec": "^3.0|^4.3",
-        "symfony/asset": "^2.7|^3.0|^4.0",
-        "symfony/phpunit-bridge": "^4.0",
-        "symfony/security": "^2.4|^3.0|^4.0",
-        "symfony/twig-bridge": "^2.4|^3.0|^4.0"
+        "fsi/datagrid-bundle": "^2.0",
+        "phpunit/phpunit": "^7.5",
+        "phpspec/phpspec": "^5.0",
+        "symfony/asset": "^3.4|^4.0",
+        "symfony/phpunit-bridge": "^4.3",
+        "symfony/security": "^3.4|^4.0",
+        "symfony/twig-bridge": "^3.4|^4.0"
     },
     "config": {
         "bin-dir": "vendor/bin"
@@ -42,11 +42,15 @@
         "psr-4": { "FSi\\Bundle\\DoctrineExtensionsBundle\\": "" }
     },
     "autoload-dev": {
-        "psr-4": { "FSi\\Bundle\\DoctrineExtensionsBundle\\Tests\\": "Tests/" }
+        "psr-4": {
+            "FSi\\Bundle\\DoctrineExtensionsBundle\\Tests\\": "Tests/",
+            "spec\\FSi\\Bundle\\DoctrineExtensionsBundle\\": "spec/FSi/Bundle/DoctrineExtensionsBundle"
+        }
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "2.0-dev",
+            "dev-master": "2.1-dev",
+            "2.0": "2.0-dev",
             "1.1": "1.1-dev",
             "1.0": "1.0-dev"
         }

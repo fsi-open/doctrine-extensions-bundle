@@ -50,7 +50,7 @@ class ConfigurationTest extends TestCase
             'orm' => ['default' => ['uploadable' => true]],
             'uploadable_configuration' => [
                 [
-                    'class' => 'FSi\Bundle\DemoBundle\Article',
+                    'class' => Article::class,
                     'configuration' => [
                         [
                             'property' => 'file',

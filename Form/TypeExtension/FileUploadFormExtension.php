@@ -12,12 +12,10 @@ declare(strict_types=1);
 namespace FSi\Bundle\DoctrineExtensionsBundle\Form\TypeExtension;
 
 use FSi\Bundle\DoctrineExtensionsBundle\Form\FSiUploadableRequestHandler;
-use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class FileUploadFormExtension extends AbstractTypeExtension
 {
@@ -38,15 +36,7 @@ class FileUploadFormExtension extends AbstractTypeExtension
 
     public function getExtendedType()
     {
-        return method_exists(AbstractType::class, 'getBlockPrefix')
-            ? FormType::class
-            : 'form'
-        ;
-    }
-
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
-    {
-        $this->configureOptions($resolver);
+        return FormType::class;
     }
 
     public function configureOptions(OptionsResolver $resolver)

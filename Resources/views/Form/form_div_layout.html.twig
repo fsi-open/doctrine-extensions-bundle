@@ -1,5 +1,5 @@
 {% block fsi_file_widget %}
-    {% spaceless %}
+    {% apply spaceless %}
         {% set type = type|default('file') %}
         {% set required = false %}
         {{ block('form_widget') }}
@@ -12,11 +12,11 @@
                 <div>{{ 'fsi_file.refresh'|trans({}, 'FSiDoctrineExtensionsBundle') }}</div>
             {% endif %}
         {% endif %}
-    {% endspaceless %}
+    {% endapply %}
 {% endblock %}
 
 {% block fsi_image_widget %}
-    {% spaceless %}
+    {% apply spaceless %}
         {% set type = type|default('file') %}
         {% set required = false %}
         {{ block('form_widget') }}
@@ -27,11 +27,11 @@
                 <div>{{ 'fsi_file.refresh'|trans({}, 'FSiDoctrineExtensionsBundle') }}</div>
             {% endif %}
         {% endif %}
-    {% endspaceless %}
+    {% endapply %}
 {% endblock %}
 
 {% block fsi_removable_file_widget %}
-    {% spaceless %}
+    {% apply spaceless %}
         {% set fileForm = form[form.vars.name] %}
         {% set type = type|default('file') %}
         {{ form_widget(fileForm) }}
@@ -39,7 +39,7 @@
             {{ form_widget(form.remove) }}
             {{ form_label(form.remove) }}
         </div>
-    {% endspaceless %}
+    {% endapply %}
 {% endblock %}
 
 {% block fsi_removable_file_row %}

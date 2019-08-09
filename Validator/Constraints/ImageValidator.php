@@ -11,6 +11,6 @@ declare(strict_types=1);
 
 namespace FSi\Bundle\DoctrineExtensionsBundle\Validator\Constraints;
 
-class ImageValidator extends FileValidator
+final class ImageValidator extends FileValidator
 {
 }

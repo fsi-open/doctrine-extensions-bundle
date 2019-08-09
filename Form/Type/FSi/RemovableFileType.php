@@ -23,7 +23,6 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class RemovableFileType extends AbstractType
 {
@@ -39,17 +38,12 @@ class RemovableFileType extends AbstractType
 
     public function getParent()
     {
-        return $this->isSymfony3() ? FormType::class : 'form';
-    }
-
-    public function getName()
-    {
-        return 'fsi_removable_file';
+        return FormType::class;
     }
 
     public function getBlockPrefix()
     {
-        return $this->getName();
+        return 'fsi_removable_file';
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -69,11 +63,6 @@ class RemovableFileType extends AbstractType
         $view->vars['label_attr']['for'] = $view[$form->getName()]->vars['id'];
     }
 
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
-    {
-        $this->configureOptions($resolver);
-    }
-
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
@@ -82,9 +71,9 @@ class RemovableFileType extends AbstractType
             'inherit_data' => true,
             'required' => false,
             'remove_name' => 'remove',
-            'remove_type' => $this->isSymfony3() ? CheckboxType::class : 'checkbox',
+            'remove_type' => CheckboxType::class,
             'remove_options' => [],
-            'file_type' => $this->isSymfony3() ? FileType::class : 'fsi_file',
+            'file_type' => FileType::class,
             'file_options' => [],
         ]);
 
@@ -138,10 +127,5 @@ class RemovableFileType extends AbstractType
             'mapped' => false,
             'translation_domain' => 'FSiDoctrineExtensionsBundle'
         ];
-    }
-
-    private function isSymfony3(): bool
-    {
-        return method_exists(AbstractType::class, 'getBlockPrefix');
     }
 }

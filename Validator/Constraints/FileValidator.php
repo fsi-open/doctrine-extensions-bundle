@@ -11,11 +11,12 @@ declare(strict_types=1);
 
 namespace FSi\Bundle\DoctrineExtensionsBundle\Validator\Constraints;
 
+use FSi\DoctrineExtensions\Uploadable\File as FSiFile;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints\FileValidator as BaseValidator;
-use FSi\DoctrineExtensions\Uploadable\File as FSiFile;
 use Symfony\Component\Validator\ConstraintValidator;
-use Symfony\Component\Validator\ExecutionContextInterface;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use Throwable;
 
 class FileValidator extends ConstraintValidator
 {
@@ -44,12 +45,12 @@ class FileValidator extends ConstraintValidator
 
             try {
                 $this->symfonyValidator->validate($tmpFile, $constraint);
-            } catch (\Exception $e) {
-                unlink($tmpFile);
+            } catch (Throwable $e) {
                 throw $e;
+            } finally {
+                unlink($tmpFile);
             }
 
-            unlink($tmpFile);
             return;
         }
 
