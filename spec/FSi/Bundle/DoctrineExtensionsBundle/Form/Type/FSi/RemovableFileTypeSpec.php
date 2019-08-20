@@ -39,7 +39,7 @@ class RemovableFileTypeSpec extends ObjectBehavior
 
     function it_should_have_valid_name()
     {
-        $this->getName()->shouldReturn('fsi_removable_file');
+        $this->getBlockPrefix()->shouldReturn('fsi_removable_file');
     }
 
     function it_should_be_child_of_form_type()

@@ -17,23 +17,15 @@ use FSi\DoctrineExtensions\Uploadable\File;
 
 class FSiFilePathResolver
 {
-    /**
-     * @param File $file
-     * @return string
-     */
     public function fileBasename(File $file): string
     {
         return basename($file->getName());
     }
 
-    /**
-     * @param File $file
-     * @return string
-     */
     public function fileUrl(File $file): string
     {
         $filesystem = $file->getFilesystem();
-        if (!($filesystem instanceof Filesystem)) {
+        if (false === $filesystem instanceof Filesystem) {
             throw new InvalidFilesystemException(sprintf(
                 'Expected instance of "%s", got "%s" instead',
                 Filesystem::class,

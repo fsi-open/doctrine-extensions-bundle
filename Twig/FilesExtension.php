@@ -55,7 +55,7 @@ class FilesExtension extends AbstractExtension
      */
     public function isFSiFile($value): bool
     {
-        if (!is_object($value)) {
+        if (false === is_object($value)) {
             return false;
         }
 

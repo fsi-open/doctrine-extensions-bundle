@@ -23,9 +23,6 @@ class TranslatableLocaleListener implements EventSubscriberInterface
      */
     private $translatableListener;
 
-    /**
-     * {@inheritdoc}
-     */
     public static function getSubscribedEvents()
     {
         return [

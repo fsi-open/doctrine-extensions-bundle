@@ -38,7 +38,7 @@ class FileTypeSpec extends ObjectBehavior
 
     function it_should_have_valid_name()
     {
-        $this->getName()->shouldReturn('fsi_file');
+        $this->getBlockPrefix()->shouldReturn('fsi_file');
     }
 
     function it_should_be_child_of_form_type()

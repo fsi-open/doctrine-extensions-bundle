@@ -12,7 +12,6 @@ declare(strict_types=1);
 namespace FSi\Bundle\DoctrineExtensionsBundle;
 
 use FSi\Bundle\DoctrineExtensionsBundle\DependencyInjection\Compiler\GaufretteFilesystemsPass;
-use FSi\Bundle\DoctrineExtensionsBundle\DependencyInjection\Compiler\Symfony3ValidatorPass;
 use FSi\Bundle\DoctrineExtensionsBundle\DependencyInjection\Compiler\TwigDataGridPass;
 use FSi\Bundle\DoctrineExtensionsBundle\DependencyInjection\Compiler\TwigFormPass;
 use FSi\Bundle\DoctrineExtensionsBundle\DependencyInjection\FSIDoctrineExtensionsExtension;
@@ -22,15 +21,11 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class FSiDoctrineExtensionsBundle extends Bundle
 {
-    /**
-     * @param ContainerBuilder $container
-     */
     public function build(ContainerBuilder $container)
     {
         parent::build($container);
 
         $container->addCompilerPass(new TwigFormPass());
-        $container->addCompilerPass(new Symfony3ValidatorPass());
         $container->addCompilerPass(new GaufretteFilesystemsPass(), PassConfig::TYPE_AFTER_REMOVING);
 
         if ($container->hasExtension('fsi_data_grid')) {

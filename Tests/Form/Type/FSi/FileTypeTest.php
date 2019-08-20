@@ -41,8 +41,8 @@ class FileTypeTest extends FormTypeTest
         $article = new Article();
         $article->setFile($file);
 
-        $form = $this->factory->create($this->isSymfony3() ? FormType::class : 'form', $article);
-        $form->add('file', $this->isSymfony3() ? FileType::class : 'fsi_file');
+        $form = $this->factory->create(FormType::class, $article);
+        $form->add('file', FileType::class);
 
         $html = $this->twig->render('form_with_fsi_file.html.twig', [
             'form' => $form->createView()
@@ -60,12 +60,9 @@ class FileTypeTest extends FormTypeTest
         $article = new Article();
         $article->setFile($file);
 
-        $form = $this->factory->create(
-            $this->isSymfony3() ? FormType::class : 'form',
-            $article
-        );
+        $form = $this->factory->create(FormType::class, $article);
 
-        $form->add('file', $this->isSymfony3() ? FileType::class : 'fsi_file', [
+        $form->add('file', FileType::class, [
             'file_url' => function (UrlGeneratorInterface $urlGenerator, FormInterface $form) {
                 return 'constant_file_url';
             },
@@ -82,20 +79,14 @@ class FileTypeTest extends FormTypeTest
 
     private function getFileMock()
     {
-        $file = $this->getMockBuilder(File::class)
-            ->disableOriginalConstructor()
-            ->getMock()
-        ;
+        $file = $this->createMock(File::class);
 
         $file->expects($this->any())
             ->method('getFilesystem')
             ->will(
                 $this->returnCallback(
                     function () {
-                        $fileSystem = $this->getMockBuilder(Filesystem::class)
-                            ->disableOriginalConstructor()
-                            ->getMock()
-                        ;
+                        $fileSystem = $this->createMock(Filesystem::class);
 
                         $fileSystem->expects($this->any())
                             ->method('getBaseUrl')
@@ -107,10 +98,7 @@ class FileTypeTest extends FormTypeTest
                             ->will(
                                 $this->returnCallback(
                                     function () {
-                                        return $this->getMockBuilder(Local::class)
-                                            ->disableOriginalConstructor()
-                                            ->getMock()
-                                        ;
+                                        return $this->createMock(Local::class);
                                     }
                                 )
                             );

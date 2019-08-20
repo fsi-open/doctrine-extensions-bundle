@@ -15,28 +15,17 @@ use FSi\Bundle\DoctrineExtensionsBundle\Form\Type\FSi\FileType;
 use FSi\Bundle\DoctrineExtensionsBundle\Validator\Constraints\Image;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class ImageType extends AbstractType
 {
     public function getParent()
     {
-        return $this->isSymfony3() ? FileType::class : 'fsi_file';
-    }
-
-    public function getName()
-    {
-        return 'fsi_image';
+        return FileType::class;
     }
 
     public function getBlockPrefix()
     {
-        return $this->getName();
-    }
-
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
-    {
-        $this->configureOptions($resolver);
+        return 'fsi_image';
     }
 
     public function configureOptions(OptionsResolver $resolver)
@@ -44,10 +33,5 @@ class ImageType extends AbstractType
         $resolver->setDefaults([
             'constraints' => [new Image()],
         ]);
-    }
-
-    private function isSymfony3(): bool
-    {
-        return method_exists(AbstractType::class, 'getBlockPrefix');
     }
 }

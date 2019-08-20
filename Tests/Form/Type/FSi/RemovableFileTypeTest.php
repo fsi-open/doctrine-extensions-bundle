@@ -29,7 +29,7 @@ class RemovableFileTypeTest extends FormTypeTest
     {
         return [
             new FSiFileExtension(
-                $this->getMockBuilder(UrlGeneratorInterface::class)->disableOriginalConstructor()->getMock(),
+                $this->createMock(UrlGeneratorInterface::class),
                 new FSiFilePathResolver()
             ),
         ];
@@ -79,11 +79,7 @@ class RemovableFileTypeTest extends FormTypeTest
         $file->expects($this->any())
             ->method('getFilesystem')
             ->will($this->returnCallback(function() {
-                $fileSystem = $this->getMockBuilder(Filesystem::class)
-                    ->disableOriginalConstructor()
-                    ->getMock()
-                ;
-
+                $fileSystem = $this->createMock(Filesystem::class);
                 $fileSystem->expects($this->any())
                     ->method('getBaseUrl')
                     ->will($this->returnValue('/uploaded/'))
@@ -92,9 +88,7 @@ class RemovableFileTypeTest extends FormTypeTest
                 $fileSystem->expects($this->any())
                     ->method('getAdapter')
                     ->will($this->returnCallback(function() {
-                        return $this->getMockBuilder(Local::class)
-                            ->disableOriginalConstructor()
-                            ->getMock();
+                        return $this->createMock(Local::class);
                     }));
 
                 return $fileSystem;
@@ -115,12 +109,8 @@ class RemovableFileTypeTest extends FormTypeTest
 
     private function createTestForm(Article $article): FormInterface
     {
-        $form = $this->factory->create(
-            $this->isSymfony3() ? FormType::class : 'form',
-            $article
-        );
-
-        $form->add('file', $this->isSymfony3() ? RemovableFileType::class : 'fsi_removable_file');
+        $form = $this->factory->create(FormType::class, $article);
+        $form->add('file', RemovableFileType::class);
 
         return $form;
     }

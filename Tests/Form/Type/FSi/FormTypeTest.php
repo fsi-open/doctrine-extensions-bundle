@@ -14,7 +14,6 @@ namespace FSi\Bundle\DoctrineExtensionsBundle\Tests\Form\Type\FSi;
 use FSi\Bundle\DoctrineExtensionsBundle\Resolver\FSiFilePathResolver;
 use FSi\Bundle\DoctrineExtensionsBundle\Twig\FilesExtension;
 use RuntimeException;
-use Symfony\Bridge\Twig\Command\DebugCommand;
 use Symfony\Bridge\Twig\Extension\AssetExtension;
 use Symfony\Bridge\Twig\Extension\FormExtension;
 use Symfony\Bridge\Twig\Extension\TranslationExtension;
@@ -28,14 +27,13 @@ use Symfony\Component\Asset\VersionStrategy\EmptyVersionStrategy;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormRenderer;
 use Symfony\Component\Form\Test\FormIntegrationTestCase;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
-use Twig_Environment;
-use Twig_RuntimeLoaderInterface;
+use Twig\Environment;
+use Twig\RuntimeLoader\RuntimeLoaderInterface;
 
 abstract class FormTypeTest extends FormIntegrationTestCase
 {
     /**
-     * @var Twig_Environment
+     * @var Environment
      */
     protected $twig;
 
@@ -46,14 +44,12 @@ abstract class FormTypeTest extends FormIntegrationTestCase
         $paths = [
             __DIR__ . '/../../../../Resources/views/Form',
             __DIR__ . '/../../../Resources/views',
-            (file_exists(VENDOR_DIR . '/symfony/twig-bridge/Resources/views'))
-                ? VENDOR_DIR . '/symfony/twig-bridge/Resources/views'
-                : VENDOR_DIR . '/symfony/twig-bridge/Symfony/Bridge/Twig/Resources/views'
+            VENDOR_DIR . '/symfony/twig-bridge/Resources/views'
         ];
 
         $loader = new StubFilesystemLoader($paths);
 
-        $twig = new Twig_Environment($loader, ['strict_variables' => true]);
+        $twig = new Environment($loader, ['strict_variables' => true]);
         $twig->addGlobal('global', '');
         $twig->addExtension(new TranslationExtension(new StubTranslator()));
         $twig->addExtension(new FilesExtension(new FSiFilePathResolver()));
@@ -61,22 +57,15 @@ abstract class FormTypeTest extends FormIntegrationTestCase
             'form_div_layout.html.twig',
             'Form/form_div_layout.html.twig'
         ], $twig);
-        if (method_exists(DebugCommand::class, 'getLoaderPaths')) {
-            $renderer = new FormRenderer($rendererEngine);
-        } else {
-            $renderer = new TwigRenderer(
-                $rendererEngine,
-                $this->getMockBuilder(CsrfTokenManagerInterface::class)->getMock()
-            );
-        }
 
-        $runtimeLoader = $this->getMockBuilder(Twig_RuntimeLoaderInterface::class)->getMock();
+        $renderer = new FormRenderer($rendererEngine);
+        $runtimeLoader = $this->createMock(RuntimeLoaderInterface::class);
         $runtimeLoader->expects($this->any())->method('load')->will($this->returnValueMap([
             [TwigRenderer::class, $renderer],
             [FormRenderer::class, $renderer],
         ]));
         $twig->addRuntimeLoader($runtimeLoader);
-        $twig->addExtension(new FormExtension($renderer));
+        $twig->addExtension(new FormExtension());
         $twig->addExtension(new AssetExtension(
             new Packages(new UrlPackage(['http://local.dev/'], new EmptyVersionStrategy()))
         ));
