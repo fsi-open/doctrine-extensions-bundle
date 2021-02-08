@@ -18,13 +18,14 @@ use FSi\Bundle\DoctrineExtensionsBundle\Tests\Fixtures\Entity\Article;
 use FSi\Bundle\DoctrineExtensionsBundle\Tests\Fixtures\Form\Extension\FSiFileExtension;
 use FSi\DoctrineExtensions\Uploadable\File;
 use Gaufrette\Adapter\Local;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class FileTypeTest extends FormTypeTest
 {
-    public function getExtensions()
+    public function getExtensions(): array
     {
         return [
             new FSiFileExtension(
@@ -34,7 +35,7 @@ class FileTypeTest extends FormTypeTest
         ];
     }
 
-    public function testFormRendering()
+    public function testFormRendering(): void
     {
         $file = $this->getFileMock();
 
@@ -47,13 +48,13 @@ class FileTypeTest extends FormTypeTest
         $html = $this->twig->render('form_with_fsi_file.html.twig', [
             'form' => $form->createView()
         ]);
-        $this->assertSame(
+        self::assertSame(
             $this->getExpectedHtml('form_with_fsi_file.html'),
             str_replace('<div >', '<div>', $html)
         );
     }
 
-    public function testFormRenderingWithCustomFileUrl()
+    public function testFormRenderingWithCustomFileUrl(): void
     {
         $file = $this->getFileMock();
 
@@ -71,52 +72,37 @@ class FileTypeTest extends FormTypeTest
         $html = $this->twig->render('form_with_fsi_file.html.twig', [
             'form' => $form->createView()
         ]);
-        $this->assertSame(
+        self::assertSame(
             $this->getExpectedHtml('form_with_fsi_file_and_constant_url.html'),
             str_replace('<div >', '<div>', $html)
         );
     }
 
-    private function getFileMock()
+    /**
+     * @return File&MockObject
+     */
+    private function getFileMock(): File
     {
         $file = $this->createMock(File::class);
 
-        $file->expects($this->any())
-            ->method('getFilesystem')
-            ->will(
-                $this->returnCallback(
-                    function () {
-                        $fileSystem = $this->createMock(Filesystem::class);
+        $file->method('getFilesystem')
+            ->willReturnCallback(
+                function () {
+                    $fileSystem = $this->createMock(Filesystem::class);
+                    $fileSystem->method('getBaseUrl')->willReturn('/uploaded/');
+                    $fileSystem->method('getAdapter')
+                        ->willReturnCallback(
+                            function () {
+                                return $this->createMock(Local::class);
+                            }
+                        );
 
-                        $fileSystem->expects($this->any())
-                            ->method('getBaseUrl')
-                            ->will($this->returnValue('/uploaded/'))
-                        ;
-
-                        $fileSystem->expects($this->any())
-                            ->method('getAdapter')
-                            ->will(
-                                $this->returnCallback(
-                                    function () {
-                                        return $this->createMock(Local::class);
-                                    }
-                                )
-                            );
-
-                        return $fileSystem;
-                    }
-                )
+                    return $fileSystem;
+                }
             );
 
-        $file->expects($this->any())
-            ->method('getKey')
-            ->will($this->returnValue('Article/file/1/image name.jpg'))
-        ;
-
-        $file->expects($this->any())
-            ->method('getName')
-            ->will($this->returnValue('Article/file/1/image name.jpg'))
-        ;
+        $file->method('getKey')->willReturn('Article/file/1/image name.jpg');
+        $file->method('getName')->willReturn('Article/file/1/image name.jpg');
 
         return $file;
     }

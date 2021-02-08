@@ -11,7 +11,7 @@
         }
     ],
     "require": {
-        "php": ">=7.1",
+        "php": "^7.1|^8.0",
         "twig/twig": "^2.11",
         "symfony/framework-bundle": "^3.4|^4.0",
         "symfony/twig-bundle": "^3.4|^4.0",
@@ -25,11 +25,11 @@
         "knplabs/knp-gaufrette-bundle": "~0.6"
     },
     "require-dev": {
-        "bossa/phpspec2-expect": "^3.0",
         "doctrine/orm": "^2.5",
+        "friends-of-phpspec/phpspec-expect": "^3.0|^4.0",
         "fsi/datagrid-bundle": "^2.0",
-        "phpunit/phpunit": "^7.5",
-        "phpspec/phpspec": "^5.0",
+        "phpunit/phpunit": "^7.5|^8.0",
+        "phpspec/phpspec": "^5.0|^6.0",
         "symfony/asset": "^3.4|^4.0",
         "symfony/phpunit-bridge": "^4.3",
         "symfony/security": "^3.4|^4.0",

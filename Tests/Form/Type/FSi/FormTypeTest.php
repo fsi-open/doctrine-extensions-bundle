@@ -27,8 +27,14 @@ use Symfony\Component\Asset\VersionStrategy\EmptyVersionStrategy;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormRenderer;
 use Symfony\Component\Form\Test\FormIntegrationTestCase;
+use Symfony\Component\Translation\Translator;
+use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorTrait;
 use Twig\Environment;
+use Twig\Loader\FilesystemLoader;
 use Twig\RuntimeLoader\RuntimeLoaderInterface;
+use function class_exists;
+use function interface_exists;
 
 abstract class FormTypeTest extends FormIntegrationTestCase
 {
@@ -37,7 +43,7 @@ abstract class FormTypeTest extends FormIntegrationTestCase
      */
     protected $twig;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -47,11 +53,22 @@ abstract class FormTypeTest extends FormIntegrationTestCase
             VENDOR_DIR . '/symfony/twig-bridge/Resources/views'
         ];
 
-        $loader = new StubFilesystemLoader($paths);
+        if (class_exists(StubFilesystemLoader::class)) {
+            $loader = new StubFilesystemLoader($paths);
+        } else {
+            $loader = new FilesystemLoader($paths);
+        }
 
         $twig = new Environment($loader, ['strict_variables' => true]);
         $twig->addGlobal('global', '');
-        $twig->addExtension(new TranslationExtension(new StubTranslator()));
+        if (interface_exists(TranslatorInterface::class)) {
+            $twig->addExtension(new TranslationExtension(
+                new class implements TranslatorInterface{use TranslatorTrait;}
+            ));
+        } else {
+            $twig->addExtension(new TranslationExtension(new Translator('EN')));
+
+        }
         $twig->addExtension(new FilesExtension(new FSiFilePathResolver()));
         $rendererEngine = new TwigRendererEngine([
             'form_div_layout.html.twig',
@@ -60,10 +77,10 @@ abstract class FormTypeTest extends FormIntegrationTestCase
 
         $renderer = new FormRenderer($rendererEngine);
         $runtimeLoader = $this->createMock(RuntimeLoaderInterface::class);
-        $runtimeLoader->expects($this->any())->method('load')->will($this->returnValueMap([
+        $runtimeLoader->method('load')->willReturnMap([
             [TwigRenderer::class, $renderer],
             [FormRenderer::class, $renderer],
-        ]));
+        ]);
         $twig->addRuntimeLoader($runtimeLoader);
         $twig->addExtension(new FormExtension());
         $twig->addExtension(new AssetExtension(

@@ -11,40 +11,37 @@ declare(strict_types=1);
 
 namespace FSi\Bundle\DoctrineExtensionsBundle\Tests\DependencyInjection;
 
-use FSi\Bundle\DemoBundle\Article;
 use FSi\Bundle\DoctrineExtensionsBundle\DependencyInjection\Configuration;
+use FSi\Bundle\DoctrineExtensionsBundle\Tests\Fixtures\Entity\Article;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Definition\Processor;
 
 class ConfigurationTest extends TestCase
 {
-    public function testDefaultOptions()
+    public function testDefaultOptions(): void
     {
         $config = $this->getProcessor()->processConfiguration(new Configuration(), []);
 
-        $this->assertSame(
-            $config,
-            self::getBundleDefaultOptions()
-        );
+        self::assertSame($config, self::getBundleDefaultOptions());
     }
 
-    public function testUploadableEnabledOption()
+    public function testUploadableEnabledOption(): void
     {
         $config = $this->getProcessor()->processConfiguration(
             new Configuration(),
             [0 => ['orm' => ['default' => ['uploadable' => true]]]]
         );
 
-        $this->assertSame(
+        self::assertSame(
             $config,
             array_merge(
-                $this->getBundleDefaultOptions(),
+                self::getBundleDefaultOptions(),
                 ['orm' => ['default' => ['uploadable' => true, 'translatable' => false]]]
             )
         );
     }
 
-    public function testUploadableConfigurationOptions()
+    public function testUploadableConfigurationOptions(): void
     {
         $input = [[
             'orm' => ['default' => ['uploadable' => true]],
@@ -68,7 +65,7 @@ class ConfigurationTest extends TestCase
         ]];
         $config = $this->getProcessor()->processConfiguration(new Configuration(), $input);
 
-        $this->assertSame(
+        self::assertSame(
             $config,
             array_merge(
                 [
@@ -99,21 +96,21 @@ class ConfigurationTest extends TestCase
         );
     }
 
-    public function testTranslatableEnabledOption()
+    public function testTranslatableEnabledOption(): void
     {
         $input = [['orm' => ['default' => ['translatable' => true]]]];
         $config = $this->getProcessor()->processConfiguration(new Configuration(), $input);
 
-        $this->assertSame(
+        self::assertSame(
             $config,
             array_merge(
-                $this->getBundleDefaultOptions(),
+                self::getBundleDefaultOptions(),
                 ['orm' => ['default' => ['translatable' => true, 'uploadable' => false]]]
             )
         );
     }
 
-    public function testUploadableFilesystemsOptions()
+    public function testUploadableFilesystemsOptions(): void
     {
         $filestystemsConfig = [
             'uploadable_filesystems' => [
@@ -123,13 +120,13 @@ class ConfigurationTest extends TestCase
         ];
         $config = $this->getProcessor()->processConfiguration(new Configuration(), [$filestystemsConfig]);
 
-        $this->assertSame(
+        self::assertSame(
             $config['uploadable_filesystems'],
             $filestystemsConfig['uploadable_filesystems']
         );
     }
 
-    public static function getBundleDefaultOptions()
+    public static function getBundleDefaultOptions(): array
     {
         return [
             'orm' => [],
