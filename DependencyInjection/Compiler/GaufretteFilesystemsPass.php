@@ -22,7 +22,10 @@ class GaufretteFilesystemsPass implements CompilerPassInterface
     {
         $configuration = new Configuration();
         $processor = new Processor();
-        $config = $processor->processConfiguration($configuration, $container->getExtensionConfig('fsi_doctrine_extensions'));
+        $config = $processor->processConfiguration(
+            $configuration,
+            $container->getExtensionConfig('fsi_doctrine_extensions')
+        );
 
         foreach ($config['uploadable_filesystems'] as $filesystem => $filesystemConfig) {
             $filesystemService = $container->findDefinition(sprintf('gaufrette.%s_filesystem', $filesystem));

@@ -87,12 +87,12 @@ class FileTypeTest extends FormTypeTest
 
         $file->method('getFilesystem')
             ->willReturnCallback(
-                function () {
+                function (): MockObject {
                     $fileSystem = $this->createMock(Filesystem::class);
                     $fileSystem->method('getBaseUrl')->willReturn('/uploaded/');
                     $fileSystem->method('getAdapter')
                         ->willReturnCallback(
-                            function () {
+                            function (): MockObject {
                                 return $this->createMock(Local::class);
                             }
                         );

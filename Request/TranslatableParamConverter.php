@@ -152,7 +152,9 @@ class TranslatableParamConverter implements ParamConverterInterface
     private function filterNullCriteria(array $criteria, ParamConverter $configuration): array
     {
         if ($this->getStripNullOption($configuration)) {
-            return array_filter($criteria, function ($value) { return !is_null($value); });
+            return array_filter($criteria, static function ($value): bool {
+                return null !== $value;
+            });
         }
 
         return $criteria;

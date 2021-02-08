@@ -17,10 +17,8 @@ use RuntimeException;
 use Symfony\Bridge\Twig\Extension\AssetExtension;
 use Symfony\Bridge\Twig\Extension\FormExtension;
 use Symfony\Bridge\Twig\Extension\TranslationExtension;
-use Symfony\Bridge\Twig\Form\TwigRenderer;
 use Symfony\Bridge\Twig\Form\TwigRendererEngine;
 use Symfony\Bridge\Twig\Tests\Extension\Fixtures\StubFilesystemLoader;
-use Symfony\Bridge\Twig\Tests\Extension\Fixtures\StubTranslator;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\Asset\UrlPackage;
 use Symfony\Component\Asset\VersionStrategy\EmptyVersionStrategy;
@@ -35,6 +33,7 @@ use Twig\Loader\FilesystemLoader;
 use Twig\RuntimeLoader\RuntimeLoaderInterface;
 use function class_exists;
 use function interface_exists;
+use function trait_exists;
 
 abstract class FormTypeTest extends FormIntegrationTestCase
 {
@@ -61,13 +60,14 @@ abstract class FormTypeTest extends FormIntegrationTestCase
 
         $twig = new Environment($loader, ['strict_variables' => true]);
         $twig->addGlobal('global', '');
-        if (interface_exists(TranslatorInterface::class)) {
+        if (true === interface_exists(TranslatorInterface::class) && true === trait_exists(TranslatorTrait::class)) {
             $twig->addExtension(new TranslationExtension(
-                new class implements TranslatorInterface{use TranslatorTrait;}
+                new class implements TranslatorInterface{
+                    use TranslatorTrait;
+                }
             ));
-        } else {
+        } elseif (true === class_exists(Translator::class)) {
             $twig->addExtension(new TranslationExtension(new Translator('EN')));
-
         }
         $twig->addExtension(new FilesExtension(new FSiFilePathResolver()));
         $rendererEngine = new TwigRendererEngine([
@@ -78,7 +78,6 @@ abstract class FormTypeTest extends FormIntegrationTestCase
         $renderer = new FormRenderer($rendererEngine);
         $runtimeLoader = $this->createMock(RuntimeLoaderInterface::class);
         $runtimeLoader->method('load')->willReturnMap([
-            [TwigRenderer::class, $renderer],
             [FormRenderer::class, $renderer],
         ]);
         $twig->addRuntimeLoader($runtimeLoader);
