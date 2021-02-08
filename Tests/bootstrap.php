@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-defined('VENDOR_DIR') ?: define('VENDOR_DIR', realpath(__DIR__ . '/../vendor'));
+defined('VENDOR_DIR') ?: define('VENDOR_DIR', dirname(__DIR__) . '/vendor');
 
 require_once VENDOR_DIR . '/autoload.php';
 

@@ -68,7 +68,10 @@ class FSIDoctrineExtensionsExtension extends Extension
             'setDefaultKeymaker',
             [new Reference($config['default_key_maker_service'])]
         );
-        $container->setParameter('fsi_doctrine_extensions.default.filesystem.adapter.path', $config['default_filesystem_path']);
+        $container->setParameter(
+            'fsi_doctrine_extensions.default.filesystem.adapter.path',
+            $config['default_filesystem_path']
+        );
         $container->getDefinition('fsi_doctrine_extensions.listener.uploadable')->addMethodCall(
             'setDefaultFilesystem',
             [new Reference($config['default_filesystem_service'])]

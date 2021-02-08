@@ -39,7 +39,7 @@ class FSiFileExtension extends AbstractExtension
         $this->filePathResolver = $filePathResolver;
     }
 
-    protected function loadTypes()
+    protected function loadTypes(): array
     {
         return [
             new FileType($this->urlGenerator, $this->filePathResolver),
@@ -47,7 +47,7 @@ class FSiFileExtension extends AbstractExtension
         ];
     }
 
-    protected function loadTypeExtensions()
+    protected function loadTypeExtensions(): array
     {
         return [
             new FileUploadFormExtension(new FSiUploadableRequestHandler()),

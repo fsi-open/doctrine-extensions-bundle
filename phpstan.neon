@@ -1,0 +1,11 @@
+parameters:
+    bootstrapFiles:
+        - Tests/bootstrap.php
+    level: 1
+    paths:
+        - .
+    excludePaths:
+        - DependencyInjection/Configuration.php
+        - Tests/Form/Type/FSi/FormTypeTest.php
+        - spec
+        - vendor

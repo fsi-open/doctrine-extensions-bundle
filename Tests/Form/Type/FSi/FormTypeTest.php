@@ -17,18 +17,23 @@ use RuntimeException;
 use Symfony\Bridge\Twig\Extension\AssetExtension;
 use Symfony\Bridge\Twig\Extension\FormExtension;
 use Symfony\Bridge\Twig\Extension\TranslationExtension;
-use Symfony\Bridge\Twig\Form\TwigRenderer;
 use Symfony\Bridge\Twig\Form\TwigRendererEngine;
 use Symfony\Bridge\Twig\Tests\Extension\Fixtures\StubFilesystemLoader;
-use Symfony\Bridge\Twig\Tests\Extension\Fixtures\StubTranslator;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\Asset\UrlPackage;
 use Symfony\Component\Asset\VersionStrategy\EmptyVersionStrategy;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormRenderer;
 use Symfony\Component\Form\Test\FormIntegrationTestCase;
+use Symfony\Component\Translation\Translator;
+use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorTrait;
 use Twig\Environment;
+use Twig\Loader\FilesystemLoader;
 use Twig\RuntimeLoader\RuntimeLoaderInterface;
+use function class_exists;
+use function interface_exists;
+use function trait_exists;
 
 abstract class FormTypeTest extends FormIntegrationTestCase
 {
@@ -37,7 +42,7 @@ abstract class FormTypeTest extends FormIntegrationTestCase
      */
     protected $twig;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -47,11 +52,23 @@ abstract class FormTypeTest extends FormIntegrationTestCase
             VENDOR_DIR . '/symfony/twig-bridge/Resources/views'
         ];
 
-        $loader = new StubFilesystemLoader($paths);
+        if (class_exists(StubFilesystemLoader::class)) {
+            $loader = new StubFilesystemLoader($paths);
+        } else {
+            $loader = new FilesystemLoader($paths);
+        }
 
         $twig = new Environment($loader, ['strict_variables' => true]);
         $twig->addGlobal('global', '');
-        $twig->addExtension(new TranslationExtension(new StubTranslator()));
+        if (true === interface_exists(TranslatorInterface::class) && true === trait_exists(TranslatorTrait::class)) {
+            $twig->addExtension(new TranslationExtension(
+                new class implements TranslatorInterface{
+                    use TranslatorTrait;
+                }
+            ));
+        } elseif (true === class_exists(Translator::class)) {
+            $twig->addExtension(new TranslationExtension(new Translator('EN')));
+        }
         $twig->addExtension(new FilesExtension(new FSiFilePathResolver()));
         $rendererEngine = new TwigRendererEngine([
             'form_div_layout.html.twig',
@@ -60,10 +77,9 @@ abstract class FormTypeTest extends FormIntegrationTestCase
 
         $renderer = new FormRenderer($rendererEngine);
         $runtimeLoader = $this->createMock(RuntimeLoaderInterface::class);
-        $runtimeLoader->expects($this->any())->method('load')->will($this->returnValueMap([
-            [TwigRenderer::class, $renderer],
+        $runtimeLoader->method('load')->willReturnMap([
             [FormRenderer::class, $renderer],
-        ]));
+        ]);
         $twig->addRuntimeLoader($runtimeLoader);
         $twig->addExtension(new FormExtension());
         $twig->addExtension(new AssetExtension(
