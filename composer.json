@@ -37,6 +37,9 @@
         "symfony/security": "^3.4|^4.0",
         "symfony/twig-bridge": "^3.4|^4.0"
     },
+    "conflict": {
+        "doctrine/persistence": "^2.0"
+    },
     "config": {
         "bin-dir": "vendor/bin"
     },
