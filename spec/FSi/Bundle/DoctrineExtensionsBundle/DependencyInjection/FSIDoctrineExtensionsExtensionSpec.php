@@ -11,15 +11,18 @@ declare(strict_types=1);
 
 namespace spec\FSi\Bundle\DoctrineExtensionsBundle\DependencyInjection;
 
+use Doctrine\Persistence\ManagerRegistry;
 use FSi\Bundle\DemoBundle\Entity\Article;
 use FSi\Bundle\DemoBundle\KeyMaker\SpecificKeyMaker;
 use FSi\Bundle\DoctrineExtensionsBundle\DependencyInjection\FSIDoctrineExtensionsExtension;
+use FSi\Bundle\DoctrineExtensionsBundle\Request\TranslatableParamConverterNew;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use function interface_exists;
 
 class FSIDoctrineExtensionsExtensionSpec extends ObjectBehavior
 {
@@ -39,6 +42,13 @@ class FSIDoctrineExtensionsExtensionSpec extends ObjectBehavior
         Definition $translatable,
         Definition $uploadable
     ) {
+        if (true === interface_exists(ManagerRegistry::class)) {
+            $builder->setParameter(
+                'fsi_doctrine_extensions.request.translatable_param_converter.class',
+                TranslatableParamConverterNew::class
+            )->shouldBeCalled();
+        }
+
         if (true === method_exists(ContainerBuilder::class, 'removeBindings')) {
             $builder->removeBindings(Argument::type('string'))->shouldBeCalled();
         }
@@ -92,6 +102,13 @@ class FSIDoctrineExtensionsExtensionSpec extends ObjectBehavior
         Definition $translatable,
         Definition $uploadable
     ) {
+        if (true === interface_exists(ManagerRegistry::class)) {
+            $builder->setParameter(
+                'fsi_doctrine_extensions.request.translatable_param_converter.class',
+                TranslatableParamConverterNew::class
+            )->shouldBeCalled();
+        }
+
         if (true === method_exists(ContainerBuilder::class, 'removeBindings')) {
             $builder->removeBindings(Argument::type('string'))->shouldBeCalled();
         }
@@ -144,6 +161,13 @@ class FSIDoctrineExtensionsExtensionSpec extends ObjectBehavior
         Definition $translatable,
         Definition $uploadable
     ) {
+        if (true === interface_exists(ManagerRegistry::class)) {
+            $builder->setParameter(
+                'fsi_doctrine_extensions.request.translatable_param_converter.class',
+                TranslatableParamConverterNew::class
+            )->shouldBeCalled();
+        }
+
         if (true === method_exists(ContainerBuilder::class, 'removeBindings')) {
             $builder->removeBindings(Argument::type('string'))->shouldBeCalled();
         }
