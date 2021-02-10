@@ -29,7 +29,7 @@ class FileUploadFormExtension extends AbstractTypeExtension
         $this->requestHandler = $requestHandler;
     }
 
-    public static function getExtendedTypes()
+    public static function getExtendedTypes(): iterable
     {
         return [FormType::class];
     }

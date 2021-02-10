@@ -13,12 +13,12 @@
     "require": {
         "php": "^7.1|^8.0",
         "twig/twig": "^2.11",
-        "symfony/framework-bundle": "^3.4|^4.0",
-        "symfony/twig-bundle": "^3.4|^4.0",
-        "symfony/http-foundation": "^3.4|^4.0",
-        "symfony/options-resolver": "^3.4|^4.0",
-        "symfony/form" : "^3.4|^4.0",
-        "symfony/validator": "^3.4|^4.0",
+        "symfony/framework-bundle": "^3.4|^4.0|^5.0",
+        "symfony/twig-bundle": "^3.4|^4.0|^5.0",
+        "symfony/http-foundation": "^3.4|^4.0|^5.0",
+        "symfony/options-resolver": "^3.4|^4.0|^5.0",
+        "symfony/form" : "^3.4|^4.0|^5.0",
+        "symfony/validator": "^3.4|^4.0|^5.0",
         "doctrine/doctrine-bundle": "^1.2|^2.0",
         "fsi/doctrine-extensions": "^2.0",
         "sensio/framework-extra-bundle": "^5.0",
@@ -31,11 +31,11 @@
         "phpunit/phpunit": "^7.5|^8.0",
         "phpspec/phpspec": "^5.0|^6.0",
         "phpstan/phpstan": "^0.12.66",
-        "squizlabs/php_codesniffer": "^3.4",
-        "symfony/asset": "^3.4|^4.0",
-        "symfony/phpunit-bridge": "^4.3",
-        "symfony/security": "^3.4|^4.0",
-        "symfony/twig-bridge": "^3.4|^4.0"
+        "squizlabs/php_codesniffer": "^3.5",
+        "symfony/asset": "^3.4|^4.0|^5.0",
+        "symfony/phpunit-bridge": "^4.3|^5.0",
+        "symfony/security": "^3.4|^4.0|^5.0",
+        "symfony/twig-bridge": "^3.4|^4.0|^5.0"
     },
     "config": {
         "bin-dir": "vendor/bin"

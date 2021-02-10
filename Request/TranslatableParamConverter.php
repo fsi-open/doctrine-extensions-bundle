@@ -139,7 +139,8 @@ class TranslatableParamConverter implements ParamConverterInterface
 
         $criteria = [];
         foreach ($mapping as $attribute => $field) {
-            if ($this->isFieldSearchable($metadata, $field)
+            if (
+                $this->isFieldSearchable($metadata, $field)
                 || $this->isFieldTranslatable($translatableMetadata, $field)
             ) {
                 $criteria[$field] = $request->attributes->get($attribute);
