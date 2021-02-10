@@ -6,6 +6,7 @@ parameters:
         - .
     excludePaths:
         - DependencyInjection/Configuration.php
+        - Request/*
         - Tests/Form/Type/FSi/FormTypeTest.php
         - spec
         - vendor

@@ -11,12 +11,15 @@ declare(strict_types=1);
 
 namespace FSi\Bundle\DoctrineExtensionsBundle\DependencyInjection;
 
+use Doctrine\Persistence\ManagerRegistry;
 use FSi\Bundle\DataGridBundle\DataGridBundle;
+use FSi\Bundle\DoctrineExtensionsBundle\Request\TranslatableParamConverterNew;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
+use function interface_exists;
 
 class FSIDoctrineExtensionsExtension extends Extension
 {
@@ -32,6 +35,7 @@ class FSIDoctrineExtensionsExtension extends Extension
         }
         $this->setListenersConfiguration($container, $config);
         $this->setUploadableConfigurationParameter($container, $config['uploadable_configuration']);
+        $this->replaceTranslatableParamConverterClass($container);
     }
 
     protected function setListenersConfiguration(ContainerBuilder $container, array $config): void
@@ -99,5 +103,15 @@ class FSIDoctrineExtensionsExtension extends Extension
     {
         $container->getDefinition('fsi_doctrine_extensions.listener.translatable')
             ->addMethodCall('setDefaultLocale', [$config['default_locale']]);
+    }
+
+    private function replaceTranslatableParamConverterClass(ContainerBuilder $container): void
+    {
+        if (true === interface_exists(ManagerRegistry::class)) {
+            $container->setParameter(
+                'fsi_doctrine_extensions.request.translatable_param_converter.class',
+                TranslatableParamConverterNew::class
+            );
+        }
     }
 }
