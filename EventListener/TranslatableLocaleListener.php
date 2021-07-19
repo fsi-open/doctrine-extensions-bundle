@@ -13,7 +13,7 @@ namespace FSi\Bundle\DoctrineExtensionsBundle\EventListener;
 
 use FSi\DoctrineExtensions\Translatable\TranslatableListener;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 class TranslatableLocaleListener implements EventSubscriberInterface
@@ -35,7 +35,7 @@ class TranslatableLocaleListener implements EventSubscriberInterface
         $this->translatableListener = $translatableListener;
     }
 
-    public function onKernelRequest(GetResponseEvent $event)
+    public function onKernelRequest(RequestEvent $event)
     {
         $this->translatableListener->setLocale($event->getRequest()->getLocale());
     }

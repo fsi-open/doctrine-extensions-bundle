@@ -89,7 +89,7 @@ class ConfigurationTest extends TestCase
                     'default_key_maker_service' =>  'fsi_doctrine_extensions.default.key_maker',
                     'default_filesystem_prefix' => 'uploaded',
                     'default_filesystem_base_url' => '/uploaded',
-                    'default_filesystem_path' => '%kernel.root_dir%/../web/uploaded',
+                    'default_filesystem_path' => '%kernel.project_dir%/web/uploaded',
                     'default_filesystem_service' => 'fsi_doctrine_extensions.default.filesystem',
                 ]
             )
@@ -135,7 +135,7 @@ class ConfigurationTest extends TestCase
             'default_key_maker_service' =>  'fsi_doctrine_extensions.default.key_maker',
             'default_filesystem_prefix' => 'uploaded',
             'default_filesystem_base_url' => '/uploaded',
-            'default_filesystem_path' => '%kernel.root_dir%/../web/uploaded',
+            'default_filesystem_path' => '%kernel.project_dir%/web/uploaded',
             'default_filesystem_service' => 'fsi_doctrine_extensions.default.filesystem',
             'uploadable_configuration' => []
         ];

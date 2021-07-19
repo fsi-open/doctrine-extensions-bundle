@@ -37,7 +37,7 @@ class Configuration implements ConfigurationInterface
                 ->end()
                 ->scalarNode('default_filesystem_prefix')->defaultValue('uploaded')->end()
                 ->scalarNode('default_filesystem_base_url')->defaultValue('/uploaded')->end()
-                ->scalarNode('default_filesystem_path')->defaultValue('%kernel.root_dir%/../web/uploaded')->end()
+                ->scalarNode('default_filesystem_path')->defaultValue('%kernel.project_dir%/web/uploaded')->end()
                 ->scalarNode('default_filesystem_service')
                     ->defaultValue('fsi_doctrine_extensions.default.filesystem')
                 ->end()

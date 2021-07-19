@@ -73,7 +73,7 @@ class FSIDoctrineExtensionsExtensionSpec extends ObjectBehavior
         $uploadable->addMethodCall('setDefaultKeymaker', Argument::type('array'))->shouldBeCalled();
         $builder->setParameter(
             'fsi_doctrine_extensions.default.filesystem.adapter.path',
-            '%kernel.root_dir%/../web/uploaded'
+            '%kernel.project_dir%/web/uploaded'
         )->shouldBeCalled();
 
         $uploadable->addMethodCall('setDefaultKeymaker', Argument::type('array'))->shouldBeCalled();
@@ -130,7 +130,7 @@ class FSIDoctrineExtensionsExtensionSpec extends ObjectBehavior
             ->willReturn($uploadable);
 
         $builder->setParameter('fsi_doctrine_extensions.default.filesystem.adapter.path',
-            '%kernel.root_dir%/../web/uploaded')->shouldBeCalled();
+            '%kernel.project_dir%/web/uploaded')->shouldBeCalled();
 
         $uploadable->addMethodCall('setDefaultFilesystem', Argument::type('array'))->shouldBeCalled();
 
@@ -190,7 +190,7 @@ class FSIDoctrineExtensionsExtensionSpec extends ObjectBehavior
             ->willReturn($uploadable);
 
         $builder->setParameter('fsi_doctrine_extensions.default.filesystem.adapter.path',
-            '%kernel.root_dir%/../web/uploaded')->shouldBeCalled();
+            '%kernel.project_dir%/web/uploaded')->shouldBeCalled();
 
         $builder->setParameter('fsi_doctrine_extensions.default.filesystem.base_url', '/uploaded')
             ->shouldBeCalled();
