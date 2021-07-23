@@ -15,7 +15,7 @@ use FSi\DoctrineExtensions\Translatable\TranslatableListener;
 use PhpSpec\ObjectBehavior;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 class TranslatableLocaleListenerSpec extends ObjectBehavior
@@ -39,7 +39,7 @@ class TranslatableLocaleListenerSpec extends ObjectBehavior
 
     function it_passes_locale_from_request_to_translatable_listener(
         TranslatableListener $translatableListener,
-        GetResponseEvent $event,
+        RequestEvent $event,
         Request $request
     ) {
         $event->getRequest()->willReturn($request);
